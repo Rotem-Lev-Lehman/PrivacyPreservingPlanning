@@ -1,0 +1,6 @@
+1.find min
+2. get hashcode
+3. equal
+4. apply 4.1 add to indexList 
+5. change agent
+6. landmarks
