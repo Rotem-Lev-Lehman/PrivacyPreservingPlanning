@@ -1453,6 +1453,10 @@ namespace Planning
                 {
                     selector = new AdvancedProjectionActionsAchieverDependeciesSelector();
                 }
+                else if(typeOfSelector == "Public_Predicates_Achiever")
+                {
+                    selector = new AdvancedProjectionPublicPredicatesAchieverDependenciesSelector();
+                }
 
                 return new AdvancedProjectionDependeciesPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner);
             }
@@ -1505,7 +1509,7 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = { "Actions_Achiever" };
+            string[] dependenciesSelectors = { "Public_Predicates_Achiever" };
             string[] dependenciesDomains = { "elevators08" };
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
