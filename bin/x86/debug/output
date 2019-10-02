@@ -1,0 +1,16907 @@
+begin_version
+3
+end_version
+begin_metric
+0
+end_metric
+147
+begin_variable
+var29
+-1
+2
+Atom is-message-at(msg1-1, base)
+<none of those>
+end_variable
+begin_variable
+var35
+-1
+2
+Atom is-message-at(msg2-1, base)
+<none of those>
+end_variable
+begin_variable
+var41
+-1
+2
+Atom is-message-at(msg3-1, base)
+<none of those>
+end_variable
+begin_variable
+var47
+-1
+2
+Atom is-message-at(msg4-1, base)
+<none of those>
+end_variable
+begin_variable
+var53
+-1
+2
+Atom is-message-at(msg5-1, base)
+<none of those>
+end_variable
+begin_variable
+var132
+-1
+2
+Atom sending(node5, base, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var133
+-1
+2
+Atom sending(node5, base, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var134
+-1
+2
+Atom sending(node5, base, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var135
+-1
+2
+Atom sending(node5, base, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var136
+-1
+2
+Atom sending(node5, base, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var30
+-1
+2
+Atom is-message-at(msg1-1, node1)
+<none of those>
+end_variable
+begin_variable
+var97
+-1
+2
+Atom sending(node2, node1, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var92
+-1
+2
+Atom sending(node1, node2, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var36
+-1
+2
+Atom is-message-at(msg2-1, node1)
+<none of those>
+end_variable
+begin_variable
+var98
+-1
+2
+Atom sending(node2, node1, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var93
+-1
+2
+Atom sending(node1, node2, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var42
+-1
+2
+Atom is-message-at(msg3-1, node1)
+<none of those>
+end_variable
+begin_variable
+var99
+-1
+2
+Atom sending(node2, node1, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var94
+-1
+2
+Atom sending(node1, node2, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var48
+-1
+2
+Atom is-message-at(msg4-1, node1)
+<none of those>
+end_variable
+begin_variable
+var100
+-1
+2
+Atom sending(node2, node1, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var95
+-1
+2
+Atom sending(node1, node2, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var54
+-1
+2
+Atom is-message-at(msg5-1, node1)
+<none of those>
+end_variable
+begin_variable
+var101
+-1
+2
+Atom sending(node2, node1, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var96
+-1
+2
+Atom sending(node1, node2, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var106
+-1
+2
+Atom sending(node2, node3, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var111
+-1
+2
+Atom sending(node3, node2, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var55
+-1
+2
+Atom is-message-at(msg5-1, node2)
+<none of those>
+end_variable
+begin_variable
+var116
+-1
+2
+Atom sending(node3, node4, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var126
+-1
+2
+Atom sending(node4, node3, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var131
+-1
+2
+Atom sending(node4, node5, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var121
+-1
+2
+Atom sending(node3, node5, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var114
+-1
+2
+Atom sending(node3, node4, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var124
+-1
+2
+Atom sending(node4, node3, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var129
+-1
+2
+Atom sending(node4, node5, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var119
+-1
+2
+Atom sending(node3, node5, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var112
+-1
+2
+Atom sending(node3, node4, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var122
+-1
+2
+Atom sending(node4, node3, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var127
+-1
+2
+Atom sending(node4, node5, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var123
+-1
+2
+Atom sending(node4, node3, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var125
+-1
+2
+Atom sending(node4, node3, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var128
+-1
+2
+Atom sending(node4, node5, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var130
+-1
+2
+Atom sending(node4, node5, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var120
+-1
+2
+Atom sending(node3, node5, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var115
+-1
+2
+Atom sending(node3, node4, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var105
+-1
+2
+Atom sending(node2, node3, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var110
+-1
+2
+Atom sending(node3, node2, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var49
+-1
+2
+Atom is-message-at(msg4-1, node2)
+<none of those>
+end_variable
+begin_variable
+var84
+-1
+3
+Atom p_artificial1000()
+Atom p_artificial1001()
+<none of those>
+end_variable
+begin_variable
+var102
+-1
+2
+Atom sending(node2, node3, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var103
+-1
+2
+Atom sending(node2, node3, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var104
+-1
+2
+Atom sending(node2, node3, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var109
+-1
+2
+Atom sending(node3, node2, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var43
+-1
+2
+Atom is-message-at(msg3-1, node2)
+<none of those>
+end_variable
+begin_variable
+var107
+-1
+2
+Atom sending(node3, node2, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var31
+-1
+2
+Atom is-message-at(msg1-1, node2)
+<none of those>
+end_variable
+begin_variable
+var108
+-1
+2
+Atom sending(node3, node2, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var37
+-1
+2
+Atom is-message-at(msg2-1, node2)
+<none of those>
+end_variable
+begin_variable
+var113
+-1
+2
+Atom sending(node3, node4, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var117
+-1
+2
+Atom sending(node3, node5, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var118
+-1
+2
+Atom sending(node3, node5, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var57
+-1
+2
+Atom is-message-at(msg5-1, node4)
+<none of those>
+end_variable
+begin_variable
+var146
+-1
+2
+Atom sending(node5, node4, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var45
+-1
+2
+Atom is-message-at(msg3-1, node4)
+<none of those>
+end_variable
+begin_variable
+var144
+-1
+2
+Atom sending(node5, node4, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var33
+-1
+2
+Atom is-message-at(msg1-1, node4)
+<none of those>
+end_variable
+begin_variable
+var142
+-1
+2
+Atom sending(node5, node4, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var51
+-1
+2
+Atom is-message-at(msg4-1, node4)
+<none of those>
+end_variable
+begin_variable
+var145
+-1
+2
+Atom sending(node5, node4, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var39
+-1
+2
+Atom is-message-at(msg2-1, node4)
+<none of those>
+end_variable
+begin_variable
+var143
+-1
+2
+Atom sending(node5, node4, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var56
+-1
+2
+Atom is-message-at(msg5-1, node3)
+<none of those>
+end_variable
+begin_variable
+var141
+-1
+2
+Atom sending(node5, node3, msg5-1)
+<none of those>
+end_variable
+begin_variable
+var85
+-1
+3
+Atom p_artificial2000()
+Atom p_artificial2001()
+<none of those>
+end_variable
+begin_variable
+var44
+-1
+2
+Atom is-message-at(msg3-1, node3)
+<none of those>
+end_variable
+begin_variable
+var139
+-1
+2
+Atom sending(node5, node3, msg3-1)
+<none of those>
+end_variable
+begin_variable
+var32
+-1
+2
+Atom is-message-at(msg1-1, node3)
+<none of those>
+end_variable
+begin_variable
+var137
+-1
+2
+Atom sending(node5, node3, msg1-1)
+<none of those>
+end_variable
+begin_variable
+var50
+-1
+2
+Atom is-message-at(msg4-1, node3)
+<none of those>
+end_variable
+begin_variable
+var140
+-1
+2
+Atom sending(node5, node3, msg4-1)
+<none of those>
+end_variable
+begin_variable
+var38
+-1
+2
+Atom is-message-at(msg2-1, node3)
+<none of those>
+end_variable
+begin_variable
+var138
+-1
+2
+Atom sending(node5, node3, msg2-1)
+<none of those>
+end_variable
+begin_variable
+var58
+-1
+2
+Atom is-message-at(msg5-1, node5)
+<none of those>
+end_variable
+begin_variable
+var86
+-1
+3
+Atom p_artificial3000()
+Atom p_artificial3001()
+<none of those>
+end_variable
+begin_variable
+var87
+-1
+3
+Atom p_artificial4000()
+Atom p_artificial4001()
+<none of those>
+end_variable
+begin_variable
+var46
+-1
+2
+Atom is-message-at(msg3-1, node5)
+<none of those>
+end_variable
+begin_variable
+var34
+-1
+2
+Atom is-message-at(msg1-1, node5)
+<none of those>
+end_variable
+begin_variable
+var88
+-1
+2
+Atom p_artificial5000()
+<none of those>
+end_variable
+begin_variable
+var40
+-1
+2
+Atom is-message-at(msg2-1, node5)
+<none of those>
+end_variable
+begin_variable
+var52
+-1
+2
+Atom is-message-at(msg4-1, node5)
+<none of those>
+end_variable
+begin_variable
+var89
+-1
+2
+Atom p_artificial5001()
+<none of those>
+end_variable
+begin_variable
+var91
+-1
+2
+Atom p_artificial5003()
+<none of those>
+end_variable
+begin_variable
+var63
+-1
+2
+Atom message-data(msg1-1, node5)
+<none of those>
+end_variable
+begin_variable
+var68
+-1
+2
+Atom message-data(msg2-1, node5)
+<none of those>
+end_variable
+begin_variable
+var73
+-1
+2
+Atom message-data(msg3-1, node5)
+<none of those>
+end_variable
+begin_variable
+var9
+-1
+2
+Atom has-data(node1, node5)
+<none of those>
+end_variable
+begin_variable
+var14
+-1
+2
+Atom has-data(node2, node5)
+<none of those>
+end_variable
+begin_variable
+var78
+-1
+2
+Atom message-data(msg4-1, node5)
+<none of those>
+end_variable
+begin_variable
+var19
+-1
+2
+Atom has-data(node3, node5)
+<none of those>
+end_variable
+begin_variable
+var24
+-1
+2
+Atom has-data(node4, node5)
+<none of those>
+end_variable
+begin_variable
+var83
+-1
+2
+Atom message-data(msg5-1, node5)
+<none of those>
+end_variable
+begin_variable
+var90
+-1
+2
+Atom p_artificial5002()
+<none of those>
+end_variable
+begin_variable
+var62
+-1
+2
+Atom message-data(msg1-1, node4)
+<none of those>
+end_variable
+begin_variable
+var67
+-1
+2
+Atom message-data(msg2-1, node4)
+<none of those>
+end_variable
+begin_variable
+var72
+-1
+2
+Atom message-data(msg3-1, node4)
+<none of those>
+end_variable
+begin_variable
+var8
+-1
+2
+Atom has-data(node1, node4)
+<none of those>
+end_variable
+begin_variable
+var13
+-1
+2
+Atom has-data(node2, node4)
+<none of those>
+end_variable
+begin_variable
+var77
+-1
+2
+Atom message-data(msg4-1, node4)
+<none of those>
+end_variable
+begin_variable
+var18
+-1
+2
+Atom has-data(node3, node4)
+<none of those>
+end_variable
+begin_variable
+var23
+-1
+2
+Atom has-data(node4, node4)
+<none of those>
+end_variable
+begin_variable
+var82
+-1
+2
+Atom message-data(msg5-1, node4)
+<none of those>
+end_variable
+begin_variable
+var28
+-1
+2
+Atom has-data(node5, node4)
+<none of those>
+end_variable
+begin_variable
+var61
+-1
+2
+Atom message-data(msg1-1, node3)
+<none of those>
+end_variable
+begin_variable
+var66
+-1
+2
+Atom message-data(msg2-1, node3)
+<none of those>
+end_variable
+begin_variable
+var71
+-1
+2
+Atom message-data(msg3-1, node3)
+<none of those>
+end_variable
+begin_variable
+var7
+-1
+2
+Atom has-data(node1, node3)
+<none of those>
+end_variable
+begin_variable
+var12
+-1
+2
+Atom has-data(node2, node3)
+<none of those>
+end_variable
+begin_variable
+var76
+-1
+2
+Atom message-data(msg4-1, node3)
+<none of those>
+end_variable
+begin_variable
+var17
+-1
+2
+Atom has-data(node3, node3)
+<none of those>
+end_variable
+begin_variable
+var22
+-1
+2
+Atom has-data(node4, node3)
+<none of those>
+end_variable
+begin_variable
+var81
+-1
+2
+Atom message-data(msg5-1, node3)
+<none of those>
+end_variable
+begin_variable
+var27
+-1
+2
+Atom has-data(node5, node3)
+<none of those>
+end_variable
+begin_variable
+var60
+-1
+2
+Atom message-data(msg1-1, node2)
+<none of those>
+end_variable
+begin_variable
+var65
+-1
+2
+Atom message-data(msg2-1, node2)
+<none of those>
+end_variable
+begin_variable
+var70
+-1
+2
+Atom message-data(msg3-1, node2)
+<none of those>
+end_variable
+begin_variable
+var6
+-1
+2
+Atom has-data(node1, node2)
+<none of those>
+end_variable
+begin_variable
+var11
+-1
+2
+Atom has-data(node2, node2)
+<none of those>
+end_variable
+begin_variable
+var75
+-1
+2
+Atom message-data(msg4-1, node2)
+<none of those>
+end_variable
+begin_variable
+var16
+-1
+2
+Atom has-data(node3, node2)
+<none of those>
+end_variable
+begin_variable
+var21
+-1
+2
+Atom has-data(node4, node2)
+<none of those>
+end_variable
+begin_variable
+var80
+-1
+2
+Atom message-data(msg5-1, node2)
+<none of those>
+end_variable
+begin_variable
+var26
+-1
+2
+Atom has-data(node5, node2)
+<none of those>
+end_variable
+begin_variable
+var59
+-1
+2
+Atom message-data(msg1-1, node1)
+<none of those>
+end_variable
+begin_variable
+var64
+-1
+2
+Atom message-data(msg2-1, node1)
+<none of those>
+end_variable
+begin_variable
+var69
+-1
+2
+Atom message-data(msg3-1, node1)
+<none of those>
+end_variable
+begin_variable
+var5
+-1
+2
+Atom has-data(node1, node1)
+<none of those>
+end_variable
+begin_variable
+var10
+-1
+2
+Atom has-data(node2, node1)
+<none of those>
+end_variable
+begin_variable
+var74
+-1
+2
+Atom message-data(msg4-1, node1)
+<none of those>
+end_variable
+begin_variable
+var15
+-1
+2
+Atom has-data(node3, node1)
+<none of those>
+end_variable
+begin_variable
+var20
+-1
+2
+Atom has-data(node4, node1)
+<none of those>
+end_variable
+begin_variable
+var79
+-1
+2
+Atom message-data(msg5-1, node1)
+<none of those>
+end_variable
+begin_variable
+var25
+-1
+2
+Atom has-data(node5, node1)
+<none of those>
+end_variable
+begin_variable
+var4
+-1
+2
+Atom has-data(base, node5)
+<none of those>
+end_variable
+begin_variable
+var3
+-1
+2
+Atom has-data(base, node4)
+<none of those>
+end_variable
+begin_variable
+var2
+-1
+2
+Atom has-data(base, node3)
+<none of those>
+end_variable
+begin_variable
+var1
+-1
+2
+Atom has-data(base, node2)
+<none of those>
+end_variable
+begin_variable
+var0
+-1
+2
+Atom has-data(base, node1)
+<none of those>
+end_variable
+0
+begin_state
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0
+1
+1
+1
+1
+1
+1
+1
+1
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0
+1
+1
+1
+1
+1
+0
+0
+1
+1
+1
+1
+1
+1
+1
+0
+0
+0
+1
+1
+0
+1
+1
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+end_state
+begin_goal
+5
+142 0
+143 0
+144 0
+145 0
+146 0
+end_goal
+465
+begin_operator
+add-to-message_node1_node1_msg1-1 
+1
+10 0
+2
+0
+135 0 1
+0
+132 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node1_msg2-1 
+1
+13 0
+2
+0
+135 0 1
+0
+133 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node1_msg3-1 
+1
+16 0
+2
+0
+135 0 1
+0
+134 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node1_msg4-1 
+1
+19 0
+2
+0
+135 0 1
+0
+137 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node1_msg5-1 
+1
+22 0
+2
+0
+135 0 1
+0
+140 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node2_msg1-1 
+1
+10 0
+2
+0
+125 0 1
+0
+122 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node2_msg2-1 
+1
+13 0
+2
+0
+125 0 1
+0
+123 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node2_msg3-1 
+1
+16 0
+2
+0
+125 0 1
+0
+124 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node2_msg4-1 
+1
+19 0
+2
+0
+125 0 1
+0
+127 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node2_msg5-1 
+1
+22 0
+2
+0
+125 0 1
+0
+130 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node3_msg1-1 
+1
+10 0
+2
+0
+115 0 1
+0
+112 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node3_msg2-1 
+1
+13 0
+2
+0
+115 0 1
+0
+113 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node3_msg3-1 
+1
+16 0
+2
+0
+115 0 1
+0
+114 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node3_msg4-1 
+1
+19 0
+2
+0
+115 0 1
+0
+117 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node3_msg5-1 
+1
+22 0
+2
+0
+115 0 1
+0
+120 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node4_msg1-1 
+1
+10 0
+2
+0
+105 0 1
+0
+102 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node4_msg2-1 
+1
+13 0
+2
+0
+105 0 1
+0
+103 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node4_msg3-1 
+1
+16 0
+2
+0
+105 0 1
+0
+104 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node4_msg4-1 
+1
+19 0
+2
+0
+105 0 1
+0
+107 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node4_msg5-1 
+1
+22 0
+2
+0
+105 0 1
+0
+110 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node5_msg1-1 
+1
+10 0
+2
+0
+95 0 1
+0
+92 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node5_msg2-1 
+1
+13 0
+2
+0
+95 0 1
+0
+93 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node5_msg3-1 
+1
+16 0
+2
+0
+95 0 1
+0
+94 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node5_msg4-1 
+1
+19 0
+2
+0
+95 0 1
+0
+97 1 0
+0
+end_operator
+begin_operator
+add-to-message_node1_node5_msg5-1 
+1
+22 0
+2
+0
+95 0 1
+0
+100 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node1_msg1-1 
+1
+55 0
+2
+0
+136 0 1
+0
+132 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node1_msg2-1 
+1
+57 0
+2
+0
+136 0 1
+0
+133 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node1_msg3-1 
+1
+53 0
+2
+0
+136 0 1
+0
+134 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node1_msg4-1 
+1
+47 0
+2
+0
+136 0 1
+0
+137 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node1_msg5-1 
+1
+27 0
+2
+0
+136 0 1
+0
+140 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node2_msg1-1 
+1
+55 0
+2
+0
+126 0 1
+0
+122 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node2_msg2-1 
+1
+57 0
+2
+0
+126 0 1
+0
+123 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node2_msg3-1 
+1
+53 0
+2
+0
+126 0 1
+0
+124 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node2_msg4-1 
+1
+47 0
+2
+0
+126 0 1
+0
+127 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node2_msg5-1 
+1
+27 0
+2
+0
+126 0 1
+0
+130 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node3_msg1-1 
+1
+55 0
+2
+0
+116 0 1
+0
+112 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node3_msg2-1 
+1
+57 0
+2
+0
+116 0 1
+0
+113 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node3_msg3-1 
+1
+53 0
+2
+0
+116 0 1
+0
+114 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node3_msg4-1 
+1
+47 0
+2
+0
+116 0 1
+0
+117 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node3_msg5-1 
+1
+27 0
+2
+0
+116 0 1
+0
+120 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node4_msg1-1 
+1
+55 0
+2
+0
+106 0 1
+0
+102 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node4_msg2-1 
+1
+57 0
+2
+0
+106 0 1
+0
+103 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node4_msg3-1 
+1
+53 0
+2
+0
+106 0 1
+0
+104 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node4_msg4-1 
+1
+47 0
+2
+0
+106 0 1
+0
+107 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node4_msg5-1 
+1
+27 0
+2
+0
+106 0 1
+0
+110 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node5_msg1-1 
+1
+55 0
+2
+0
+96 0 1
+0
+92 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node5_msg2-1 
+1
+57 0
+2
+0
+96 0 1
+0
+93 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node5_msg3-1 
+1
+53 0
+2
+0
+96 0 1
+0
+94 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node5_msg4-1 
+1
+47 0
+2
+0
+96 0 1
+0
+97 1 0
+0
+end_operator
+begin_operator
+add-to-message_node2_node5_msg5-1 
+1
+27 0
+2
+0
+96 0 1
+0
+100 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node1_msg1-1 
+1
+76 0
+2
+0
+138 0 1
+0
+132 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node1_msg2-1 
+1
+80 0
+2
+0
+138 0 1
+0
+133 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node1_msg3-1 
+1
+74 0
+2
+0
+138 0 1
+0
+134 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node1_msg4-1 
+1
+78 0
+2
+0
+138 0 1
+0
+137 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node1_msg5-1 
+1
+71 0
+2
+0
+138 0 1
+0
+140 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node2_msg1-1 
+1
+76 0
+2
+0
+128 0 1
+0
+122 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node2_msg2-1 
+1
+80 0
+2
+0
+128 0 1
+0
+123 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node2_msg3-1 
+1
+74 0
+2
+0
+128 0 1
+0
+124 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node2_msg4-1 
+1
+78 0
+2
+0
+128 0 1
+0
+127 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node2_msg5-1 
+1
+71 0
+2
+0
+128 0 1
+0
+130 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node3_msg1-1 
+1
+76 0
+2
+0
+118 0 1
+0
+112 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node3_msg2-1 
+1
+80 0
+2
+0
+118 0 1
+0
+113 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node3_msg3-1 
+1
+74 0
+2
+0
+118 0 1
+0
+114 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node3_msg4-1 
+1
+78 0
+2
+0
+118 0 1
+0
+117 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node3_msg5-1 
+1
+71 0
+2
+0
+118 0 1
+0
+120 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node4_msg1-1 
+1
+76 0
+2
+0
+108 0 1
+0
+102 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node4_msg2-1 
+1
+80 0
+2
+0
+108 0 1
+0
+103 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node4_msg3-1 
+1
+74 0
+2
+0
+108 0 1
+0
+104 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node4_msg4-1 
+1
+78 0
+2
+0
+108 0 1
+0
+107 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node4_msg5-1 
+1
+71 0
+2
+0
+108 0 1
+0
+110 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node5_msg1-1 
+1
+76 0
+2
+0
+98 0 1
+0
+92 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node5_msg2-1 
+1
+80 0
+2
+0
+98 0 1
+0
+93 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node5_msg3-1 
+1
+74 0
+2
+0
+98 0 1
+0
+94 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node5_msg4-1 
+1
+78 0
+2
+0
+98 0 1
+0
+97 1 0
+0
+end_operator
+begin_operator
+add-to-message_node3_node5_msg5-1 
+1
+71 0
+2
+0
+98 0 1
+0
+100 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node1_msg1-1 
+1
+65 0
+2
+0
+139 0 1
+0
+132 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node1_msg2-1 
+1
+69 0
+2
+0
+139 0 1
+0
+133 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node1_msg3-1 
+1
+63 0
+2
+0
+139 0 1
+0
+134 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node1_msg4-1 
+1
+67 0
+2
+0
+139 0 1
+0
+137 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node1_msg5-1 
+1
+61 0
+2
+0
+139 0 1
+0
+140 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node2_msg1-1 
+1
+65 0
+2
+0
+129 0 1
+0
+122 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node2_msg2-1 
+1
+69 0
+2
+0
+129 0 1
+0
+123 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node2_msg3-1 
+1
+63 0
+2
+0
+129 0 1
+0
+124 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node2_msg4-1 
+1
+67 0
+2
+0
+129 0 1
+0
+127 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node2_msg5-1 
+1
+61 0
+2
+0
+129 0 1
+0
+130 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node3_msg1-1 
+1
+65 0
+2
+0
+119 0 1
+0
+112 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node3_msg2-1 
+1
+69 0
+2
+0
+119 0 1
+0
+113 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node3_msg3-1 
+1
+63 0
+2
+0
+119 0 1
+0
+114 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node3_msg4-1 
+1
+67 0
+2
+0
+119 0 1
+0
+117 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node3_msg5-1 
+1
+61 0
+2
+0
+119 0 1
+0
+120 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node4_msg1-1 
+1
+65 0
+2
+0
+109 0 1
+0
+102 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node4_msg2-1 
+1
+69 0
+2
+0
+109 0 1
+0
+103 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node4_msg3-1 
+1
+63 0
+2
+0
+109 0 1
+0
+104 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node4_msg4-1 
+1
+67 0
+2
+0
+109 0 1
+0
+107 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node4_msg5-1 
+1
+61 0
+2
+0
+109 0 1
+0
+110 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node5_msg1-1 
+1
+65 0
+2
+0
+99 0 1
+0
+92 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node5_msg2-1 
+1
+69 0
+2
+0
+99 0 1
+0
+93 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node5_msg3-1 
+1
+63 0
+2
+0
+99 0 1
+0
+94 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node5_msg4-1 
+1
+67 0
+2
+0
+99 0 1
+0
+97 1 0
+0
+end_operator
+begin_operator
+add-to-message_node4_node5_msg5-1 
+1
+61 0
+2
+0
+99 0 1
+0
+100 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node1_msg1-1 
+1
+86 0
+2
+0
+141 0 1
+0
+132 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node1_msg2-1 
+1
+88 0
+2
+0
+141 0 1
+0
+133 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node1_msg3-1 
+1
+85 0
+2
+0
+141 0 1
+0
+134 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node1_msg4-1 
+1
+89 0
+2
+0
+141 0 1
+0
+137 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node1_msg5-1 
+1
+82 0
+2
+0
+141 0 1
+0
+140 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node2_msg1-1 
+1
+86 0
+2
+0
+131 0 1
+0
+122 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node2_msg2-1 
+1
+88 0
+2
+0
+131 0 1
+0
+123 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node2_msg3-1 
+1
+85 0
+2
+0
+131 0 1
+0
+124 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node2_msg4-1 
+1
+89 0
+2
+0
+131 0 1
+0
+127 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node2_msg5-1 
+1
+82 0
+2
+0
+131 0 1
+0
+130 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node3_msg1-1 
+1
+86 0
+2
+0
+121 0 1
+0
+112 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node3_msg2-1 
+1
+88 0
+2
+0
+121 0 1
+0
+113 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node3_msg3-1 
+1
+85 0
+2
+0
+121 0 1
+0
+114 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node3_msg4-1 
+1
+89 0
+2
+0
+121 0 1
+0
+117 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node3_msg5-1 
+1
+82 0
+2
+0
+121 0 1
+0
+120 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node4_msg1-1 
+1
+86 0
+2
+0
+111 0 1
+0
+102 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node4_msg2-1 
+1
+88 0
+2
+0
+111 0 1
+0
+103 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node4_msg3-1 
+1
+85 0
+2
+0
+111 0 1
+0
+104 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node4_msg4-1 
+1
+89 0
+2
+0
+111 0 1
+0
+107 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node4_msg5-1 
+1
+82 0
+2
+0
+111 0 1
+0
+110 1 0
+0
+end_operator
+begin_operator
+add-to-message_node5_node5_msg1-1 
+1
+86 0
+2
+0
+92 1 0
+0
+101 0 1
+0
+end_operator
+begin_operator
+add-to-message_node5_node5_msg2-1 
+1
+88 0
+2
+0
+93 1 0
+0
+101 0 1
+0
+end_operator
+begin_operator
+add-to-message_node5_node5_msg3-1 
+1
+85 0
+2
+0
+94 1 0
+0
+101 0 1
+0
+end_operator
+begin_operator
+add-to-message_node5_node5_msg4-1 
+1
+89 0
+2
+0
+97 1 0
+0
+101 0 1
+0
+end_operator
+begin_operator
+add-to-message_node5_node5_msg5-1 
+1
+82 0
+2
+0
+100 1 0
+0
+101 0 1
+0
+end_operator
+begin_operator
+generate-data_node1_low_zero 
+0
+2
+0
+135 -1 0
+0
+48 1 2
+0
+end_operator
+begin_operator
+generate-data_node1_normal_low 
+0
+2
+0
+135 -1 0
+0
+48 0 1
+0
+end_operator
+begin_operator
+generate-data_node2_low_zero 
+0
+2
+0
+126 -1 0
+0
+73 1 2
+0
+end_operator
+begin_operator
+generate-data_node2_normal_low 
+0
+2
+0
+126 -1 0
+0
+73 0 1
+0
+end_operator
+begin_operator
+generate-data_node3_low_zero 
+0
+2
+0
+118 -1 0
+0
+83 1 2
+0
+end_operator
+begin_operator
+generate-data_node3_normal_low 
+0
+2
+0
+118 -1 0
+0
+83 0 1
+0
+end_operator
+begin_operator
+generate-data_node4_low_zero 
+0
+2
+0
+109 -1 0
+0
+84 1 2
+0
+end_operator
+begin_operator
+generate-data_node4_normal_low 
+0
+2
+0
+109 -1 0
+0
+84 0 1
+0
+end_operator
+begin_operator
+generate-data_node5_low_zero 
+0
+2
+0
+101 -1 0
+0
+91 0 1
+0
+end_operator
+begin_operator
+generate-data_node5_normal_low 
+0
+3
+0
+90 0 1
+0
+101 -1 0
+0
+91 -1 0
+0
+end_operator
+begin_operator
+get-data-from-message_base_node1_msg1-1 
+1
+0 0
+2
+0
+146 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node1_msg2-1 
+1
+1 0
+2
+0
+146 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node1_msg3-1 
+1
+2 0
+2
+0
+146 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node1_msg4-1 
+1
+3 0
+2
+0
+146 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node1_msg5-1 
+1
+4 0
+2
+0
+146 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node2_msg1-1 
+1
+0 0
+2
+0
+145 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node2_msg2-1 
+1
+1 0
+2
+0
+145 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node2_msg3-1 
+1
+2 0
+2
+0
+145 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node2_msg4-1 
+1
+3 0
+2
+0
+145 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node2_msg5-1 
+1
+4 0
+2
+0
+145 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node3_msg1-1 
+1
+0 0
+2
+0
+144 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node3_msg2-1 
+1
+1 0
+2
+0
+144 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node3_msg3-1 
+1
+2 0
+2
+0
+144 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node3_msg4-1 
+1
+3 0
+2
+0
+144 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node3_msg5-1 
+1
+4 0
+2
+0
+144 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node4_msg1-1 
+1
+0 0
+2
+0
+143 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node4_msg2-1 
+1
+1 0
+2
+0
+143 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node4_msg3-1 
+1
+2 0
+2
+0
+143 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node4_msg4-1 
+1
+3 0
+2
+0
+143 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node4_msg5-1 
+1
+4 0
+2
+0
+143 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node5_msg1-1 
+1
+0 0
+2
+0
+142 -1 0
+0
+92 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node5_msg2-1 
+1
+1 0
+2
+0
+142 -1 0
+0
+93 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node5_msg3-1 
+1
+2 0
+2
+0
+142 -1 0
+0
+94 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node5_msg4-1 
+1
+3 0
+2
+0
+142 -1 0
+0
+97 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_base_node5_msg5-1 
+1
+4 0
+2
+0
+142 -1 0
+0
+100 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node1_msg1-1 
+1
+10 0
+2
+0
+135 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node1_msg2-1 
+1
+13 0
+2
+0
+135 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node1_msg3-1 
+1
+16 0
+2
+0
+135 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node1_msg4-1 
+1
+19 0
+2
+0
+135 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node1_msg5-1 
+1
+22 0
+2
+0
+135 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node2_msg1-1 
+1
+10 0
+2
+0
+125 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node2_msg2-1 
+1
+13 0
+2
+0
+125 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node2_msg3-1 
+1
+16 0
+2
+0
+125 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node2_msg4-1 
+1
+19 0
+2
+0
+125 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node2_msg5-1 
+1
+22 0
+2
+0
+125 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node3_msg1-1 
+1
+10 0
+2
+0
+115 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node3_msg2-1 
+1
+13 0
+2
+0
+115 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node3_msg3-1 
+1
+16 0
+2
+0
+115 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node3_msg4-1 
+1
+19 0
+2
+0
+115 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node3_msg5-1 
+1
+22 0
+2
+0
+115 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node4_msg1-1 
+1
+10 0
+2
+0
+105 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node4_msg2-1 
+1
+13 0
+2
+0
+105 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node4_msg3-1 
+1
+16 0
+2
+0
+105 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node4_msg4-1 
+1
+19 0
+2
+0
+105 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node4_msg5-1 
+1
+22 0
+2
+0
+105 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node5_msg1-1 
+1
+10 0
+2
+0
+95 -1 0
+0
+92 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node5_msg2-1 
+1
+13 0
+2
+0
+95 -1 0
+0
+93 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node5_msg3-1 
+1
+16 0
+2
+0
+95 -1 0
+0
+94 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node5_msg4-1 
+1
+19 0
+2
+0
+95 -1 0
+0
+97 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node1_node5_msg5-1 
+1
+22 0
+2
+0
+95 -1 0
+0
+100 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node1_msg1-1 
+1
+55 0
+2
+0
+136 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node1_msg2-1 
+1
+57 0
+2
+0
+136 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node1_msg3-1 
+1
+53 0
+2
+0
+136 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node1_msg4-1 
+1
+47 0
+2
+0
+136 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node1_msg5-1 
+1
+27 0
+2
+0
+136 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node2_msg1-1 
+1
+55 0
+2
+0
+126 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node2_msg2-1 
+1
+57 0
+2
+0
+126 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node2_msg3-1 
+1
+53 0
+2
+0
+126 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node2_msg4-1 
+1
+47 0
+2
+0
+126 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node2_msg5-1 
+1
+27 0
+2
+0
+126 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node3_msg1-1 
+1
+55 0
+2
+0
+116 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node3_msg2-1 
+1
+57 0
+2
+0
+116 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node3_msg3-1 
+1
+53 0
+2
+0
+116 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node3_msg4-1 
+1
+47 0
+2
+0
+116 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node3_msg5-1 
+1
+27 0
+2
+0
+116 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node4_msg1-1 
+1
+55 0
+2
+0
+106 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node4_msg2-1 
+1
+57 0
+2
+0
+106 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node4_msg3-1 
+1
+53 0
+2
+0
+106 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node4_msg4-1 
+1
+47 0
+2
+0
+106 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node4_msg5-1 
+1
+27 0
+2
+0
+106 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node5_msg1-1 
+1
+55 0
+2
+0
+96 -1 0
+0
+92 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node5_msg2-1 
+1
+57 0
+2
+0
+96 -1 0
+0
+93 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node5_msg3-1 
+1
+53 0
+2
+0
+96 -1 0
+0
+94 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node5_msg4-1 
+1
+47 0
+2
+0
+96 -1 0
+0
+97 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node2_node5_msg5-1 
+1
+27 0
+2
+0
+96 -1 0
+0
+100 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node1_msg1-1 
+1
+76 0
+2
+0
+138 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node1_msg2-1 
+1
+80 0
+2
+0
+138 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node1_msg3-1 
+1
+74 0
+2
+0
+138 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node1_msg4-1 
+1
+78 0
+2
+0
+138 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node1_msg5-1 
+1
+71 0
+2
+0
+138 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node2_msg1-1 
+1
+76 0
+2
+0
+128 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node2_msg2-1 
+1
+80 0
+2
+0
+128 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node2_msg3-1 
+1
+74 0
+2
+0
+128 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node2_msg4-1 
+1
+78 0
+2
+0
+128 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node2_msg5-1 
+1
+71 0
+2
+0
+128 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node3_msg1-1 
+1
+76 0
+2
+0
+118 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node3_msg2-1 
+1
+80 0
+2
+0
+118 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node3_msg3-1 
+1
+74 0
+2
+0
+118 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node3_msg4-1 
+1
+78 0
+2
+0
+118 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node3_msg5-1 
+1
+71 0
+2
+0
+118 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node4_msg1-1 
+1
+76 0
+2
+0
+108 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node4_msg2-1 
+1
+80 0
+2
+0
+108 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node4_msg3-1 
+1
+74 0
+2
+0
+108 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node4_msg4-1 
+1
+78 0
+2
+0
+108 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node4_msg5-1 
+1
+71 0
+2
+0
+108 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node5_msg1-1 
+1
+76 0
+2
+0
+98 -1 0
+0
+92 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node5_msg2-1 
+1
+80 0
+2
+0
+98 -1 0
+0
+93 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node5_msg3-1 
+1
+74 0
+2
+0
+98 -1 0
+0
+94 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node5_msg4-1 
+1
+78 0
+2
+0
+98 -1 0
+0
+97 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node3_node5_msg5-1 
+1
+71 0
+2
+0
+98 -1 0
+0
+100 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node1_msg1-1 
+1
+65 0
+2
+0
+139 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node1_msg2-1 
+1
+69 0
+2
+0
+139 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node1_msg3-1 
+1
+63 0
+2
+0
+139 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node1_msg4-1 
+1
+67 0
+2
+0
+139 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node1_msg5-1 
+1
+61 0
+2
+0
+139 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node2_msg1-1 
+1
+65 0
+2
+0
+129 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node2_msg2-1 
+1
+69 0
+2
+0
+129 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node2_msg3-1 
+1
+63 0
+2
+0
+129 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node2_msg4-1 
+1
+67 0
+2
+0
+129 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node2_msg5-1 
+1
+61 0
+2
+0
+129 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node3_msg1-1 
+1
+65 0
+2
+0
+119 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node3_msg2-1 
+1
+69 0
+2
+0
+119 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node3_msg3-1 
+1
+63 0
+2
+0
+119 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node3_msg4-1 
+1
+67 0
+2
+0
+119 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node3_msg5-1 
+1
+61 0
+2
+0
+119 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node4_msg1-1 
+1
+65 0
+2
+0
+109 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node4_msg2-1 
+1
+69 0
+2
+0
+109 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node4_msg3-1 
+1
+63 0
+2
+0
+109 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node4_msg4-1 
+1
+67 0
+2
+0
+109 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node4_msg5-1 
+1
+61 0
+2
+0
+109 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node5_msg1-1 
+1
+65 0
+2
+0
+99 -1 0
+0
+92 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node5_msg2-1 
+1
+69 0
+2
+0
+99 -1 0
+0
+93 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node5_msg3-1 
+1
+63 0
+2
+0
+99 -1 0
+0
+94 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node5_msg4-1 
+1
+67 0
+2
+0
+99 -1 0
+0
+97 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node4_node5_msg5-1 
+1
+61 0
+2
+0
+99 -1 0
+0
+100 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node1_msg1-1 
+1
+86 0
+2
+0
+141 -1 0
+0
+132 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node1_msg2-1 
+1
+88 0
+2
+0
+141 -1 0
+0
+133 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node1_msg3-1 
+1
+85 0
+2
+0
+141 -1 0
+0
+134 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node1_msg4-1 
+1
+89 0
+2
+0
+141 -1 0
+0
+137 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node1_msg5-1 
+1
+82 0
+2
+0
+141 -1 0
+0
+140 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node2_msg1-1 
+1
+86 0
+2
+0
+131 -1 0
+0
+122 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node2_msg2-1 
+1
+88 0
+2
+0
+131 -1 0
+0
+123 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node2_msg3-1 
+1
+85 0
+2
+0
+131 -1 0
+0
+124 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node2_msg4-1 
+1
+89 0
+2
+0
+131 -1 0
+0
+127 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node2_msg5-1 
+1
+82 0
+2
+0
+131 -1 0
+0
+130 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node3_msg1-1 
+1
+86 0
+2
+0
+121 -1 0
+0
+112 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node3_msg2-1 
+1
+88 0
+2
+0
+121 -1 0
+0
+113 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node3_msg3-1 
+1
+85 0
+2
+0
+121 -1 0
+0
+114 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node3_msg4-1 
+1
+89 0
+2
+0
+121 -1 0
+0
+117 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node3_msg5-1 
+1
+82 0
+2
+0
+121 -1 0
+0
+120 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node4_msg1-1 
+1
+86 0
+2
+0
+111 -1 0
+0
+102 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node4_msg2-1 
+1
+88 0
+2
+0
+111 -1 0
+0
+103 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node4_msg3-1 
+1
+85 0
+2
+0
+111 -1 0
+0
+104 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node4_msg4-1 
+1
+89 0
+2
+0
+111 -1 0
+0
+107 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node4_msg5-1 
+1
+82 0
+2
+0
+111 -1 0
+0
+110 0 1
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node5_msg1-1 
+1
+86 0
+2
+0
+92 0 1
+0
+101 -1 0
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node5_msg2-1 
+1
+88 0
+2
+0
+93 0 1
+0
+101 -1 0
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node5_msg3-1 
+1
+85 0
+2
+0
+94 0 1
+0
+101 -1 0
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node5_msg4-1 
+1
+89 0
+2
+0
+97 0 1
+0
+101 -1 0
+0
+end_operator
+begin_operator
+get-data-from-message_node5_node5_msg5-1 
+1
+82 0
+2
+0
+100 0 1
+0
+101 -1 0
+0
+end_operator
+begin_operator
+receive-message_base_node5_msg1-1 
+0
+2
+0
+0 1 0
+0
+5 0 1
+0
+end_operator
+begin_operator
+receive-message_base_node5_msg2-1 
+0
+2
+0
+1 1 0
+0
+6 0 1
+0
+end_operator
+begin_operator
+receive-message_base_node5_msg3-1 
+0
+2
+0
+2 1 0
+0
+7 0 1
+0
+end_operator
+begin_operator
+receive-message_base_node5_msg4-1 
+0
+2
+0
+3 1 0
+0
+8 0 1
+0
+end_operator
+begin_operator
+receive-message_base_node5_msg5-1 
+0
+2
+0
+4 1 0
+0
+9 0 1
+0
+end_operator
+begin_operator
+receive-message_node1_node2_msg1-1 
+0
+2
+0
+10 1 0
+0
+11 0 1
+0
+end_operator
+begin_operator
+receive-message_node1_node2_msg2-1 
+0
+2
+0
+13 1 0
+0
+14 0 1
+0
+end_operator
+begin_operator
+receive-message_node1_node2_msg3-1 
+0
+2
+0
+16 1 0
+0
+17 0 1
+0
+end_operator
+begin_operator
+receive-message_node1_node2_msg4-1 
+0
+2
+0
+19 1 0
+0
+20 0 1
+0
+end_operator
+begin_operator
+receive-message_node1_node2_msg5-1 
+0
+2
+0
+22 1 0
+0
+23 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node1_msg1-1 
+0
+2
+0
+55 1 0
+0
+12 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node1_msg2-1 
+0
+2
+0
+57 1 0
+0
+15 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node1_msg3-1 
+0
+2
+0
+53 1 0
+0
+18 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node1_msg4-1 
+0
+2
+0
+47 1 0
+0
+21 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node1_msg5-1 
+0
+2
+0
+27 1 0
+0
+24 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node3_msg1-1 
+0
+2
+0
+55 1 0
+0
+54 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node3_msg2-1 
+0
+2
+0
+57 1 0
+0
+56 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node3_msg3-1 
+0
+2
+0
+53 1 0
+0
+52 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node3_msg4-1 
+0
+2
+0
+47 1 0
+0
+46 0 1
+0
+end_operator
+begin_operator
+receive-message_node2_node3_msg5-1 
+0
+2
+0
+27 1 0
+0
+26 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node2_msg1-1 
+0
+2
+0
+76 1 0
+0
+49 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node2_msg2-1 
+0
+2
+0
+80 1 0
+0
+50 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node2_msg3-1 
+0
+2
+0
+74 1 0
+0
+51 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node2_msg4-1 
+0
+2
+0
+78 1 0
+0
+45 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node2_msg5-1 
+0
+2
+0
+71 1 0
+0
+25 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node4_msg1-1 
+0
+2
+0
+76 1 0
+0
+37 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node4_msg2-1 
+0
+2
+0
+80 1 0
+0
+39 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node4_msg3-1 
+0
+2
+0
+74 1 0
+0
+33 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node4_msg4-1 
+0
+2
+0
+78 1 0
+0
+40 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node4_msg5-1 
+0
+2
+0
+71 1 0
+0
+29 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node5_msg1-1 
+0
+2
+0
+76 1 0
+0
+77 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node5_msg2-1 
+0
+2
+0
+80 1 0
+0
+81 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node5_msg3-1 
+0
+2
+0
+74 1 0
+0
+75 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node5_msg4-1 
+0
+2
+0
+78 1 0
+0
+79 0 1
+0
+end_operator
+begin_operator
+receive-message_node3_node5_msg5-1 
+0
+2
+0
+71 1 0
+0
+72 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node3_msg1-1 
+0
+2
+0
+65 1 0
+0
+36 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node3_msg2-1 
+0
+2
+0
+69 1 0
+0
+58 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node3_msg3-1 
+0
+2
+0
+63 1 0
+0
+32 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node3_msg4-1 
+0
+2
+0
+67 1 0
+0
+44 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node3_msg5-1 
+0
+2
+0
+61 1 0
+0
+28 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node5_msg1-1 
+0
+2
+0
+65 1 0
+0
+66 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node5_msg2-1 
+0
+2
+0
+69 1 0
+0
+70 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node5_msg3-1 
+0
+2
+0
+63 1 0
+0
+64 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node5_msg4-1 
+0
+2
+0
+67 1 0
+0
+68 0 1
+0
+end_operator
+begin_operator
+receive-message_node4_node5_msg5-1 
+0
+2
+0
+61 1 0
+0
+62 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node3_msg1-1 
+0
+2
+0
+86 1 0
+0
+59 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node3_msg2-1 
+0
+2
+0
+88 1 0
+0
+60 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node3_msg3-1 
+0
+2
+0
+85 1 0
+0
+35 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node3_msg4-1 
+0
+2
+0
+89 1 0
+0
+43 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node3_msg5-1 
+0
+2
+0
+82 1 0
+0
+31 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node4_msg1-1 
+0
+2
+0
+86 1 0
+0
+38 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node4_msg2-1 
+0
+2
+0
+88 1 0
+0
+41 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node4_msg3-1 
+0
+2
+0
+85 1 0
+0
+34 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node4_msg4-1 
+0
+2
+0
+89 1 0
+0
+42 0 1
+0
+end_operator
+begin_operator
+receive-message_node5_node4_msg5-1 
+0
+2
+0
+82 1 0
+0
+30 0 1
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg1-1_low_zero 
+1
+55 1
+3
+0
+10 0 1
+0
+48 1 2
+0
+12 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg1-1_normal_low 
+1
+55 1
+3
+0
+10 0 1
+0
+48 0 1
+0
+12 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg2-1_low_zero 
+1
+57 1
+3
+0
+13 0 1
+0
+48 1 2
+0
+15 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg2-1_normal_low 
+1
+57 1
+3
+0
+13 0 1
+0
+48 0 1
+0
+15 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg3-1_low_zero 
+1
+53 1
+3
+0
+16 0 1
+0
+48 1 2
+0
+18 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg3-1_normal_low 
+1
+53 1
+3
+0
+16 0 1
+0
+48 0 1
+0
+18 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg4-1_low_zero 
+1
+47 1
+3
+0
+19 0 1
+0
+48 1 2
+0
+21 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg4-1_normal_low 
+1
+47 1
+3
+0
+19 0 1
+0
+48 0 1
+0
+21 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg5-1_low_zero 
+1
+27 1
+3
+0
+22 0 1
+0
+48 1 2
+0
+24 1 0
+0
+end_operator
+begin_operator
+send-message_node1_node2_msg5-1_normal_low 
+1
+27 1
+3
+0
+22 0 1
+0
+48 0 1
+0
+24 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg1-1_low_zero 
+1
+10 1
+3
+0
+55 0 1
+0
+73 1 2
+0
+11 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg1-1_normal_low 
+1
+10 1
+3
+0
+55 0 1
+0
+73 0 1
+0
+11 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg2-1_low_zero 
+1
+13 1
+3
+0
+57 0 1
+0
+73 1 2
+0
+14 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg2-1_normal_low 
+1
+13 1
+3
+0
+57 0 1
+0
+73 0 1
+0
+14 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg3-1_low_zero 
+1
+16 1
+3
+0
+53 0 1
+0
+73 1 2
+0
+17 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg3-1_normal_low 
+1
+16 1
+3
+0
+53 0 1
+0
+73 0 1
+0
+17 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg4-1_low_zero 
+1
+19 1
+3
+0
+47 0 1
+0
+73 1 2
+0
+20 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg4-1_normal_low 
+1
+19 1
+3
+0
+47 0 1
+0
+73 0 1
+0
+20 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg5-1_low_zero 
+1
+22 1
+3
+0
+27 0 1
+0
+73 1 2
+0
+23 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node1_msg5-1_normal_low 
+1
+22 1
+3
+0
+27 0 1
+0
+73 0 1
+0
+23 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg1-1_low_zero 
+1
+76 1
+3
+0
+55 0 1
+0
+73 1 2
+0
+49 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg1-1_normal_low 
+1
+76 1
+3
+0
+55 0 1
+0
+73 0 1
+0
+49 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg2-1_low_zero 
+1
+80 1
+3
+0
+57 0 1
+0
+73 1 2
+0
+50 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg2-1_normal_low 
+1
+80 1
+3
+0
+57 0 1
+0
+73 0 1
+0
+50 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg3-1_low_zero 
+1
+74 1
+3
+0
+53 0 1
+0
+73 1 2
+0
+51 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg3-1_normal_low 
+1
+74 1
+3
+0
+53 0 1
+0
+73 0 1
+0
+51 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg4-1_low_zero 
+1
+78 1
+3
+0
+47 0 1
+0
+73 1 2
+0
+45 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg4-1_normal_low 
+1
+78 1
+3
+0
+47 0 1
+0
+73 0 1
+0
+45 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg5-1_low_zero 
+1
+71 1
+3
+0
+27 0 1
+0
+73 1 2
+0
+25 1 0
+0
+end_operator
+begin_operator
+send-message_node2_node3_msg5-1_normal_low 
+1
+71 1
+3
+0
+27 0 1
+0
+73 0 1
+0
+25 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg1-1_low_zero 
+1
+55 1
+3
+0
+76 0 1
+0
+83 1 2
+0
+54 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg1-1_normal_low 
+1
+55 1
+3
+0
+76 0 1
+0
+83 0 1
+0
+54 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg2-1_low_zero 
+1
+57 1
+3
+0
+80 0 1
+0
+83 1 2
+0
+56 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg2-1_normal_low 
+1
+57 1
+3
+0
+80 0 1
+0
+83 0 1
+0
+56 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg3-1_low_zero 
+1
+53 1
+3
+0
+74 0 1
+0
+83 1 2
+0
+52 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg3-1_normal_low 
+1
+53 1
+3
+0
+74 0 1
+0
+83 0 1
+0
+52 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg4-1_low_zero 
+1
+47 1
+3
+0
+78 0 1
+0
+83 1 2
+0
+46 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg4-1_normal_low 
+1
+47 1
+3
+0
+78 0 1
+0
+83 0 1
+0
+46 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg5-1_low_zero 
+1
+27 1
+3
+0
+71 0 1
+0
+83 1 2
+0
+26 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node2_msg5-1_normal_low 
+1
+27 1
+3
+0
+71 0 1
+0
+83 0 1
+0
+26 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg1-1_low_zero 
+1
+65 1
+3
+0
+76 0 1
+0
+83 1 2
+0
+36 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg1-1_normal_low 
+1
+65 1
+3
+0
+76 0 1
+0
+83 0 1
+0
+36 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg2-1_low_zero 
+1
+69 1
+3
+0
+80 0 1
+0
+83 1 2
+0
+58 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg2-1_normal_low 
+1
+69 1
+3
+0
+80 0 1
+0
+83 0 1
+0
+58 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg3-1_low_zero 
+1
+63 1
+3
+0
+74 0 1
+0
+83 1 2
+0
+32 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg3-1_normal_low 
+1
+63 1
+3
+0
+74 0 1
+0
+83 0 1
+0
+32 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg4-1_low_zero 
+1
+67 1
+3
+0
+78 0 1
+0
+83 1 2
+0
+44 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg4-1_normal_low 
+1
+67 1
+3
+0
+78 0 1
+0
+83 0 1
+0
+44 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg5-1_low_zero 
+1
+61 1
+3
+0
+71 0 1
+0
+83 1 2
+0
+28 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node4_msg5-1_normal_low 
+1
+61 1
+3
+0
+71 0 1
+0
+83 0 1
+0
+28 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg1-1_low_zero 
+1
+86 1
+3
+0
+76 0 1
+0
+83 1 2
+0
+59 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg1-1_normal_low 
+1
+86 1
+3
+0
+76 0 1
+0
+83 0 1
+0
+59 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg2-1_low_zero 
+1
+88 1
+3
+0
+80 0 1
+0
+83 1 2
+0
+60 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg2-1_normal_low 
+1
+88 1
+3
+0
+80 0 1
+0
+83 0 1
+0
+60 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg3-1_low_zero 
+1
+85 1
+3
+0
+74 0 1
+0
+83 1 2
+0
+35 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg3-1_normal_low 
+1
+85 1
+3
+0
+74 0 1
+0
+83 0 1
+0
+35 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg4-1_low_zero 
+1
+89 1
+3
+0
+78 0 1
+0
+83 1 2
+0
+43 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg4-1_normal_low 
+1
+89 1
+3
+0
+78 0 1
+0
+83 0 1
+0
+43 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg5-1_low_zero 
+1
+82 1
+3
+0
+71 0 1
+0
+83 1 2
+0
+31 1 0
+0
+end_operator
+begin_operator
+send-message_node3_node5_msg5-1_normal_low 
+1
+82 1
+3
+0
+71 0 1
+0
+83 0 1
+0
+31 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg1-1_low_zero 
+1
+76 1
+3
+0
+65 0 1
+0
+84 1 2
+0
+37 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg1-1_normal_low 
+1
+76 1
+3
+0
+65 0 1
+0
+84 0 1
+0
+37 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg2-1_low_zero 
+1
+80 1
+3
+0
+69 0 1
+0
+84 1 2
+0
+39 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg2-1_normal_low 
+1
+80 1
+3
+0
+69 0 1
+0
+84 0 1
+0
+39 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg3-1_low_zero 
+1
+74 1
+3
+0
+63 0 1
+0
+84 1 2
+0
+33 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg3-1_normal_low 
+1
+74 1
+3
+0
+63 0 1
+0
+84 0 1
+0
+33 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg4-1_low_zero 
+1
+78 1
+3
+0
+67 0 1
+0
+84 1 2
+0
+40 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg4-1_normal_low 
+1
+78 1
+3
+0
+67 0 1
+0
+84 0 1
+0
+40 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg5-1_low_zero 
+1
+71 1
+3
+0
+61 0 1
+0
+84 1 2
+0
+29 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node3_msg5-1_normal_low 
+1
+71 1
+3
+0
+61 0 1
+0
+84 0 1
+0
+29 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg1-1_low_zero 
+1
+86 1
+3
+0
+65 0 1
+0
+84 1 2
+0
+38 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg1-1_normal_low 
+1
+86 1
+3
+0
+65 0 1
+0
+84 0 1
+0
+38 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg2-1_low_zero 
+1
+88 1
+3
+0
+69 0 1
+0
+84 1 2
+0
+41 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg2-1_normal_low 
+1
+88 1
+3
+0
+69 0 1
+0
+84 0 1
+0
+41 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg3-1_low_zero 
+1
+85 1
+3
+0
+63 0 1
+0
+84 1 2
+0
+34 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg3-1_normal_low 
+1
+85 1
+3
+0
+63 0 1
+0
+84 0 1
+0
+34 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg4-1_low_zero 
+1
+89 1
+3
+0
+67 0 1
+0
+84 1 2
+0
+42 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg4-1_normal_low 
+1
+89 1
+3
+0
+67 0 1
+0
+84 0 1
+0
+42 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg5-1_low_zero 
+1
+82 1
+3
+0
+61 0 1
+0
+84 1 2
+0
+30 1 0
+0
+end_operator
+begin_operator
+send-message_node4_node5_msg5-1_normal_low 
+1
+82 1
+3
+0
+61 0 1
+0
+84 0 1
+0
+30 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg1-1_high_normal 
+1
+0 1
+4
+0
+86 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+5 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg1-1_low_zero 
+1
+0 1
+3
+0
+86 0 1
+0
+91 0 1
+0
+5 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg1-1_normal_low 
+1
+0 1
+4
+0
+86 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+5 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg2-1_high_normal 
+1
+1 1
+4
+0
+88 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+6 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg2-1_low_zero 
+1
+1 1
+3
+0
+88 0 1
+0
+91 0 1
+0
+6 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg2-1_normal_low 
+1
+1 1
+4
+0
+88 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+6 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg3-1_high_normal 
+1
+2 1
+4
+0
+85 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+7 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg3-1_low_zero 
+1
+2 1
+3
+0
+85 0 1
+0
+91 0 1
+0
+7 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg3-1_normal_low 
+1
+2 1
+4
+0
+85 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+7 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg4-1_high_normal 
+1
+3 1
+4
+0
+89 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+8 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg4-1_low_zero 
+1
+3 1
+3
+0
+89 0 1
+0
+91 0 1
+0
+8 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg4-1_normal_low 
+1
+3 1
+4
+0
+89 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+8 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg5-1_high_normal 
+1
+4 1
+4
+0
+82 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+9 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg5-1_low_zero 
+1
+4 1
+3
+0
+82 0 1
+0
+91 0 1
+0
+9 1 0
+0
+end_operator
+begin_operator
+send-message_node5_base_msg5-1_normal_low 
+1
+4 1
+4
+0
+82 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+9 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg1-1_high_normal 
+1
+76 1
+4
+0
+86 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+77 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg1-1_low_zero 
+1
+76 1
+3
+0
+86 0 1
+0
+91 0 1
+0
+77 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg1-1_normal_low 
+1
+76 1
+4
+0
+86 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+77 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg2-1_high_normal 
+1
+80 1
+4
+0
+88 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+81 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg2-1_low_zero 
+1
+80 1
+3
+0
+88 0 1
+0
+91 0 1
+0
+81 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg2-1_normal_low 
+1
+80 1
+4
+0
+88 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+81 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg3-1_high_normal 
+1
+74 1
+4
+0
+85 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+75 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg3-1_low_zero 
+1
+74 1
+3
+0
+85 0 1
+0
+91 0 1
+0
+75 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg3-1_normal_low 
+1
+74 1
+4
+0
+85 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+75 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg4-1_high_normal 
+1
+78 1
+4
+0
+89 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+79 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg4-1_low_zero 
+1
+78 1
+3
+0
+89 0 1
+0
+91 0 1
+0
+79 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg4-1_normal_low 
+1
+78 1
+4
+0
+89 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+79 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg5-1_high_normal 
+1
+71 1
+4
+0
+82 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+72 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg5-1_low_zero 
+1
+71 1
+3
+0
+82 0 1
+0
+91 0 1
+0
+72 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node3_msg5-1_normal_low 
+1
+71 1
+4
+0
+82 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+72 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg1-1_high_normal 
+1
+65 1
+4
+0
+86 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+66 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg1-1_low_zero 
+1
+65 1
+3
+0
+86 0 1
+0
+91 0 1
+0
+66 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg1-1_normal_low 
+1
+65 1
+4
+0
+86 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+66 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg2-1_high_normal 
+1
+69 1
+4
+0
+88 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+70 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg2-1_low_zero 
+1
+69 1
+3
+0
+88 0 1
+0
+91 0 1
+0
+70 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg2-1_normal_low 
+1
+69 1
+4
+0
+88 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+70 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg3-1_high_normal 
+1
+63 1
+4
+0
+85 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+64 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg3-1_low_zero 
+1
+63 1
+3
+0
+85 0 1
+0
+91 0 1
+0
+64 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg3-1_normal_low 
+1
+63 1
+4
+0
+85 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+64 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg4-1_high_normal 
+1
+67 1
+4
+0
+89 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+68 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg4-1_low_zero 
+1
+67 1
+3
+0
+89 0 1
+0
+91 0 1
+0
+68 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg4-1_normal_low 
+1
+67 1
+4
+0
+89 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+68 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg5-1_high_normal 
+1
+61 1
+4
+0
+82 0 1
+0
+87 0 1
+0
+90 -1 0
+0
+62 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg5-1_low_zero 
+1
+61 1
+3
+0
+82 0 1
+0
+91 0 1
+0
+62 1 0
+0
+end_operator
+begin_operator
+send-message_node5_node4_msg5-1_normal_low 
+1
+61 1
+4
+0
+82 0 1
+0
+90 0 1
+0
+91 -1 0
+0
+62 1 0
+0
+end_operator
+0
+begin_SG
+switch 135
+check 0
+switch 10
+check 0
+switch 132
+check 0
+check 0
+check 1
+0
+check 0
+check 0
+switch 13
+check 0
+switch 133
+check 0
+check 0
+check 1
+1
+check 0
+check 0
+switch 16
+check 0
+switch 134
+check 0
+check 0
+check 1
+2
+check 0
+check 0
+switch 19
+check 0
+switch 137
+check 0
+check 0
+check 1
+3
+check 0
+check 0
+switch 22
+check 0
+switch 140
+check 0
+check 0
+check 1
+4
+check 0
+check 0
+check 0
+check 0
+switch 125
+check 0
+switch 10
+check 0
+switch 122
+check 0
+check 0
+check 1
+5
+check 0
+check 0
+switch 13
+check 0
+switch 123
+check 0
+check 0
+check 1
+6
+check 0
+check 0
+switch 16
+check 0
+switch 124
+check 0
+check 0
+check 1
+7
+check 0
+check 0
+switch 19
+check 0
+switch 127
+check 0
+check 0
+check 1
+8
+check 0
+check 0
+switch 22
+check 0
+switch 130
+check 0
+check 0
+check 1
+9
+check 0
+check 0
+check 0
+check 0
+switch 115
+check 0
+switch 10
+check 0
+switch 112
+check 0
+check 0
+check 1
+10
+check 0
+check 0
+switch 13
+check 0
+switch 113
+check 0
+check 0
+check 1
+11
+check 0
+check 0
+switch 16
+check 0
+switch 114
+check 0
+check 0
+check 1
+12
+check 0
+check 0
+switch 19
+check 0
+switch 117
+check 0
+check 0
+check 1
+13
+check 0
+check 0
+switch 22
+check 0
+switch 120
+check 0
+check 0
+check 1
+14
+check 0
+check 0
+check 0
+check 0
+switch 105
+check 0
+switch 10
+check 0
+switch 102
+check 0
+check 0
+check 1
+15
+check 0
+check 0
+switch 13
+check 0
+switch 103
+check 0
+check 0
+check 1
+16
+check 0
+check 0
+switch 16
+check 0
+switch 104
+check 0
+check 0
+check 1
+17
+check 0
+check 0
+switch 19
+check 0
+switch 107
+check 0
+check 0
+check 1
+18
+check 0
+check 0
+switch 22
+check 0
+switch 110
+check 0
+check 0
+check 1
+19
+check 0
+check 0
+check 0
+check 0
+switch 95
+check 0
+switch 10
+check 0
+switch 92
+check 0
+check 0
+check 1
+20
+check 0
+check 0
+switch 13
+check 0
+switch 93
+check 0
+check 0
+check 1
+21
+check 0
+check 0
+switch 16
+check 0
+switch 94
+check 0
+check 0
+check 1
+22
+check 0
+check 0
+switch 19
+check 0
+switch 97
+check 0
+check 0
+check 1
+23
+check 0
+check 0
+switch 22
+check 0
+switch 100
+check 0
+check 0
+check 1
+24
+check 0
+check 0
+check 0
+check 0
+switch 136
+check 0
+switch 55
+check 0
+switch 132
+check 0
+check 0
+check 1
+25
+check 0
+check 0
+switch 57
+check 0
+switch 133
+check 0
+check 0
+check 1
+26
+check 0
+check 0
+switch 53
+check 0
+switch 134
+check 0
+check 0
+check 1
+27
+check 0
+check 0
+switch 47
+check 0
+switch 137
+check 0
+check 0
+check 1
+28
+check 0
+check 0
+switch 27
+check 0
+switch 140
+check 0
+check 0
+check 1
+29
+check 0
+check 0
+check 0
+check 0
+switch 126
+check 0
+switch 55
+check 0
+switch 122
+check 0
+check 0
+check 1
+30
+check 0
+check 0
+switch 57
+check 0
+switch 123
+check 0
+check 0
+check 1
+31
+check 0
+check 0
+switch 53
+check 0
+switch 124
+check 0
+check 0
+check 1
+32
+check 0
+check 0
+switch 47
+check 0
+switch 127
+check 0
+check 0
+check 1
+33
+check 0
+check 0
+switch 27
+check 0
+switch 130
+check 0
+check 0
+check 1
+34
+check 0
+check 0
+check 0
+check 0
+switch 116
+check 0
+switch 55
+check 0
+switch 112
+check 0
+check 0
+check 1
+35
+check 0
+check 0
+switch 57
+check 0
+switch 113
+check 0
+check 0
+check 1
+36
+check 0
+check 0
+switch 53
+check 0
+switch 114
+check 0
+check 0
+check 1
+37
+check 0
+check 0
+switch 47
+check 0
+switch 117
+check 0
+check 0
+check 1
+38
+check 0
+check 0
+switch 27
+check 0
+switch 120
+check 0
+check 0
+check 1
+39
+check 0
+check 0
+check 0
+check 0
+switch 106
+check 0
+switch 55
+check 0
+switch 102
+check 0
+check 0
+check 1
+40
+check 0
+check 0
+switch 57
+check 0
+switch 103
+check 0
+check 0
+check 1
+41
+check 0
+check 0
+switch 53
+check 0
+switch 104
+check 0
+check 0
+check 1
+42
+check 0
+check 0
+switch 47
+check 0
+switch 107
+check 0
+check 0
+check 1
+43
+check 0
+check 0
+switch 27
+check 0
+switch 110
+check 0
+check 0
+check 1
+44
+check 0
+check 0
+check 0
+check 0
+switch 96
+check 0
+switch 55
+check 0
+switch 92
+check 0
+check 0
+check 1
+45
+check 0
+check 0
+switch 57
+check 0
+switch 93
+check 0
+check 0
+check 1
+46
+check 0
+check 0
+switch 53
+check 0
+switch 94
+check 0
+check 0
+check 1
+47
+check 0
+check 0
+switch 47
+check 0
+switch 97
+check 0
+check 0
+check 1
+48
+check 0
+check 0
+switch 27
+check 0
+switch 100
+check 0
+check 0
+check 1
+49
+check 0
+check 0
+check 0
+check 0
+switch 138
+check 0
+switch 76
+check 0
+switch 132
+check 0
+check 0
+check 1
+50
+check 0
+check 0
+switch 80
+check 0
+switch 133
+check 0
+check 0
+check 1
+51
+check 0
+check 0
+switch 74
+check 0
+switch 134
+check 0
+check 0
+check 1
+52
+check 0
+check 0
+switch 78
+check 0
+switch 137
+check 0
+check 0
+check 1
+53
+check 0
+check 0
+switch 71
+check 0
+switch 140
+check 0
+check 0
+check 1
+54
+check 0
+check 0
+check 0
+check 0
+switch 128
+check 0
+switch 76
+check 0
+switch 122
+check 0
+check 0
+check 1
+55
+check 0
+check 0
+switch 80
+check 0
+switch 123
+check 0
+check 0
+check 1
+56
+check 0
+check 0
+switch 74
+check 0
+switch 124
+check 0
+check 0
+check 1
+57
+check 0
+check 0
+switch 78
+check 0
+switch 127
+check 0
+check 0
+check 1
+58
+check 0
+check 0
+switch 71
+check 0
+switch 130
+check 0
+check 0
+check 1
+59
+check 0
+check 0
+check 0
+check 0
+switch 118
+check 0
+switch 76
+check 0
+switch 112
+check 0
+check 0
+check 1
+60
+check 0
+check 0
+switch 80
+check 0
+switch 113
+check 0
+check 0
+check 1
+61
+check 0
+check 0
+switch 74
+check 0
+switch 114
+check 0
+check 0
+check 1
+62
+check 0
+check 0
+switch 78
+check 0
+switch 117
+check 0
+check 0
+check 1
+63
+check 0
+check 0
+switch 71
+check 0
+switch 120
+check 0
+check 0
+check 1
+64
+check 0
+check 0
+check 0
+check 0
+switch 108
+check 0
+switch 76
+check 0
+switch 102
+check 0
+check 0
+check 1
+65
+check 0
+check 0
+switch 80
+check 0
+switch 103
+check 0
+check 0
+check 1
+66
+check 0
+check 0
+switch 74
+check 0
+switch 104
+check 0
+check 0
+check 1
+67
+check 0
+check 0
+switch 78
+check 0
+switch 107
+check 0
+check 0
+check 1
+68
+check 0
+check 0
+switch 71
+check 0
+switch 110
+check 0
+check 0
+check 1
+69
+check 0
+check 0
+check 0
+check 0
+switch 98
+check 0
+switch 76
+check 0
+switch 92
+check 0
+check 0
+check 1
+70
+check 0
+check 0
+switch 80
+check 0
+switch 93
+check 0
+check 0
+check 1
+71
+check 0
+check 0
+switch 74
+check 0
+switch 94
+check 0
+check 0
+check 1
+72
+check 0
+check 0
+switch 78
+check 0
+switch 97
+check 0
+check 0
+check 1
+73
+check 0
+check 0
+switch 71
+check 0
+switch 100
+check 0
+check 0
+check 1
+74
+check 0
+check 0
+check 0
+check 0
+switch 139
+check 0
+switch 65
+check 0
+switch 132
+check 0
+check 0
+check 1
+75
+check 0
+check 0
+switch 69
+check 0
+switch 133
+check 0
+check 0
+check 1
+76
+check 0
+check 0
+switch 63
+check 0
+switch 134
+check 0
+check 0
+check 1
+77
+check 0
+check 0
+switch 67
+check 0
+switch 137
+check 0
+check 0
+check 1
+78
+check 0
+check 0
+switch 61
+check 0
+switch 140
+check 0
+check 0
+check 1
+79
+check 0
+check 0
+check 0
+check 0
+switch 129
+check 0
+switch 65
+check 0
+switch 122
+check 0
+check 0
+check 1
+80
+check 0
+check 0
+switch 69
+check 0
+switch 123
+check 0
+check 0
+check 1
+81
+check 0
+check 0
+switch 63
+check 0
+switch 124
+check 0
+check 0
+check 1
+82
+check 0
+check 0
+switch 67
+check 0
+switch 127
+check 0
+check 0
+check 1
+83
+check 0
+check 0
+switch 61
+check 0
+switch 130
+check 0
+check 0
+check 1
+84
+check 0
+check 0
+check 0
+check 0
+switch 119
+check 0
+switch 65
+check 0
+switch 112
+check 0
+check 0
+check 1
+85
+check 0
+check 0
+switch 69
+check 0
+switch 113
+check 0
+check 0
+check 1
+86
+check 0
+check 0
+switch 63
+check 0
+switch 114
+check 0
+check 0
+check 1
+87
+check 0
+check 0
+switch 67
+check 0
+switch 117
+check 0
+check 0
+check 1
+88
+check 0
+check 0
+switch 61
+check 0
+switch 120
+check 0
+check 0
+check 1
+89
+check 0
+check 0
+check 0
+check 0
+switch 109
+check 0
+switch 65
+check 0
+switch 102
+check 0
+check 0
+check 1
+90
+check 0
+check 0
+switch 69
+check 0
+switch 103
+check 0
+check 0
+check 1
+91
+check 0
+check 0
+switch 63
+check 0
+switch 104
+check 0
+check 0
+check 1
+92
+check 0
+check 0
+switch 67
+check 0
+switch 107
+check 0
+check 0
+check 1
+93
+check 0
+check 0
+switch 61
+check 0
+switch 110
+check 0
+check 0
+check 1
+94
+check 0
+check 0
+check 0
+check 0
+switch 99
+check 0
+switch 65
+check 0
+switch 92
+check 0
+check 0
+check 1
+95
+check 0
+check 0
+switch 69
+check 0
+switch 93
+check 0
+check 0
+check 1
+96
+check 0
+check 0
+switch 63
+check 0
+switch 94
+check 0
+check 0
+check 1
+97
+check 0
+check 0
+switch 67
+check 0
+switch 97
+check 0
+check 0
+check 1
+98
+check 0
+check 0
+switch 61
+check 0
+switch 100
+check 0
+check 0
+check 1
+99
+check 0
+check 0
+check 0
+check 0
+switch 141
+check 0
+switch 86
+check 0
+switch 132
+check 0
+check 0
+check 1
+100
+check 0
+check 0
+switch 88
+check 0
+switch 133
+check 0
+check 0
+check 1
+101
+check 0
+check 0
+switch 85
+check 0
+switch 134
+check 0
+check 0
+check 1
+102
+check 0
+check 0
+switch 89
+check 0
+switch 137
+check 0
+check 0
+check 1
+103
+check 0
+check 0
+switch 82
+check 0
+switch 140
+check 0
+check 0
+check 1
+104
+check 0
+check 0
+check 0
+check 0
+switch 131
+check 0
+switch 86
+check 0
+switch 122
+check 0
+check 0
+check 1
+105
+check 0
+check 0
+switch 88
+check 0
+switch 123
+check 0
+check 0
+check 1
+106
+check 0
+check 0
+switch 85
+check 0
+switch 124
+check 0
+check 0
+check 1
+107
+check 0
+check 0
+switch 89
+check 0
+switch 127
+check 0
+check 0
+check 1
+108
+check 0
+check 0
+switch 82
+check 0
+switch 130
+check 0
+check 0
+check 1
+109
+check 0
+check 0
+check 0
+check 0
+switch 121
+check 0
+switch 86
+check 0
+switch 112
+check 0
+check 0
+check 1
+110
+check 0
+check 0
+switch 88
+check 0
+switch 113
+check 0
+check 0
+check 1
+111
+check 0
+check 0
+switch 85
+check 0
+switch 114
+check 0
+check 0
+check 1
+112
+check 0
+check 0
+switch 89
+check 0
+switch 117
+check 0
+check 0
+check 1
+113
+check 0
+check 0
+switch 82
+check 0
+switch 120
+check 0
+check 0
+check 1
+114
+check 0
+check 0
+check 0
+check 0
+switch 111
+check 0
+switch 86
+check 0
+switch 102
+check 0
+check 0
+check 1
+115
+check 0
+check 0
+switch 88
+check 0
+switch 103
+check 0
+check 0
+check 1
+116
+check 0
+check 0
+switch 85
+check 0
+switch 104
+check 0
+check 0
+check 1
+117
+check 0
+check 0
+switch 89
+check 0
+switch 107
+check 0
+check 0
+check 1
+118
+check 0
+check 0
+switch 82
+check 0
+switch 110
+check 0
+check 0
+check 1
+119
+check 0
+check 0
+check 0
+check 0
+switch 0
+check 0
+switch 132
+check 0
+check 1
+135
+check 0
+switch 122
+check 0
+check 1
+140
+check 0
+switch 112
+check 0
+check 1
+145
+check 0
+switch 102
+check 0
+check 1
+150
+check 0
+switch 92
+check 0
+check 1
+155
+check 0
+check 0
+switch 86
+check 0
+switch 87
+check 0
+switch 5
+check 0
+check 0
+check 1
+420
+check 0
+check 0
+switch 90
+check 0
+switch 5
+check 0
+check 0
+check 1
+422
+check 0
+check 0
+switch 91
+check 0
+switch 5
+check 0
+check 0
+check 1
+421
+check 0
+check 0
+check 0
+check 0
+switch 5
+check 0
+check 1
+285
+check 0
+check 0
+switch 10
+check 0
+switch 55
+check 0
+check 0
+switch 48
+check 0
+switch 12
+check 0
+check 0
+check 1
+341
+check 0
+switch 12
+check 0
+check 0
+check 1
+340
+check 0
+check 0
+check 0
+switch 132
+check 0
+check 1
+160
+check 0
+switch 122
+check 0
+check 1
+165
+check 0
+switch 112
+check 0
+check 1
+170
+check 0
+switch 102
+check 0
+check 1
+175
+check 0
+switch 92
+check 0
+check 1
+180
+check 0
+check 0
+switch 55
+check 0
+switch 73
+check 0
+switch 11
+check 0
+check 0
+check 1
+351
+check 0
+switch 11
+check 0
+check 0
+check 1
+350
+check 0
+check 0
+check 0
+check 0
+switch 11
+check 0
+check 1
+290
+check 0
+check 0
+switch 55
+check 0
+switch 76
+check 0
+check 0
+switch 73
+check 0
+switch 49
+check 0
+check 0
+check 1
+361
+check 0
+switch 49
+check 0
+check 0
+check 1
+360
+check 0
+check 0
+check 0
+switch 132
+check 0
+check 1
+185
+check 0
+switch 122
+check 0
+check 1
+190
+check 0
+switch 112
+check 0
+check 1
+195
+check 0
+switch 102
+check 0
+check 1
+200
+check 0
+switch 92
+check 0
+check 1
+205
+check 0
+check 0
+switch 76
+check 0
+switch 83
+check 0
+switch 54
+check 0
+check 0
+check 1
+371
+check 0
+switch 54
+check 0
+check 0
+check 1
+370
+check 0
+check 0
+check 0
+check 0
+switch 12
+check 0
+check 1
+295
+check 0
+switch 54
+check 0
+check 1
+300
+check 0
+check 0
+switch 76
+check 0
+switch 65
+check 0
+check 0
+switch 83
+check 0
+switch 36
+check 0
+check 0
+check 1
+381
+check 0
+switch 36
+check 0
+check 0
+check 1
+380
+check 0
+check 0
+check 0
+switch 86
+check 0
+check 0
+switch 83
+check 0
+switch 59
+check 0
+check 0
+check 1
+391
+check 0
+switch 59
+check 0
+check 0
+check 1
+390
+check 0
+check 0
+check 0
+switch 132
+check 0
+check 1
+210
+check 0
+switch 122
+check 0
+check 1
+215
+check 0
+switch 112
+check 0
+check 1
+220
+check 0
+switch 102
+check 0
+check 1
+225
+check 0
+switch 92
+check 0
+check 1
+230
+check 0
+check 0
+switch 65
+check 0
+switch 84
+check 0
+switch 37
+check 0
+check 0
+check 1
+401
+check 0
+switch 37
+check 0
+check 0
+check 1
+400
+check 0
+check 0
+check 0
+check 0
+switch 86
+check 0
+switch 87
+check 0
+switch 77
+check 0
+check 0
+check 1
+435
+check 0
+check 0
+switch 90
+check 0
+switch 77
+check 0
+check 0
+check 1
+437
+check 0
+check 0
+switch 91
+check 0
+switch 77
+check 0
+check 0
+check 1
+436
+check 0
+check 0
+check 0
+check 0
+switch 49
+check 0
+check 1
+305
+check 0
+switch 37
+check 0
+check 1
+310
+check 0
+switch 77
+check 0
+check 1
+315
+check 0
+check 0
+switch 65
+check 0
+switch 86
+check 0
+check 0
+switch 84
+check 0
+switch 38
+check 0
+check 0
+check 1
+411
+check 0
+switch 38
+check 0
+check 0
+check 1
+410
+check 0
+check 0
+check 0
+switch 132
+check 0
+check 1
+235
+check 0
+switch 122
+check 0
+check 1
+240
+check 0
+switch 112
+check 0
+check 1
+245
+check 0
+switch 102
+check 0
+check 1
+250
+check 0
+switch 92
+check 0
+check 1
+255
+check 0
+check 0
+switch 86
+check 0
+switch 87
+check 0
+switch 66
+check 0
+check 0
+check 1
+450
+check 0
+check 0
+switch 90
+check 0
+switch 66
+check 0
+check 0
+check 1
+452
+check 0
+check 0
+switch 91
+check 0
+switch 66
+check 0
+check 0
+check 1
+451
+check 0
+check 0
+check 0
+check 0
+switch 36
+check 0
+check 1
+320
+check 0
+switch 66
+check 0
+check 1
+325
+check 0
+check 0
+switch 86
+check 0
+switch 132
+check 0
+check 1
+260
+check 0
+switch 122
+check 0
+check 1
+265
+check 0
+switch 112
+check 0
+check 1
+270
+check 0
+switch 102
+check 0
+check 1
+275
+check 0
+switch 92
+check 0
+check 1
+280
+switch 101
+check 0
+check 1
+120
+check 0
+check 0
+check 0
+switch 59
+check 0
+check 1
+330
+check 0
+switch 38
+check 0
+check 1
+335
+check 0
+check 0
+switch 1
+check 0
+switch 133
+check 0
+check 1
+136
+check 0
+switch 123
+check 0
+check 1
+141
+check 0
+switch 113
+check 0
+check 1
+146
+check 0
+switch 103
+check 0
+check 1
+151
+check 0
+switch 93
+check 0
+check 1
+156
+check 0
+check 0
+switch 88
+check 0
+switch 87
+check 0
+switch 6
+check 0
+check 0
+check 1
+423
+check 0
+check 0
+switch 90
+check 0
+switch 6
+check 0
+check 0
+check 1
+425
+check 0
+check 0
+switch 91
+check 0
+switch 6
+check 0
+check 0
+check 1
+424
+check 0
+check 0
+check 0
+check 0
+switch 6
+check 0
+check 1
+286
+check 0
+check 0
+switch 13
+check 0
+switch 57
+check 0
+check 0
+switch 48
+check 0
+switch 15
+check 0
+check 0
+check 1
+343
+check 0
+switch 15
+check 0
+check 0
+check 1
+342
+check 0
+check 0
+check 0
+switch 133
+check 0
+check 1
+161
+check 0
+switch 123
+check 0
+check 1
+166
+check 0
+switch 113
+check 0
+check 1
+171
+check 0
+switch 103
+check 0
+check 1
+176
+check 0
+switch 93
+check 0
+check 1
+181
+check 0
+check 0
+switch 57
+check 0
+switch 73
+check 0
+switch 14
+check 0
+check 0
+check 1
+353
+check 0
+switch 14
+check 0
+check 0
+check 1
+352
+check 0
+check 0
+check 0
+check 0
+switch 14
+check 0
+check 1
+291
+check 0
+check 0
+switch 57
+check 0
+switch 80
+check 0
+check 0
+switch 73
+check 0
+switch 50
+check 0
+check 0
+check 1
+363
+check 0
+switch 50
+check 0
+check 0
+check 1
+362
+check 0
+check 0
+check 0
+switch 133
+check 0
+check 1
+186
+check 0
+switch 123
+check 0
+check 1
+191
+check 0
+switch 113
+check 0
+check 1
+196
+check 0
+switch 103
+check 0
+check 1
+201
+check 0
+switch 93
+check 0
+check 1
+206
+check 0
+check 0
+switch 80
+check 0
+switch 83
+check 0
+switch 56
+check 0
+check 0
+check 1
+373
+check 0
+switch 56
+check 0
+check 0
+check 1
+372
+check 0
+check 0
+check 0
+check 0
+switch 15
+check 0
+check 1
+296
+check 0
+switch 56
+check 0
+check 1
+301
+check 0
+check 0
+switch 80
+check 0
+switch 69
+check 0
+check 0
+switch 83
+check 0
+switch 58
+check 0
+check 0
+check 1
+383
+check 0
+switch 58
+check 0
+check 0
+check 1
+382
+check 0
+check 0
+check 0
+switch 88
+check 0
+check 0
+switch 83
+check 0
+switch 60
+check 0
+check 0
+check 1
+393
+check 0
+switch 60
+check 0
+check 0
+check 1
+392
+check 0
+check 0
+check 0
+switch 133
+check 0
+check 1
+211
+check 0
+switch 123
+check 0
+check 1
+216
+check 0
+switch 113
+check 0
+check 1
+221
+check 0
+switch 103
+check 0
+check 1
+226
+check 0
+switch 93
+check 0
+check 1
+231
+check 0
+check 0
+switch 69
+check 0
+switch 84
+check 0
+switch 39
+check 0
+check 0
+check 1
+403
+check 0
+switch 39
+check 0
+check 0
+check 1
+402
+check 0
+check 0
+check 0
+check 0
+switch 88
+check 0
+switch 87
+check 0
+switch 81
+check 0
+check 0
+check 1
+438
+check 0
+check 0
+switch 90
+check 0
+switch 81
+check 0
+check 0
+check 1
+440
+check 0
+check 0
+switch 91
+check 0
+switch 81
+check 0
+check 0
+check 1
+439
+check 0
+check 0
+check 0
+check 0
+switch 50
+check 0
+check 1
+306
+check 0
+switch 39
+check 0
+check 1
+311
+check 0
+switch 81
+check 0
+check 1
+316
+check 0
+check 0
+switch 69
+check 0
+switch 88
+check 0
+check 0
+switch 84
+check 0
+switch 41
+check 0
+check 0
+check 1
+413
+check 0
+switch 41
+check 0
+check 0
+check 1
+412
+check 0
+check 0
+check 0
+switch 133
+check 0
+check 1
+236
+check 0
+switch 123
+check 0
+check 1
+241
+check 0
+switch 113
+check 0
+check 1
+246
+check 0
+switch 103
+check 0
+check 1
+251
+check 0
+switch 93
+check 0
+check 1
+256
+check 0
+check 0
+switch 88
+check 0
+switch 87
+check 0
+switch 70
+check 0
+check 0
+check 1
+453
+check 0
+check 0
+switch 90
+check 0
+switch 70
+check 0
+check 0
+check 1
+455
+check 0
+check 0
+switch 91
+check 0
+switch 70
+check 0
+check 0
+check 1
+454
+check 0
+check 0
+check 0
+check 0
+switch 58
+check 0
+check 1
+321
+check 0
+switch 70
+check 0
+check 1
+326
+check 0
+check 0
+switch 88
+check 0
+switch 133
+check 0
+check 1
+261
+check 0
+switch 123
+check 0
+check 1
+266
+check 0
+switch 113
+check 0
+check 1
+271
+check 0
+switch 103
+check 0
+check 1
+276
+check 0
+switch 93
+check 0
+check 1
+281
+switch 101
+check 0
+check 1
+121
+check 0
+check 0
+check 0
+switch 60
+check 0
+check 1
+331
+check 0
+switch 41
+check 0
+check 1
+336
+check 0
+check 0
+switch 2
+check 0
+switch 134
+check 0
+check 1
+137
+check 0
+switch 124
+check 0
+check 1
+142
+check 0
+switch 114
+check 0
+check 1
+147
+check 0
+switch 104
+check 0
+check 1
+152
+check 0
+switch 94
+check 0
+check 1
+157
+check 0
+check 0
+switch 85
+check 0
+switch 87
+check 0
+switch 7
+check 0
+check 0
+check 1
+426
+check 0
+check 0
+switch 90
+check 0
+switch 7
+check 0
+check 0
+check 1
+428
+check 0
+check 0
+switch 91
+check 0
+switch 7
+check 0
+check 0
+check 1
+427
+check 0
+check 0
+check 0
+check 0
+switch 7
+check 0
+check 1
+287
+check 0
+check 0
+switch 16
+check 0
+switch 53
+check 0
+check 0
+switch 48
+check 0
+switch 18
+check 0
+check 0
+check 1
+345
+check 0
+switch 18
+check 0
+check 0
+check 1
+344
+check 0
+check 0
+check 0
+switch 134
+check 0
+check 1
+162
+check 0
+switch 124
+check 0
+check 1
+167
+check 0
+switch 114
+check 0
+check 1
+172
+check 0
+switch 104
+check 0
+check 1
+177
+check 0
+switch 94
+check 0
+check 1
+182
+check 0
+check 0
+switch 53
+check 0
+switch 73
+check 0
+switch 17
+check 0
+check 0
+check 1
+355
+check 0
+switch 17
+check 0
+check 0
+check 1
+354
+check 0
+check 0
+check 0
+check 0
+switch 17
+check 0
+check 1
+292
+check 0
+check 0
+switch 53
+check 0
+switch 74
+check 0
+check 0
+switch 73
+check 0
+switch 51
+check 0
+check 0
+check 1
+365
+check 0
+switch 51
+check 0
+check 0
+check 1
+364
+check 0
+check 0
+check 0
+switch 134
+check 0
+check 1
+187
+check 0
+switch 124
+check 0
+check 1
+192
+check 0
+switch 114
+check 0
+check 1
+197
+check 0
+switch 104
+check 0
+check 1
+202
+check 0
+switch 94
+check 0
+check 1
+207
+check 0
+check 0
+switch 74
+check 0
+switch 83
+check 0
+switch 52
+check 0
+check 0
+check 1
+375
+check 0
+switch 52
+check 0
+check 0
+check 1
+374
+check 0
+check 0
+check 0
+check 0
+switch 18
+check 0
+check 1
+297
+check 0
+switch 52
+check 0
+check 1
+302
+check 0
+check 0
+switch 74
+check 0
+switch 63
+check 0
+check 0
+switch 83
+check 0
+switch 32
+check 0
+check 0
+check 1
+385
+check 0
+switch 32
+check 0
+check 0
+check 1
+384
+check 0
+check 0
+check 0
+switch 85
+check 0
+check 0
+switch 83
+check 0
+switch 35
+check 0
+check 0
+check 1
+395
+check 0
+switch 35
+check 0
+check 0
+check 1
+394
+check 0
+check 0
+check 0
+switch 134
+check 0
+check 1
+212
+check 0
+switch 124
+check 0
+check 1
+217
+check 0
+switch 114
+check 0
+check 1
+222
+check 0
+switch 104
+check 0
+check 1
+227
+check 0
+switch 94
+check 0
+check 1
+232
+check 0
+check 0
+switch 63
+check 0
+switch 84
+check 0
+switch 33
+check 0
+check 0
+check 1
+405
+check 0
+switch 33
+check 0
+check 0
+check 1
+404
+check 0
+check 0
+check 0
+check 0
+switch 85
+check 0
+switch 87
+check 0
+switch 75
+check 0
+check 0
+check 1
+441
+check 0
+check 0
+switch 90
+check 0
+switch 75
+check 0
+check 0
+check 1
+443
+check 0
+check 0
+switch 91
+check 0
+switch 75
+check 0
+check 0
+check 1
+442
+check 0
+check 0
+check 0
+check 0
+switch 51
+check 0
+check 1
+307
+check 0
+switch 33
+check 0
+check 1
+312
+check 0
+switch 75
+check 0
+check 1
+317
+check 0
+check 0
+switch 63
+check 0
+switch 85
+check 0
+check 0
+switch 84
+check 0
+switch 34
+check 0
+check 0
+check 1
+415
+check 0
+switch 34
+check 0
+check 0
+check 1
+414
+check 0
+check 0
+check 0
+switch 134
+check 0
+check 1
+237
+check 0
+switch 124
+check 0
+check 1
+242
+check 0
+switch 114
+check 0
+check 1
+247
+check 0
+switch 104
+check 0
+check 1
+252
+check 0
+switch 94
+check 0
+check 1
+257
+check 0
+check 0
+switch 85
+check 0
+switch 87
+check 0
+switch 64
+check 0
+check 0
+check 1
+456
+check 0
+check 0
+switch 90
+check 0
+switch 64
+check 0
+check 0
+check 1
+458
+check 0
+check 0
+switch 91
+check 0
+switch 64
+check 0
+check 0
+check 1
+457
+check 0
+check 0
+check 0
+check 0
+switch 32
+check 0
+check 1
+322
+check 0
+switch 64
+check 0
+check 1
+327
+check 0
+check 0
+switch 85
+check 0
+switch 134
+check 0
+check 1
+262
+check 0
+switch 124
+check 0
+check 1
+267
+check 0
+switch 114
+check 0
+check 1
+272
+check 0
+switch 104
+check 0
+check 1
+277
+check 0
+switch 94
+check 0
+check 1
+282
+switch 101
+check 0
+check 1
+122
+check 0
+check 0
+check 0
+switch 35
+check 0
+check 1
+332
+check 0
+switch 34
+check 0
+check 1
+337
+check 0
+check 0
+switch 3
+check 0
+switch 137
+check 0
+check 1
+138
+check 0
+switch 127
+check 0
+check 1
+143
+check 0
+switch 117
+check 0
+check 1
+148
+check 0
+switch 107
+check 0
+check 1
+153
+check 0
+switch 97
+check 0
+check 1
+158
+check 0
+check 0
+switch 89
+check 0
+switch 87
+check 0
+switch 8
+check 0
+check 0
+check 1
+429
+check 0
+check 0
+switch 90
+check 0
+switch 8
+check 0
+check 0
+check 1
+431
+check 0
+check 0
+switch 91
+check 0
+switch 8
+check 0
+check 0
+check 1
+430
+check 0
+check 0
+check 0
+check 0
+switch 8
+check 0
+check 1
+288
+check 0
+check 0
+switch 19
+check 0
+switch 47
+check 0
+check 0
+switch 48
+check 0
+switch 21
+check 0
+check 0
+check 1
+347
+check 0
+switch 21
+check 0
+check 0
+check 1
+346
+check 0
+check 0
+check 0
+switch 137
+check 0
+check 1
+163
+check 0
+switch 127
+check 0
+check 1
+168
+check 0
+switch 117
+check 0
+check 1
+173
+check 0
+switch 107
+check 0
+check 1
+178
+check 0
+switch 97
+check 0
+check 1
+183
+check 0
+check 0
+switch 47
+check 0
+switch 73
+check 0
+switch 20
+check 0
+check 0
+check 1
+357
+check 0
+switch 20
+check 0
+check 0
+check 1
+356
+check 0
+check 0
+check 0
+check 0
+switch 20
+check 0
+check 1
+293
+check 0
+check 0
+switch 47
+check 0
+switch 78
+check 0
+check 0
+switch 73
+check 0
+switch 45
+check 0
+check 0
+check 1
+367
+check 0
+switch 45
+check 0
+check 0
+check 1
+366
+check 0
+check 0
+check 0
+switch 137
+check 0
+check 1
+188
+check 0
+switch 127
+check 0
+check 1
+193
+check 0
+switch 117
+check 0
+check 1
+198
+check 0
+switch 107
+check 0
+check 1
+203
+check 0
+switch 97
+check 0
+check 1
+208
+check 0
+check 0
+switch 78
+check 0
+switch 83
+check 0
+switch 46
+check 0
+check 0
+check 1
+377
+check 0
+switch 46
+check 0
+check 0
+check 1
+376
+check 0
+check 0
+check 0
+check 0
+switch 21
+check 0
+check 1
+298
+check 0
+switch 46
+check 0
+check 1
+303
+check 0
+check 0
+switch 78
+check 0
+switch 67
+check 0
+check 0
+switch 83
+check 0
+switch 44
+check 0
+check 0
+check 1
+387
+check 0
+switch 44
+check 0
+check 0
+check 1
+386
+check 0
+check 0
+check 0
+switch 89
+check 0
+check 0
+switch 83
+check 0
+switch 43
+check 0
+check 0
+check 1
+397
+check 0
+switch 43
+check 0
+check 0
+check 1
+396
+check 0
+check 0
+check 0
+switch 137
+check 0
+check 1
+213
+check 0
+switch 127
+check 0
+check 1
+218
+check 0
+switch 117
+check 0
+check 1
+223
+check 0
+switch 107
+check 0
+check 1
+228
+check 0
+switch 97
+check 0
+check 1
+233
+check 0
+check 0
+switch 67
+check 0
+switch 84
+check 0
+switch 40
+check 0
+check 0
+check 1
+407
+check 0
+switch 40
+check 0
+check 0
+check 1
+406
+check 0
+check 0
+check 0
+check 0
+switch 89
+check 0
+switch 87
+check 0
+switch 79
+check 0
+check 0
+check 1
+444
+check 0
+check 0
+switch 90
+check 0
+switch 79
+check 0
+check 0
+check 1
+446
+check 0
+check 0
+switch 91
+check 0
+switch 79
+check 0
+check 0
+check 1
+445
+check 0
+check 0
+check 0
+check 0
+switch 45
+check 0
+check 1
+308
+check 0
+switch 40
+check 0
+check 1
+313
+check 0
+switch 79
+check 0
+check 1
+318
+check 0
+check 0
+switch 67
+check 0
+switch 89
+check 0
+check 0
+switch 84
+check 0
+switch 42
+check 0
+check 0
+check 1
+417
+check 0
+switch 42
+check 0
+check 0
+check 1
+416
+check 0
+check 0
+check 0
+switch 137
+check 0
+check 1
+238
+check 0
+switch 127
+check 0
+check 1
+243
+check 0
+switch 117
+check 0
+check 1
+248
+check 0
+switch 107
+check 0
+check 1
+253
+check 0
+switch 97
+check 0
+check 1
+258
+check 0
+check 0
+switch 89
+check 0
+switch 87
+check 0
+switch 68
+check 0
+check 0
+check 1
+459
+check 0
+check 0
+switch 90
+check 0
+switch 68
+check 0
+check 0
+check 1
+461
+check 0
+check 0
+switch 91
+check 0
+switch 68
+check 0
+check 0
+check 1
+460
+check 0
+check 0
+check 0
+check 0
+switch 44
+check 0
+check 1
+323
+check 0
+switch 68
+check 0
+check 1
+328
+check 0
+check 0
+switch 89
+check 0
+switch 137
+check 0
+check 1
+263
+check 0
+switch 127
+check 0
+check 1
+268
+check 0
+switch 117
+check 0
+check 1
+273
+check 0
+switch 107
+check 0
+check 1
+278
+check 0
+switch 97
+check 0
+check 1
+283
+switch 101
+check 0
+check 1
+123
+check 0
+check 0
+check 0
+switch 43
+check 0
+check 1
+333
+check 0
+switch 42
+check 0
+check 1
+338
+check 0
+check 0
+switch 4
+check 0
+switch 140
+check 0
+check 1
+139
+check 0
+switch 130
+check 0
+check 1
+144
+check 0
+switch 120
+check 0
+check 1
+149
+check 0
+switch 110
+check 0
+check 1
+154
+check 0
+switch 100
+check 0
+check 1
+159
+check 0
+check 0
+switch 82
+check 0
+switch 87
+check 0
+switch 9
+check 0
+check 0
+check 1
+432
+check 0
+check 0
+switch 90
+check 0
+switch 9
+check 0
+check 0
+check 1
+434
+check 0
+check 0
+switch 91
+check 0
+switch 9
+check 0
+check 0
+check 1
+433
+check 0
+check 0
+check 0
+check 0
+switch 9
+check 0
+check 1
+289
+check 0
+check 0
+switch 22
+check 0
+switch 27
+check 0
+check 0
+switch 48
+check 0
+switch 24
+check 0
+check 0
+check 1
+349
+check 0
+switch 24
+check 0
+check 0
+check 1
+348
+check 0
+check 0
+check 0
+switch 140
+check 0
+check 1
+164
+check 0
+switch 130
+check 0
+check 1
+169
+check 0
+switch 120
+check 0
+check 1
+174
+check 0
+switch 110
+check 0
+check 1
+179
+check 0
+switch 100
+check 0
+check 1
+184
+check 0
+check 0
+switch 27
+check 0
+switch 73
+check 0
+switch 23
+check 0
+check 0
+check 1
+359
+check 0
+switch 23
+check 0
+check 0
+check 1
+358
+check 0
+check 0
+check 0
+check 0
+switch 23
+check 0
+check 1
+294
+check 0
+check 0
+switch 27
+check 0
+switch 71
+check 0
+check 0
+switch 73
+check 0
+switch 25
+check 0
+check 0
+check 1
+369
+check 0
+switch 25
+check 0
+check 0
+check 1
+368
+check 0
+check 0
+check 0
+switch 140
+check 0
+check 1
+189
+check 0
+switch 130
+check 0
+check 1
+194
+check 0
+switch 120
+check 0
+check 1
+199
+check 0
+switch 110
+check 0
+check 1
+204
+check 0
+switch 100
+check 0
+check 1
+209
+check 0
+check 0
+switch 71
+check 0
+switch 83
+check 0
+switch 26
+check 0
+check 0
+check 1
+379
+check 0
+switch 26
+check 0
+check 0
+check 1
+378
+check 0
+check 0
+check 0
+check 0
+switch 24
+check 0
+check 1
+299
+check 0
+switch 26
+check 0
+check 1
+304
+check 0
+check 0
+switch 71
+check 0
+switch 61
+check 0
+check 0
+switch 83
+check 0
+switch 28
+check 0
+check 0
+check 1
+389
+check 0
+switch 28
+check 0
+check 0
+check 1
+388
+check 0
+check 0
+check 0
+switch 82
+check 0
+check 0
+switch 83
+check 0
+switch 31
+check 0
+check 0
+check 1
+399
+check 0
+switch 31
+check 0
+check 0
+check 1
+398
+check 0
+check 0
+check 0
+switch 140
+check 0
+check 1
+214
+check 0
+switch 130
+check 0
+check 1
+219
+check 0
+switch 120
+check 0
+check 1
+224
+check 0
+switch 110
+check 0
+check 1
+229
+check 0
+switch 100
+check 0
+check 1
+234
+check 0
+check 0
+switch 61
+check 0
+switch 84
+check 0
+switch 29
+check 0
+check 0
+check 1
+409
+check 0
+switch 29
+check 0
+check 0
+check 1
+408
+check 0
+check 0
+check 0
+check 0
+switch 82
+check 0
+switch 87
+check 0
+switch 72
+check 0
+check 0
+check 1
+447
+check 0
+check 0
+switch 90
+check 0
+switch 72
+check 0
+check 0
+check 1
+449
+check 0
+check 0
+switch 91
+check 0
+switch 72
+check 0
+check 0
+check 1
+448
+check 0
+check 0
+check 0
+check 0
+switch 25
+check 0
+check 1
+309
+check 0
+switch 29
+check 0
+check 1
+314
+check 0
+switch 72
+check 0
+check 1
+319
+check 0
+check 0
+switch 61
+check 0
+switch 82
+check 0
+check 0
+switch 84
+check 0
+switch 30
+check 0
+check 0
+check 1
+419
+check 0
+switch 30
+check 0
+check 0
+check 1
+418
+check 0
+check 0
+check 0
+switch 140
+check 0
+check 1
+239
+check 0
+switch 130
+check 0
+check 1
+244
+check 0
+switch 120
+check 0
+check 1
+249
+check 0
+switch 110
+check 0
+check 1
+254
+check 0
+switch 100
+check 0
+check 1
+259
+check 0
+check 0
+switch 82
+check 0
+switch 87
+check 0
+switch 62
+check 0
+check 0
+check 1
+462
+check 0
+check 0
+switch 90
+check 0
+switch 62
+check 0
+check 0
+check 1
+464
+check 0
+check 0
+switch 91
+check 0
+switch 62
+check 0
+check 0
+check 1
+463
+check 0
+check 0
+check 0
+check 0
+switch 28
+check 0
+check 1
+324
+check 0
+switch 62
+check 0
+check 1
+329
+check 0
+check 0
+switch 82
+check 0
+switch 140
+check 0
+check 1
+264
+check 0
+switch 130
+check 0
+check 1
+269
+check 0
+switch 120
+check 0
+check 1
+274
+check 0
+switch 110
+check 0
+check 1
+279
+check 0
+switch 100
+check 0
+check 1
+284
+switch 101
+check 0
+check 1
+124
+check 0
+check 0
+check 0
+switch 31
+check 0
+check 1
+334
+check 0
+switch 30
+check 0
+check 1
+339
+check 0
+check 0
+switch 48
+check 0
+check 1
+126
+check 1
+125
+check 0
+switch 73
+check 0
+check 1
+128
+check 1
+127
+check 0
+switch 83
+check 0
+check 1
+130
+check 1
+129
+check 0
+switch 84
+check 0
+check 1
+132
+check 1
+131
+check 0
+switch 90
+check 0
+check 1
+134
+check 0
+switch 91
+check 0
+check 1
+133
+check 0
+check 0
+end_SG
+begin_DTG
+0
+1
+0
+285
+1
+5 0
+end_DTG
+begin_DTG
+0
+1
+0
+286
+1
+6 0
+end_DTG
+begin_DTG
+0
+1
+0
+287
+1
+7 0
+end_DTG
+begin_DTG
+0
+1
+0
+288
+1
+8 0
+end_DTG
+begin_DTG
+0
+1
+0
+289
+1
+9 0
+end_DTG
+begin_DTG
+1
+1
+285
+1
+0 1
+3
+0
+420
+3
+0 1
+86 0
+87 0
+0
+421
+3
+0 1
+86 0
+91 0
+0
+422
+3
+0 1
+86 0
+90 0
+end_DTG
+begin_DTG
+1
+1
+286
+1
+1 1
+3
+0
+423
+3
+1 1
+88 0
+87 0
+0
+424
+3
+1 1
+88 0
+91 0
+0
+425
+3
+1 1
+88 0
+90 0
+end_DTG
+begin_DTG
+1
+1
+287
+1
+2 1
+3
+0
+426
+3
+2 1
+85 0
+87 0
+0
+427
+3
+2 1
+85 0
+91 0
+0
+428
+3
+2 1
+85 0
+90 0
+end_DTG
+begin_DTG
+1
+1
+288
+1
+3 1
+3
+0
+429
+3
+3 1
+89 0
+87 0
+0
+430
+3
+3 1
+89 0
+91 0
+0
+431
+3
+3 1
+89 0
+90 0
+end_DTG
+begin_DTG
+1
+1
+289
+1
+4 1
+3
+0
+432
+3
+4 1
+82 0
+87 0
+0
+433
+3
+4 1
+82 0
+91 0
+0
+434
+3
+4 1
+82 0
+90 0
+end_DTG
+begin_DTG
+2
+1
+340
+3
+55 1
+48 1
+12 1
+1
+341
+3
+55 1
+48 0
+12 1
+1
+0
+290
+1
+11 0
+end_DTG
+begin_DTG
+1
+1
+290
+1
+10 1
+2
+0
+350
+3
+10 1
+55 0
+73 1
+0
+351
+3
+10 1
+55 0
+73 0
+end_DTG
+begin_DTG
+1
+1
+295
+1
+55 1
+2
+0
+340
+3
+10 0
+55 1
+48 1
+0
+341
+3
+10 0
+55 1
+48 0
+end_DTG
+begin_DTG
+2
+1
+342
+3
+57 1
+48 1
+15 1
+1
+343
+3
+57 1
+48 0
+15 1
+1
+0
+291
+1
+14 0
+end_DTG
+begin_DTG
+1
+1
+291
+1
+13 1
+2
+0
+352
+3
+13 1
+57 0
+73 1
+0
+353
+3
+13 1
+57 0
+73 0
+end_DTG
+begin_DTG
+1
+1
+296
+1
+57 1
+2
+0
+342
+3
+13 0
+57 1
+48 1
+0
+343
+3
+13 0
+57 1
+48 0
+end_DTG
+begin_DTG
+2
+1
+344
+3
+53 1
+48 1
+18 1
+1
+345
+3
+53 1
+48 0
+18 1
+1
+0
+292
+1
+17 0
+end_DTG
+begin_DTG
+1
+1
+292
+1
+16 1
+2
+0
+354
+3
+16 1
+53 0
+73 1
+0
+355
+3
+16 1
+53 0
+73 0
+end_DTG
+begin_DTG
+1
+1
+297
+1
+53 1
+2
+0
+344
+3
+16 0
+53 1
+48 1
+0
+345
+3
+16 0
+53 1
+48 0
+end_DTG
+begin_DTG
+2
+1
+346
+3
+47 1
+48 1
+21 1
+1
+347
+3
+47 1
+48 0
+21 1
+1
+0
+293
+1
+20 0
+end_DTG
+begin_DTG
+1
+1
+293
+1
+19 1
+2
+0
+356
+3
+19 1
+47 0
+73 1
+0
+357
+3
+19 1
+47 0
+73 0
+end_DTG
+begin_DTG
+1
+1
+298
+1
+47 1
+2
+0
+346
+3
+19 0
+47 1
+48 1
+0
+347
+3
+19 0
+47 1
+48 0
+end_DTG
+begin_DTG
+2
+1
+348
+3
+27 1
+48 1
+24 1
+1
+349
+3
+27 1
+48 0
+24 1
+1
+0
+294
+1
+23 0
+end_DTG
+begin_DTG
+1
+1
+294
+1
+22 1
+2
+0
+358
+3
+22 1
+27 0
+73 1
+0
+359
+3
+22 1
+27 0
+73 0
+end_DTG
+begin_DTG
+1
+1
+299
+1
+27 1
+2
+0
+348
+3
+22 0
+27 1
+48 1
+0
+349
+3
+22 0
+27 1
+48 0
+end_DTG
+begin_DTG
+1
+1
+309
+1
+71 1
+2
+0
+368
+3
+27 0
+71 1
+73 1
+0
+369
+3
+27 0
+71 1
+73 0
+end_DTG
+begin_DTG
+1
+1
+304
+1
+27 1
+2
+0
+378
+3
+27 1
+71 0
+83 1
+0
+379
+3
+27 1
+71 0
+83 0
+end_DTG
+begin_DTG
+4
+1
+358
+3
+22 1
+73 1
+23 1
+1
+359
+3
+22 1
+73 0
+23 1
+1
+368
+3
+71 1
+73 1
+25 1
+1
+369
+3
+71 1
+73 0
+25 1
+2
+0
+299
+1
+24 0
+0
+304
+1
+26 0
+end_DTG
+begin_DTG
+1
+1
+324
+1
+61 1
+2
+0
+388
+3
+71 0
+61 1
+83 1
+0
+389
+3
+71 0
+61 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+314
+1
+71 1
+2
+0
+408
+3
+71 1
+61 0
+84 1
+0
+409
+3
+71 1
+61 0
+84 0
+end_DTG
+begin_DTG
+1
+1
+339
+1
+82 1
+2
+0
+418
+3
+61 0
+82 1
+84 1
+0
+419
+3
+61 0
+82 1
+84 0
+end_DTG
+begin_DTG
+1
+1
+334
+1
+82 1
+2
+0
+398
+3
+71 0
+82 1
+83 1
+0
+399
+3
+71 0
+82 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+322
+1
+63 1
+2
+0
+384
+3
+74 0
+63 1
+83 1
+0
+385
+3
+74 0
+63 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+312
+1
+74 1
+2
+0
+404
+3
+74 1
+63 0
+84 1
+0
+405
+3
+74 1
+63 0
+84 0
+end_DTG
+begin_DTG
+1
+1
+337
+1
+85 1
+2
+0
+414
+3
+63 0
+85 1
+84 1
+0
+415
+3
+63 0
+85 1
+84 0
+end_DTG
+begin_DTG
+1
+1
+332
+1
+85 1
+2
+0
+394
+3
+74 0
+85 1
+83 1
+0
+395
+3
+74 0
+85 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+320
+1
+65 1
+2
+0
+380
+3
+76 0
+65 1
+83 1
+0
+381
+3
+76 0
+65 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+310
+1
+76 1
+2
+0
+400
+3
+76 1
+65 0
+84 1
+0
+401
+3
+76 1
+65 0
+84 0
+end_DTG
+begin_DTG
+1
+1
+335
+1
+86 1
+2
+0
+410
+3
+65 0
+86 1
+84 1
+0
+411
+3
+65 0
+86 1
+84 0
+end_DTG
+begin_DTG
+1
+1
+311
+1
+80 1
+2
+0
+402
+3
+80 1
+69 0
+84 1
+0
+403
+3
+80 1
+69 0
+84 0
+end_DTG
+begin_DTG
+1
+1
+313
+1
+78 1
+2
+0
+406
+3
+78 1
+67 0
+84 1
+0
+407
+3
+78 1
+67 0
+84 0
+end_DTG
+begin_DTG
+1
+1
+336
+1
+88 1
+2
+0
+412
+3
+69 0
+88 1
+84 1
+0
+413
+3
+69 0
+88 1
+84 0
+end_DTG
+begin_DTG
+1
+1
+338
+1
+89 1
+2
+0
+416
+3
+67 0
+89 1
+84 1
+0
+417
+3
+67 0
+89 1
+84 0
+end_DTG
+begin_DTG
+1
+1
+333
+1
+89 1
+2
+0
+396
+3
+78 0
+89 1
+83 1
+0
+397
+3
+78 0
+89 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+323
+1
+67 1
+2
+0
+386
+3
+78 0
+67 1
+83 1
+0
+387
+3
+78 0
+67 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+308
+1
+78 1
+2
+0
+366
+3
+47 0
+78 1
+73 1
+0
+367
+3
+47 0
+78 1
+73 0
+end_DTG
+begin_DTG
+1
+1
+303
+1
+47 1
+2
+0
+376
+3
+47 1
+78 0
+83 1
+0
+377
+3
+47 1
+78 0
+83 0
+end_DTG
+begin_DTG
+4
+1
+356
+3
+19 1
+73 1
+20 1
+1
+357
+3
+19 1
+73 0
+20 1
+1
+366
+3
+78 1
+73 1
+45 1
+1
+367
+3
+78 1
+73 0
+45 1
+2
+0
+298
+1
+21 0
+0
+303
+1
+46 0
+end_DTG
+begin_DTG
+1
+1
+126
+0
+1
+2
+125
+0
+0
+end_DTG
+begin_DTG
+1
+1
+305
+1
+76 1
+2
+0
+360
+3
+55 0
+76 1
+73 1
+0
+361
+3
+55 0
+76 1
+73 0
+end_DTG
+begin_DTG
+1
+1
+306
+1
+80 1
+2
+0
+362
+3
+57 0
+80 1
+73 1
+0
+363
+3
+57 0
+80 1
+73 0
+end_DTG
+begin_DTG
+1
+1
+307
+1
+74 1
+2
+0
+364
+3
+53 0
+74 1
+73 1
+0
+365
+3
+53 0
+74 1
+73 0
+end_DTG
+begin_DTG
+1
+1
+302
+1
+53 1
+2
+0
+374
+3
+53 1
+74 0
+83 1
+0
+375
+3
+53 1
+74 0
+83 0
+end_DTG
+begin_DTG
+4
+1
+354
+3
+16 1
+73 1
+17 1
+1
+355
+3
+16 1
+73 0
+17 1
+1
+364
+3
+74 1
+73 1
+51 1
+1
+365
+3
+74 1
+73 0
+51 1
+2
+0
+297
+1
+18 0
+0
+302
+1
+52 0
+end_DTG
+begin_DTG
+1
+1
+300
+1
+55 1
+2
+0
+370
+3
+55 1
+76 0
+83 1
+0
+371
+3
+55 1
+76 0
+83 0
+end_DTG
+begin_DTG
+4
+1
+350
+3
+10 1
+73 1
+11 1
+1
+351
+3
+10 1
+73 0
+11 1
+1
+360
+3
+76 1
+73 1
+49 1
+1
+361
+3
+76 1
+73 0
+49 1
+2
+0
+295
+1
+12 0
+0
+300
+1
+54 0
+end_DTG
+begin_DTG
+1
+1
+301
+1
+57 1
+2
+0
+372
+3
+57 1
+80 0
+83 1
+0
+373
+3
+57 1
+80 0
+83 0
+end_DTG
+begin_DTG
+4
+1
+352
+3
+13 1
+73 1
+14 1
+1
+353
+3
+13 1
+73 0
+14 1
+1
+362
+3
+80 1
+73 1
+50 1
+1
+363
+3
+80 1
+73 0
+50 1
+2
+0
+296
+1
+15 0
+0
+301
+1
+56 0
+end_DTG
+begin_DTG
+1
+1
+321
+1
+69 1
+2
+0
+382
+3
+80 0
+69 1
+83 1
+0
+383
+3
+80 0
+69 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+330
+1
+86 1
+2
+0
+390
+3
+76 0
+86 1
+83 1
+0
+391
+3
+76 0
+86 1
+83 0
+end_DTG
+begin_DTG
+1
+1
+331
+1
+88 1
+2
+0
+392
+3
+80 0
+88 1
+83 1
+0
+393
+3
+80 0
+88 1
+83 0
+end_DTG
+begin_DTG
+4
+1
+408
+3
+71 1
+84 1
+29 1
+1
+409
+3
+71 1
+84 0
+29 1
+1
+418
+3
+82 1
+84 1
+30 1
+1
+419
+3
+82 1
+84 0
+30 1
+2
+0
+324
+1
+28 0
+0
+329
+1
+62 0
+end_DTG
+begin_DTG
+1
+1
+329
+1
+61 1
+3
+0
+462
+3
+61 1
+82 0
+87 0
+0
+463
+3
+61 1
+82 0
+91 0
+0
+464
+3
+61 1
+82 0
+90 0
+end_DTG
+begin_DTG
+4
+1
+404
+3
+74 1
+84 1
+33 1
+1
+405
+3
+74 1
+84 0
+33 1
+1
+414
+3
+85 1
+84 1
+34 1
+1
+415
+3
+85 1
+84 0
+34 1
+2
+0
+322
+1
+32 0
+0
+327
+1
+64 0
+end_DTG
+begin_DTG
+1
+1
+327
+1
+63 1
+3
+0
+456
+3
+63 1
+85 0
+87 0
+0
+457
+3
+63 1
+85 0
+91 0
+0
+458
+3
+63 1
+85 0
+90 0
+end_DTG
+begin_DTG
+4
+1
+400
+3
+76 1
+84 1
+37 1
+1
+401
+3
+76 1
+84 0
+37 1
+1
+410
+3
+86 1
+84 1
+38 1
+1
+411
+3
+86 1
+84 0
+38 1
+2
+0
+320
+1
+36 0
+0
+325
+1
+66 0
+end_DTG
+begin_DTG
+1
+1
+325
+1
+65 1
+3
+0
+450
+3
+65 1
+86 0
+87 0
+0
+451
+3
+65 1
+86 0
+91 0
+0
+452
+3
+65 1
+86 0
+90 0
+end_DTG
+begin_DTG
+4
+1
+406
+3
+78 1
+84 1
+40 1
+1
+407
+3
+78 1
+84 0
+40 1
+1
+416
+3
+89 1
+84 1
+42 1
+1
+417
+3
+89 1
+84 0
+42 1
+2
+0
+323
+1
+44 0
+0
+328
+1
+68 0
+end_DTG
+begin_DTG
+1
+1
+328
+1
+67 1
+3
+0
+459
+3
+67 1
+89 0
+87 0
+0
+460
+3
+67 1
+89 0
+91 0
+0
+461
+3
+67 1
+89 0
+90 0
+end_DTG
+begin_DTG
+4
+1
+402
+3
+80 1
+84 1
+39 1
+1
+403
+3
+80 1
+84 0
+39 1
+1
+412
+3
+88 1
+84 1
+41 1
+1
+413
+3
+88 1
+84 0
+41 1
+2
+0
+321
+1
+58 0
+0
+326
+1
+70 0
+end_DTG
+begin_DTG
+1
+1
+326
+1
+69 1
+3
+0
+453
+3
+69 1
+88 0
+87 0
+0
+454
+3
+69 1
+88 0
+91 0
+0
+455
+3
+69 1
+88 0
+90 0
+end_DTG
+begin_DTG
+6
+1
+378
+3
+27 1
+83 1
+26 1
+1
+379
+3
+27 1
+83 0
+26 1
+1
+388
+3
+61 1
+83 1
+28 1
+1
+389
+3
+61 1
+83 0
+28 1
+1
+398
+3
+82 1
+83 1
+31 1
+1
+399
+3
+82 1
+83 0
+31 1
+3
+0
+309
+1
+25 0
+0
+314
+1
+29 0
+0
+319
+1
+72 0
+end_DTG
+begin_DTG
+1
+1
+319
+1
+71 1
+3
+0
+447
+3
+71 1
+82 0
+87 0
+0
+448
+3
+71 1
+82 0
+91 0
+0
+449
+3
+71 1
+82 0
+90 0
+end_DTG
+begin_DTG
+1
+1
+128
+0
+1
+2
+127
+0
+0
+end_DTG
+begin_DTG
+6
+1
+374
+3
+53 1
+83 1
+52 1
+1
+375
+3
+53 1
+83 0
+52 1
+1
+384
+3
+63 1
+83 1
+32 1
+1
+385
+3
+63 1
+83 0
+32 1
+1
+394
+3
+85 1
+83 1
+35 1
+1
+395
+3
+85 1
+83 0
+35 1
+3
+0
+307
+1
+51 0
+0
+312
+1
+33 0
+0
+317
+1
+75 0
+end_DTG
+begin_DTG
+1
+1
+317
+1
+74 1
+3
+0
+441
+3
+74 1
+85 0
+87 0
+0
+442
+3
+74 1
+85 0
+91 0
+0
+443
+3
+74 1
+85 0
+90 0
+end_DTG
+begin_DTG
+6
+1
+370
+3
+55 1
+83 1
+54 1
+1
+371
+3
+55 1
+83 0
+54 1
+1
+380
+3
+65 1
+83 1
+36 1
+1
+381
+3
+65 1
+83 0
+36 1
+1
+390
+3
+86 1
+83 1
+59 1
+1
+391
+3
+86 1
+83 0
+59 1
+3
+0
+305
+1
+49 0
+0
+310
+1
+37 0
+0
+315
+1
+77 0
+end_DTG
+begin_DTG
+1
+1
+315
+1
+76 1
+3
+0
+435
+3
+76 1
+86 0
+87 0
+0
+436
+3
+76 1
+86 0
+91 0
+0
+437
+3
+76 1
+86 0
+90 0
+end_DTG
+begin_DTG
+6
+1
+376
+3
+47 1
+83 1
+46 1
+1
+377
+3
+47 1
+83 0
+46 1
+1
+386
+3
+67 1
+83 1
+44 1
+1
+387
+3
+67 1
+83 0
+44 1
+1
+396
+3
+89 1
+83 1
+43 1
+1
+397
+3
+89 1
+83 0
+43 1
+3
+0
+308
+1
+45 0
+0
+313
+1
+40 0
+0
+318
+1
+79 0
+end_DTG
+begin_DTG
+1
+1
+318
+1
+78 1
+3
+0
+444
+3
+78 1
+89 0
+87 0
+0
+445
+3
+78 1
+89 0
+91 0
+0
+446
+3
+78 1
+89 0
+90 0
+end_DTG
+begin_DTG
+6
+1
+372
+3
+57 1
+83 1
+56 1
+1
+373
+3
+57 1
+83 0
+56 1
+1
+382
+3
+69 1
+83 1
+58 1
+1
+383
+3
+69 1
+83 0
+58 1
+1
+392
+3
+88 1
+83 1
+60 1
+1
+393
+3
+88 1
+83 0
+60 1
+3
+0
+306
+1
+50 0
+0
+311
+1
+39 0
+0
+316
+1
+81 0
+end_DTG
+begin_DTG
+1
+1
+316
+1
+80 1
+3
+0
+438
+3
+80 1
+88 0
+87 0
+0
+439
+3
+80 1
+88 0
+91 0
+0
+440
+3
+80 1
+88 0
+90 0
+end_DTG
+begin_DTG
+9
+1
+432
+3
+4 1
+87 0
+9 1
+1
+433
+3
+4 1
+91 0
+9 1
+1
+434
+3
+4 1
+90 0
+9 1
+1
+447
+3
+71 1
+87 0
+72 1
+1
+448
+3
+71 1
+91 0
+72 1
+1
+449
+3
+71 1
+90 0
+72 1
+1
+462
+3
+61 1
+87 0
+62 1
+1
+463
+3
+61 1
+91 0
+62 1
+1
+464
+3
+61 1
+90 0
+62 1
+2
+0
+334
+1
+31 0
+0
+339
+1
+30 0
+end_DTG
+begin_DTG
+1
+1
+130
+0
+1
+2
+129
+0
+0
+end_DTG
+begin_DTG
+1
+1
+132
+0
+1
+2
+131
+0
+0
+end_DTG
+begin_DTG
+9
+1
+426
+3
+2 1
+87 0
+7 1
+1
+427
+3
+2 1
+91 0
+7 1
+1
+428
+3
+2 1
+90 0
+7 1
+1
+441
+3
+74 1
+87 0
+75 1
+1
+442
+3
+74 1
+91 0
+75 1
+1
+443
+3
+74 1
+90 0
+75 1
+1
+456
+3
+63 1
+87 0
+64 1
+1
+457
+3
+63 1
+91 0
+64 1
+1
+458
+3
+63 1
+90 0
+64 1
+2
+0
+332
+1
+35 0
+0
+337
+1
+34 0
+end_DTG
+begin_DTG
+9
+1
+420
+3
+0 1
+87 0
+5 1
+1
+421
+3
+0 1
+91 0
+5 1
+1
+422
+3
+0 1
+90 0
+5 1
+1
+435
+3
+76 1
+87 0
+77 1
+1
+436
+3
+76 1
+91 0
+77 1
+1
+437
+3
+76 1
+90 0
+77 1
+1
+450
+3
+65 1
+87 0
+66 1
+1
+451
+3
+65 1
+91 0
+66 1
+1
+452
+3
+65 1
+90 0
+66 1
+2
+0
+330
+1
+59 0
+0
+335
+1
+38 0
+end_DTG
+begin_DTG
+15
+1
+420
+3
+0 1
+86 0
+5 1
+1
+423
+3
+1 1
+88 0
+6 1
+1
+426
+3
+2 1
+85 0
+7 1
+1
+429
+3
+3 1
+89 0
+8 1
+1
+432
+3
+4 1
+82 0
+9 1
+1
+435
+3
+76 1
+86 0
+77 1
+1
+438
+3
+80 1
+88 0
+81 1
+1
+441
+3
+74 1
+85 0
+75 1
+1
+444
+3
+78 1
+89 0
+79 1
+1
+447
+3
+71 1
+82 0
+72 1
+1
+450
+3
+65 1
+86 0
+66 1
+1
+453
+3
+69 1
+88 0
+70 1
+1
+456
+3
+63 1
+85 0
+64 1
+1
+459
+3
+67 1
+89 0
+68 1
+1
+462
+3
+61 1
+82 0
+62 1
+0
+end_DTG
+begin_DTG
+9
+1
+423
+3
+1 1
+87 0
+6 1
+1
+424
+3
+1 1
+91 0
+6 1
+1
+425
+3
+1 1
+90 0
+6 1
+1
+438
+3
+80 1
+87 0
+81 1
+1
+439
+3
+80 1
+91 0
+81 1
+1
+440
+3
+80 1
+90 0
+81 1
+1
+453
+3
+69 1
+87 0
+70 1
+1
+454
+3
+69 1
+91 0
+70 1
+1
+455
+3
+69 1
+90 0
+70 1
+2
+0
+331
+1
+60 0
+0
+336
+1
+41 0
+end_DTG
+begin_DTG
+9
+1
+429
+3
+3 1
+87 0
+8 1
+1
+430
+3
+3 1
+91 0
+8 1
+1
+431
+3
+3 1
+90 0
+8 1
+1
+444
+3
+78 1
+87 0
+79 1
+1
+445
+3
+78 1
+91 0
+79 1
+1
+446
+3
+78 1
+90 0
+79 1
+1
+459
+3
+67 1
+87 0
+68 1
+1
+460
+3
+67 1
+91 0
+68 1
+1
+461
+3
+67 1
+90 0
+68 1
+2
+0
+333
+1
+43 0
+0
+338
+1
+42 0
+end_DTG
+begin_DTG
+1
+1
+134
+0
+15
+0
+420
+4
+0 1
+86 0
+87 0
+5 1
+0
+423
+4
+1 1
+88 0
+87 0
+6 1
+0
+426
+4
+2 1
+85 0
+87 0
+7 1
+0
+429
+4
+3 1
+89 0
+87 0
+8 1
+0
+432
+4
+4 1
+82 0
+87 0
+9 1
+0
+435
+4
+76 1
+86 0
+87 0
+77 1
+0
+438
+4
+80 1
+88 0
+87 0
+81 1
+0
+441
+4
+74 1
+85 0
+87 0
+75 1
+0
+444
+4
+78 1
+89 0
+87 0
+79 1
+0
+447
+4
+71 1
+82 0
+87 0
+72 1
+0
+450
+4
+65 1
+86 0
+87 0
+66 1
+0
+453
+4
+69 1
+88 0
+87 0
+70 1
+0
+456
+4
+63 1
+85 0
+87 0
+64 1
+0
+459
+4
+67 1
+89 0
+87 0
+68 1
+0
+462
+4
+61 1
+82 0
+87 0
+62 1
+end_DTG
+begin_DTG
+1
+1
+133
+0
+1
+0
+134
+1
+90 0
+end_DTG
+begin_DTG
+6
+1
+155
+1
+0 0
+1
+180
+1
+10 0
+1
+205
+1
+55 0
+1
+230
+1
+76 0
+1
+255
+1
+65 0
+1
+280
+1
+86 0
+5
+0
+20
+2
+95 0
+10 0
+0
+45
+2
+96 0
+55 0
+0
+70
+2
+98 0
+76 0
+0
+95
+2
+99 0
+65 0
+0
+120
+2
+86 0
+101 0
+end_DTG
+begin_DTG
+6
+1
+156
+1
+1 0
+1
+181
+1
+13 0
+1
+206
+1
+57 0
+1
+231
+1
+80 0
+1
+256
+1
+69 0
+1
+281
+1
+88 0
+5
+0
+21
+2
+95 0
+13 0
+0
+46
+2
+96 0
+57 0
+0
+71
+2
+98 0
+80 0
+0
+96
+2
+99 0
+69 0
+0
+121
+2
+88 0
+101 0
+end_DTG
+begin_DTG
+6
+1
+157
+1
+2 0
+1
+182
+1
+16 0
+1
+207
+1
+53 0
+1
+232
+1
+74 0
+1
+257
+1
+63 0
+1
+282
+1
+85 0
+5
+0
+22
+2
+95 0
+16 0
+0
+47
+2
+96 0
+53 0
+0
+72
+2
+98 0
+74 0
+0
+97
+2
+99 0
+63 0
+0
+122
+2
+85 0
+101 0
+end_DTG
+begin_DTG
+5
+1
+20
+2
+10 0
+92 1
+1
+21
+2
+13 0
+93 1
+1
+22
+2
+16 0
+94 1
+1
+23
+2
+19 0
+97 1
+1
+24
+2
+22 0
+100 1
+5
+0
+180
+2
+10 0
+92 0
+0
+181
+2
+13 0
+93 0
+0
+182
+2
+16 0
+94 0
+0
+183
+2
+19 0
+97 0
+0
+184
+2
+22 0
+100 0
+end_DTG
+begin_DTG
+5
+1
+45
+2
+55 0
+92 1
+1
+46
+2
+57 0
+93 1
+1
+47
+2
+53 0
+94 1
+1
+48
+2
+47 0
+97 1
+1
+49
+2
+27 0
+100 1
+5
+0
+205
+2
+55 0
+92 0
+0
+206
+2
+57 0
+93 0
+0
+207
+2
+53 0
+94 0
+0
+208
+2
+47 0
+97 0
+0
+209
+2
+27 0
+100 0
+end_DTG
+begin_DTG
+6
+1
+158
+1
+3 0
+1
+183
+1
+19 0
+1
+208
+1
+47 0
+1
+233
+1
+78 0
+1
+258
+1
+67 0
+1
+283
+1
+89 0
+5
+0
+23
+2
+95 0
+19 0
+0
+48
+2
+96 0
+47 0
+0
+73
+2
+98 0
+78 0
+0
+98
+2
+99 0
+67 0
+0
+123
+2
+89 0
+101 0
+end_DTG
+begin_DTG
+5
+1
+70
+2
+76 0
+92 1
+1
+71
+2
+80 0
+93 1
+1
+72
+2
+74 0
+94 1
+1
+73
+2
+78 0
+97 1
+1
+74
+2
+71 0
+100 1
+5
+0
+230
+2
+76 0
+92 0
+0
+231
+2
+80 0
+93 0
+0
+232
+2
+74 0
+94 0
+0
+233
+2
+78 0
+97 0
+0
+234
+2
+71 0
+100 0
+end_DTG
+begin_DTG
+5
+1
+95
+2
+65 0
+92 1
+1
+96
+2
+69 0
+93 1
+1
+97
+2
+63 0
+94 1
+1
+98
+2
+67 0
+97 1
+1
+99
+2
+61 0
+100 1
+5
+0
+255
+2
+65 0
+92 0
+0
+256
+2
+69 0
+93 0
+0
+257
+2
+63 0
+94 0
+0
+258
+2
+67 0
+97 0
+0
+259
+2
+61 0
+100 0
+end_DTG
+begin_DTG
+6
+1
+159
+1
+4 0
+1
+184
+1
+22 0
+1
+209
+1
+27 0
+1
+234
+1
+71 0
+1
+259
+1
+61 0
+1
+284
+1
+82 0
+5
+0
+24
+2
+95 0
+22 0
+0
+49
+2
+96 0
+27 0
+0
+74
+2
+98 0
+71 0
+0
+99
+2
+99 0
+61 0
+0
+124
+2
+82 0
+101 0
+end_DTG
+begin_DTG
+5
+1
+120
+2
+86 0
+92 1
+1
+121
+2
+88 0
+93 1
+1
+122
+2
+85 0
+94 1
+1
+123
+2
+89 0
+97 1
+1
+124
+2
+82 0
+100 1
+7
+0
+133
+1
+91 0
+0
+134
+1
+90 0
+0
+280
+2
+86 0
+92 0
+0
+281
+2
+88 0
+93 0
+0
+282
+2
+85 0
+94 0
+0
+283
+2
+89 0
+97 0
+0
+284
+2
+82 0
+100 0
+end_DTG
+begin_DTG
+6
+1
+150
+1
+0 0
+1
+175
+1
+10 0
+1
+200
+1
+55 0
+1
+225
+1
+76 0
+1
+250
+1
+65 0
+1
+275
+1
+86 0
+5
+0
+15
+2
+105 0
+10 0
+0
+40
+2
+106 0
+55 0
+0
+65
+2
+108 0
+76 0
+0
+90
+2
+109 0
+65 0
+0
+115
+2
+111 0
+86 0
+end_DTG
+begin_DTG
+6
+1
+151
+1
+1 0
+1
+176
+1
+13 0
+1
+201
+1
+57 0
+1
+226
+1
+80 0
+1
+251
+1
+69 0
+1
+276
+1
+88 0
+5
+0
+16
+2
+105 0
+13 0
+0
+41
+2
+106 0
+57 0
+0
+66
+2
+108 0
+80 0
+0
+91
+2
+109 0
+69 0
+0
+116
+2
+111 0
+88 0
+end_DTG
+begin_DTG
+6
+1
+152
+1
+2 0
+1
+177
+1
+16 0
+1
+202
+1
+53 0
+1
+227
+1
+74 0
+1
+252
+1
+63 0
+1
+277
+1
+85 0
+5
+0
+17
+2
+105 0
+16 0
+0
+42
+2
+106 0
+53 0
+0
+67
+2
+108 0
+74 0
+0
+92
+2
+109 0
+63 0
+0
+117
+2
+111 0
+85 0
+end_DTG
+begin_DTG
+5
+1
+15
+2
+10 0
+102 1
+1
+16
+2
+13 0
+103 1
+1
+17
+2
+16 0
+104 1
+1
+18
+2
+19 0
+107 1
+1
+19
+2
+22 0
+110 1
+5
+0
+175
+2
+10 0
+102 0
+0
+176
+2
+13 0
+103 0
+0
+177
+2
+16 0
+104 0
+0
+178
+2
+19 0
+107 0
+0
+179
+2
+22 0
+110 0
+end_DTG
+begin_DTG
+5
+1
+40
+2
+55 0
+102 1
+1
+41
+2
+57 0
+103 1
+1
+42
+2
+53 0
+104 1
+1
+43
+2
+47 0
+107 1
+1
+44
+2
+27 0
+110 1
+5
+0
+200
+2
+55 0
+102 0
+0
+201
+2
+57 0
+103 0
+0
+202
+2
+53 0
+104 0
+0
+203
+2
+47 0
+107 0
+0
+204
+2
+27 0
+110 0
+end_DTG
+begin_DTG
+6
+1
+153
+1
+3 0
+1
+178
+1
+19 0
+1
+203
+1
+47 0
+1
+228
+1
+78 0
+1
+253
+1
+67 0
+1
+278
+1
+89 0
+5
+0
+18
+2
+105 0
+19 0
+0
+43
+2
+106 0
+47 0
+0
+68
+2
+108 0
+78 0
+0
+93
+2
+109 0
+67 0
+0
+118
+2
+111 0
+89 0
+end_DTG
+begin_DTG
+5
+1
+65
+2
+76 0
+102 1
+1
+66
+2
+80 0
+103 1
+1
+67
+2
+74 0
+104 1
+1
+68
+2
+78 0
+107 1
+1
+69
+2
+71 0
+110 1
+5
+0
+225
+2
+76 0
+102 0
+0
+226
+2
+80 0
+103 0
+0
+227
+2
+74 0
+104 0
+0
+228
+2
+78 0
+107 0
+0
+229
+2
+71 0
+110 0
+end_DTG
+begin_DTG
+5
+1
+90
+2
+65 0
+102 1
+1
+91
+2
+69 0
+103 1
+1
+92
+2
+63 0
+104 1
+1
+93
+2
+67 0
+107 1
+1
+94
+2
+61 0
+110 1
+7
+0
+131
+1
+84 1
+0
+132
+1
+84 0
+0
+250
+2
+65 0
+102 0
+0
+251
+2
+69 0
+103 0
+0
+252
+2
+63 0
+104 0
+0
+253
+2
+67 0
+107 0
+0
+254
+2
+61 0
+110 0
+end_DTG
+begin_DTG
+6
+1
+154
+1
+4 0
+1
+179
+1
+22 0
+1
+204
+1
+27 0
+1
+229
+1
+71 0
+1
+254
+1
+61 0
+1
+279
+1
+82 0
+5
+0
+19
+2
+105 0
+22 0
+0
+44
+2
+106 0
+27 0
+0
+69
+2
+108 0
+71 0
+0
+94
+2
+109 0
+61 0
+0
+119
+2
+111 0
+82 0
+end_DTG
+begin_DTG
+5
+1
+115
+2
+86 0
+102 1
+1
+116
+2
+88 0
+103 1
+1
+117
+2
+85 0
+104 1
+1
+118
+2
+89 0
+107 1
+1
+119
+2
+82 0
+110 1
+5
+0
+275
+2
+86 0
+102 0
+0
+276
+2
+88 0
+103 0
+0
+277
+2
+85 0
+104 0
+0
+278
+2
+89 0
+107 0
+0
+279
+2
+82 0
+110 0
+end_DTG
+begin_DTG
+6
+1
+145
+1
+0 0
+1
+170
+1
+10 0
+1
+195
+1
+55 0
+1
+220
+1
+76 0
+1
+245
+1
+65 0
+1
+270
+1
+86 0
+5
+0
+10
+2
+115 0
+10 0
+0
+35
+2
+116 0
+55 0
+0
+60
+2
+118 0
+76 0
+0
+85
+2
+119 0
+65 0
+0
+110
+2
+121 0
+86 0
+end_DTG
+begin_DTG
+6
+1
+146
+1
+1 0
+1
+171
+1
+13 0
+1
+196
+1
+57 0
+1
+221
+1
+80 0
+1
+246
+1
+69 0
+1
+271
+1
+88 0
+5
+0
+11
+2
+115 0
+13 0
+0
+36
+2
+116 0
+57 0
+0
+61
+2
+118 0
+80 0
+0
+86
+2
+119 0
+69 0
+0
+111
+2
+121 0
+88 0
+end_DTG
+begin_DTG
+6
+1
+147
+1
+2 0
+1
+172
+1
+16 0
+1
+197
+1
+53 0
+1
+222
+1
+74 0
+1
+247
+1
+63 0
+1
+272
+1
+85 0
+5
+0
+12
+2
+115 0
+16 0
+0
+37
+2
+116 0
+53 0
+0
+62
+2
+118 0
+74 0
+0
+87
+2
+119 0
+63 0
+0
+112
+2
+121 0
+85 0
+end_DTG
+begin_DTG
+5
+1
+10
+2
+10 0
+112 1
+1
+11
+2
+13 0
+113 1
+1
+12
+2
+16 0
+114 1
+1
+13
+2
+19 0
+117 1
+1
+14
+2
+22 0
+120 1
+5
+0
+170
+2
+10 0
+112 0
+0
+171
+2
+13 0
+113 0
+0
+172
+2
+16 0
+114 0
+0
+173
+2
+19 0
+117 0
+0
+174
+2
+22 0
+120 0
+end_DTG
+begin_DTG
+5
+1
+35
+2
+55 0
+112 1
+1
+36
+2
+57 0
+113 1
+1
+37
+2
+53 0
+114 1
+1
+38
+2
+47 0
+117 1
+1
+39
+2
+27 0
+120 1
+5
+0
+195
+2
+55 0
+112 0
+0
+196
+2
+57 0
+113 0
+0
+197
+2
+53 0
+114 0
+0
+198
+2
+47 0
+117 0
+0
+199
+2
+27 0
+120 0
+end_DTG
+begin_DTG
+6
+1
+148
+1
+3 0
+1
+173
+1
+19 0
+1
+198
+1
+47 0
+1
+223
+1
+78 0
+1
+248
+1
+67 0
+1
+273
+1
+89 0
+5
+0
+13
+2
+115 0
+19 0
+0
+38
+2
+116 0
+47 0
+0
+63
+2
+118 0
+78 0
+0
+88
+2
+119 0
+67 0
+0
+113
+2
+121 0
+89 0
+end_DTG
+begin_DTG
+5
+1
+60
+2
+76 0
+112 1
+1
+61
+2
+80 0
+113 1
+1
+62
+2
+74 0
+114 1
+1
+63
+2
+78 0
+117 1
+1
+64
+2
+71 0
+120 1
+7
+0
+129
+1
+83 1
+0
+130
+1
+83 0
+0
+220
+2
+76 0
+112 0
+0
+221
+2
+80 0
+113 0
+0
+222
+2
+74 0
+114 0
+0
+223
+2
+78 0
+117 0
+0
+224
+2
+71 0
+120 0
+end_DTG
+begin_DTG
+5
+1
+85
+2
+65 0
+112 1
+1
+86
+2
+69 0
+113 1
+1
+87
+2
+63 0
+114 1
+1
+88
+2
+67 0
+117 1
+1
+89
+2
+61 0
+120 1
+5
+0
+245
+2
+65 0
+112 0
+0
+246
+2
+69 0
+113 0
+0
+247
+2
+63 0
+114 0
+0
+248
+2
+67 0
+117 0
+0
+249
+2
+61 0
+120 0
+end_DTG
+begin_DTG
+6
+1
+149
+1
+4 0
+1
+174
+1
+22 0
+1
+199
+1
+27 0
+1
+224
+1
+71 0
+1
+249
+1
+61 0
+1
+274
+1
+82 0
+5
+0
+14
+2
+115 0
+22 0
+0
+39
+2
+116 0
+27 0
+0
+64
+2
+118 0
+71 0
+0
+89
+2
+119 0
+61 0
+0
+114
+2
+121 0
+82 0
+end_DTG
+begin_DTG
+5
+1
+110
+2
+86 0
+112 1
+1
+111
+2
+88 0
+113 1
+1
+112
+2
+85 0
+114 1
+1
+113
+2
+89 0
+117 1
+1
+114
+2
+82 0
+120 1
+5
+0
+270
+2
+86 0
+112 0
+0
+271
+2
+88 0
+113 0
+0
+272
+2
+85 0
+114 0
+0
+273
+2
+89 0
+117 0
+0
+274
+2
+82 0
+120 0
+end_DTG
+begin_DTG
+6
+1
+140
+1
+0 0
+1
+165
+1
+10 0
+1
+190
+1
+55 0
+1
+215
+1
+76 0
+1
+240
+1
+65 0
+1
+265
+1
+86 0
+5
+0
+5
+2
+125 0
+10 0
+0
+30
+2
+126 0
+55 0
+0
+55
+2
+128 0
+76 0
+0
+80
+2
+129 0
+65 0
+0
+105
+2
+131 0
+86 0
+end_DTG
+begin_DTG
+6
+1
+141
+1
+1 0
+1
+166
+1
+13 0
+1
+191
+1
+57 0
+1
+216
+1
+80 0
+1
+241
+1
+69 0
+1
+266
+1
+88 0
+5
+0
+6
+2
+125 0
+13 0
+0
+31
+2
+126 0
+57 0
+0
+56
+2
+128 0
+80 0
+0
+81
+2
+129 0
+69 0
+0
+106
+2
+131 0
+88 0
+end_DTG
+begin_DTG
+6
+1
+142
+1
+2 0
+1
+167
+1
+16 0
+1
+192
+1
+53 0
+1
+217
+1
+74 0
+1
+242
+1
+63 0
+1
+267
+1
+85 0
+5
+0
+7
+2
+125 0
+16 0
+0
+32
+2
+126 0
+53 0
+0
+57
+2
+128 0
+74 0
+0
+82
+2
+129 0
+63 0
+0
+107
+2
+131 0
+85 0
+end_DTG
+begin_DTG
+5
+1
+5
+2
+10 0
+122 1
+1
+6
+2
+13 0
+123 1
+1
+7
+2
+16 0
+124 1
+1
+8
+2
+19 0
+127 1
+1
+9
+2
+22 0
+130 1
+5
+0
+165
+2
+10 0
+122 0
+0
+166
+2
+13 0
+123 0
+0
+167
+2
+16 0
+124 0
+0
+168
+2
+19 0
+127 0
+0
+169
+2
+22 0
+130 0
+end_DTG
+begin_DTG
+5
+1
+30
+2
+55 0
+122 1
+1
+31
+2
+57 0
+123 1
+1
+32
+2
+53 0
+124 1
+1
+33
+2
+47 0
+127 1
+1
+34
+2
+27 0
+130 1
+7
+0
+127
+1
+73 1
+0
+128
+1
+73 0
+0
+190
+2
+55 0
+122 0
+0
+191
+2
+57 0
+123 0
+0
+192
+2
+53 0
+124 0
+0
+193
+2
+47 0
+127 0
+0
+194
+2
+27 0
+130 0
+end_DTG
+begin_DTG
+6
+1
+143
+1
+3 0
+1
+168
+1
+19 0
+1
+193
+1
+47 0
+1
+218
+1
+78 0
+1
+243
+1
+67 0
+1
+268
+1
+89 0
+5
+0
+8
+2
+125 0
+19 0
+0
+33
+2
+126 0
+47 0
+0
+58
+2
+128 0
+78 0
+0
+83
+2
+129 0
+67 0
+0
+108
+2
+131 0
+89 0
+end_DTG
+begin_DTG
+5
+1
+55
+2
+76 0
+122 1
+1
+56
+2
+80 0
+123 1
+1
+57
+2
+74 0
+124 1
+1
+58
+2
+78 0
+127 1
+1
+59
+2
+71 0
+130 1
+5
+0
+215
+2
+76 0
+122 0
+0
+216
+2
+80 0
+123 0
+0
+217
+2
+74 0
+124 0
+0
+218
+2
+78 0
+127 0
+0
+219
+2
+71 0
+130 0
+end_DTG
+begin_DTG
+5
+1
+80
+2
+65 0
+122 1
+1
+81
+2
+69 0
+123 1
+1
+82
+2
+63 0
+124 1
+1
+83
+2
+67 0
+127 1
+1
+84
+2
+61 0
+130 1
+5
+0
+240
+2
+65 0
+122 0
+0
+241
+2
+69 0
+123 0
+0
+242
+2
+63 0
+124 0
+0
+243
+2
+67 0
+127 0
+0
+244
+2
+61 0
+130 0
+end_DTG
+begin_DTG
+6
+1
+144
+1
+4 0
+1
+169
+1
+22 0
+1
+194
+1
+27 0
+1
+219
+1
+71 0
+1
+244
+1
+61 0
+1
+269
+1
+82 0
+5
+0
+9
+2
+125 0
+22 0
+0
+34
+2
+126 0
+27 0
+0
+59
+2
+128 0
+71 0
+0
+84
+2
+129 0
+61 0
+0
+109
+2
+131 0
+82 0
+end_DTG
+begin_DTG
+5
+1
+105
+2
+86 0
+122 1
+1
+106
+2
+88 0
+123 1
+1
+107
+2
+85 0
+124 1
+1
+108
+2
+89 0
+127 1
+1
+109
+2
+82 0
+130 1
+5
+0
+265
+2
+86 0
+122 0
+0
+266
+2
+88 0
+123 0
+0
+267
+2
+85 0
+124 0
+0
+268
+2
+89 0
+127 0
+0
+269
+2
+82 0
+130 0
+end_DTG
+begin_DTG
+6
+1
+135
+1
+0 0
+1
+160
+1
+10 0
+1
+185
+1
+55 0
+1
+210
+1
+76 0
+1
+235
+1
+65 0
+1
+260
+1
+86 0
+5
+0
+0
+2
+135 0
+10 0
+0
+25
+2
+136 0
+55 0
+0
+50
+2
+138 0
+76 0
+0
+75
+2
+139 0
+65 0
+0
+100
+2
+141 0
+86 0
+end_DTG
+begin_DTG
+6
+1
+136
+1
+1 0
+1
+161
+1
+13 0
+1
+186
+1
+57 0
+1
+211
+1
+80 0
+1
+236
+1
+69 0
+1
+261
+1
+88 0
+5
+0
+1
+2
+135 0
+13 0
+0
+26
+2
+136 0
+57 0
+0
+51
+2
+138 0
+80 0
+0
+76
+2
+139 0
+69 0
+0
+101
+2
+141 0
+88 0
+end_DTG
+begin_DTG
+6
+1
+137
+1
+2 0
+1
+162
+1
+16 0
+1
+187
+1
+53 0
+1
+212
+1
+74 0
+1
+237
+1
+63 0
+1
+262
+1
+85 0
+5
+0
+2
+2
+135 0
+16 0
+0
+27
+2
+136 0
+53 0
+0
+52
+2
+138 0
+74 0
+0
+77
+2
+139 0
+63 0
+0
+102
+2
+141 0
+85 0
+end_DTG
+begin_DTG
+5
+1
+0
+2
+10 0
+132 1
+1
+1
+2
+13 0
+133 1
+1
+2
+2
+16 0
+134 1
+1
+3
+2
+19 0
+137 1
+1
+4
+2
+22 0
+140 1
+7
+0
+125
+1
+48 1
+0
+126
+1
+48 0
+0
+160
+2
+10 0
+132 0
+0
+161
+2
+13 0
+133 0
+0
+162
+2
+16 0
+134 0
+0
+163
+2
+19 0
+137 0
+0
+164
+2
+22 0
+140 0
+end_DTG
+begin_DTG
+5
+1
+25
+2
+55 0
+132 1
+1
+26
+2
+57 0
+133 1
+1
+27
+2
+53 0
+134 1
+1
+28
+2
+47 0
+137 1
+1
+29
+2
+27 0
+140 1
+5
+0
+185
+2
+55 0
+132 0
+0
+186
+2
+57 0
+133 0
+0
+187
+2
+53 0
+134 0
+0
+188
+2
+47 0
+137 0
+0
+189
+2
+27 0
+140 0
+end_DTG
+begin_DTG
+6
+1
+138
+1
+3 0
+1
+163
+1
+19 0
+1
+188
+1
+47 0
+1
+213
+1
+78 0
+1
+238
+1
+67 0
+1
+263
+1
+89 0
+5
+0
+3
+2
+135 0
+19 0
+0
+28
+2
+136 0
+47 0
+0
+53
+2
+138 0
+78 0
+0
+78
+2
+139 0
+67 0
+0
+103
+2
+141 0
+89 0
+end_DTG
+begin_DTG
+5
+1
+50
+2
+76 0
+132 1
+1
+51
+2
+80 0
+133 1
+1
+52
+2
+74 0
+134 1
+1
+53
+2
+78 0
+137 1
+1
+54
+2
+71 0
+140 1
+5
+0
+210
+2
+76 0
+132 0
+0
+211
+2
+80 0
+133 0
+0
+212
+2
+74 0
+134 0
+0
+213
+2
+78 0
+137 0
+0
+214
+2
+71 0
+140 0
+end_DTG
+begin_DTG
+5
+1
+75
+2
+65 0
+132 1
+1
+76
+2
+69 0
+133 1
+1
+77
+2
+63 0
+134 1
+1
+78
+2
+67 0
+137 1
+1
+79
+2
+61 0
+140 1
+5
+0
+235
+2
+65 0
+132 0
+0
+236
+2
+69 0
+133 0
+0
+237
+2
+63 0
+134 0
+0
+238
+2
+67 0
+137 0
+0
+239
+2
+61 0
+140 0
+end_DTG
+begin_DTG
+6
+1
+139
+1
+4 0
+1
+164
+1
+22 0
+1
+189
+1
+27 0
+1
+214
+1
+71 0
+1
+239
+1
+61 0
+1
+264
+1
+82 0
+5
+0
+4
+2
+135 0
+22 0
+0
+29
+2
+136 0
+27 0
+0
+54
+2
+138 0
+71 0
+0
+79
+2
+139 0
+61 0
+0
+104
+2
+141 0
+82 0
+end_DTG
+begin_DTG
+5
+1
+100
+2
+86 0
+132 1
+1
+101
+2
+88 0
+133 1
+1
+102
+2
+85 0
+134 1
+1
+103
+2
+89 0
+137 1
+1
+104
+2
+82 0
+140 1
+5
+0
+260
+2
+86 0
+132 0
+0
+261
+2
+88 0
+133 0
+0
+262
+2
+85 0
+134 0
+0
+263
+2
+89 0
+137 0
+0
+264
+2
+82 0
+140 0
+end_DTG
+begin_DTG
+0
+5
+0
+155
+2
+0 0
+92 0
+0
+156
+2
+1 0
+93 0
+0
+157
+2
+2 0
+94 0
+0
+158
+2
+3 0
+97 0
+0
+159
+2
+4 0
+100 0
+end_DTG
+begin_DTG
+0
+5
+0
+150
+2
+0 0
+102 0
+0
+151
+2
+1 0
+103 0
+0
+152
+2
+2 0
+104 0
+0
+153
+2
+3 0
+107 0
+0
+154
+2
+4 0
+110 0
+end_DTG
+begin_DTG
+0
+5
+0
+145
+2
+0 0
+112 0
+0
+146
+2
+1 0
+113 0
+0
+147
+2
+2 0
+114 0
+0
+148
+2
+3 0
+117 0
+0
+149
+2
+4 0
+120 0
+end_DTG
+begin_DTG
+0
+5
+0
+140
+2
+0 0
+122 0
+0
+141
+2
+1 0
+123 0
+0
+142
+2
+2 0
+124 0
+0
+143
+2
+3 0
+127 0
+0
+144
+2
+4 0
+130 0
+end_DTG
+begin_DTG
+0
+5
+0
+135
+2
+0 0
+132 0
+0
+136
+2
+1 0
+133 0
+0
+137
+2
+2 0
+134 0
+0
+138
+2
+3 0
+137 0
+0
+139
+2
+4 0
+140 0
+end_DTG
+begin_CG
+15
+146 1
+145 1
+144 1
+143 1
+142 1
+86 3
+132 1
+122 1
+112 1
+102 1
+92 1
+87 1
+90 2
+91 2
+5 4
+15
+146 1
+145 1
+144 1
+143 1
+142 1
+88 3
+133 1
+123 1
+113 1
+103 1
+93 1
+87 1
+90 2
+91 2
+6 4
+15
+146 1
+145 1
+144 1
+143 1
+142 1
+85 3
+134 1
+124 1
+114 1
+104 1
+94 1
+87 1
+90 2
+91 2
+7 4
+15
+146 1
+145 1
+144 1
+143 1
+142 1
+89 3
+137 1
+127 1
+117 1
+107 1
+97 1
+87 1
+90 2
+91 2
+8 4
+15
+146 1
+145 1
+144 1
+143 1
+142 1
+82 3
+140 1
+130 1
+120 1
+110 1
+100 1
+87 1
+90 2
+91 2
+9 4
+5
+0 1
+86 3
+87 1
+90 2
+91 2
+5
+1 1
+88 3
+87 1
+90 2
+91 2
+5
+2 1
+85 3
+87 1
+90 2
+91 2
+5
+3 1
+89 3
+87 1
+90 2
+91 2
+5
+4 1
+82 3
+87 1
+90 2
+91 2
+15
+135 2
+125 2
+115 2
+105 2
+95 2
+55 2
+132 2
+122 2
+112 2
+102 2
+92 2
+48 2
+73 2
+12 2
+11 3
+3
+10 1
+55 2
+73 2
+3
+10 2
+55 1
+48 2
+15
+135 2
+125 2
+115 2
+105 2
+95 2
+57 2
+133 2
+123 2
+113 2
+103 2
+93 2
+48 2
+73 2
+15 2
+14 3
+3
+13 1
+57 2
+73 2
+3
+13 2
+57 1
+48 2
+15
+135 2
+125 2
+115 2
+105 2
+95 2
+53 2
+134 2
+124 2
+114 2
+104 2
+94 2
+48 2
+73 2
+18 2
+17 3
+3
+16 1
+53 2
+73 2
+3
+16 2
+53 1
+48 2
+15
+135 2
+125 2
+115 2
+105 2
+95 2
+47 2
+137 2
+127 2
+117 2
+107 2
+97 2
+48 2
+73 2
+21 2
+20 3
+3
+19 1
+47 2
+73 2
+3
+19 2
+47 1
+48 2
+15
+135 2
+125 2
+115 2
+105 2
+95 2
+27 2
+140 2
+130 2
+120 2
+110 2
+100 2
+48 2
+73 2
+24 2
+23 3
+3
+22 1
+27 2
+73 2
+3
+22 2
+27 1
+48 2
+3
+27 2
+71 1
+73 2
+3
+27 1
+71 2
+83 2
+19
+136 2
+126 2
+116 2
+106 2
+96 2
+22 2
+71 2
+140 2
+130 2
+120 2
+110 2
+100 2
+48 2
+73 4
+83 2
+24 3
+23 2
+25 2
+26 3
+3
+71 2
+61 1
+83 2
+3
+71 1
+61 2
+84 2
+3
+61 2
+82 1
+84 2
+3
+71 2
+82 1
+83 2
+3
+74 2
+63 1
+83 2
+3
+74 1
+63 2
+84 2
+3
+63 2
+85 1
+84 2
+3
+74 2
+85 1
+83 2
+3
+76 2
+65 1
+83 2
+3
+76 1
+65 2
+84 2
+3
+65 2
+86 1
+84 2
+3
+80 1
+69 2
+84 2
+3
+78 1
+67 2
+84 2
+3
+69 2
+88 1
+84 2
+3
+67 2
+89 1
+84 2
+3
+78 2
+89 1
+83 2
+3
+78 2
+67 1
+83 2
+3
+47 2
+78 1
+73 2
+3
+47 1
+78 2
+83 2
+19
+136 2
+126 2
+116 2
+106 2
+96 2
+19 2
+78 2
+137 2
+127 2
+117 2
+107 2
+97 2
+48 2
+73 4
+83 2
+21 3
+20 2
+45 2
+46 3
+11
+135 2
+10 2
+13 2
+16 2
+19 2
+22 2
+12 2
+15 2
+18 2
+21 2
+24 2
+3
+55 2
+76 1
+73 2
+3
+57 2
+80 1
+73 2
+3
+53 2
+74 1
+73 2
+3
+53 1
+74 2
+83 2
+19
+136 2
+126 2
+116 2
+106 2
+96 2
+16 2
+74 2
+134 2
+124 2
+114 2
+104 2
+94 2
+48 2
+73 4
+83 2
+18 3
+17 2
+51 2
+52 3
+3
+55 1
+76 2
+83 2
+19
+136 2
+126 2
+116 2
+106 2
+96 2
+10 2
+76 2
+132 2
+122 2
+112 2
+102 2
+92 2
+48 2
+73 4
+83 2
+12 3
+11 2
+49 2
+54 3
+3
+57 1
+80 2
+83 2
+19
+136 2
+126 2
+116 2
+106 2
+96 2
+13 2
+80 2
+133 2
+123 2
+113 2
+103 2
+93 2
+48 2
+73 4
+83 2
+15 3
+14 2
+50 2
+56 3
+3
+80 2
+69 1
+83 2
+3
+76 2
+86 1
+83 2
+3
+80 2
+88 1
+83 2
+21
+139 2
+129 2
+119 2
+109 2
+99 2
+71 2
+82 3
+140 2
+130 2
+120 2
+110 2
+100 2
+83 2
+84 4
+87 1
+90 2
+91 2
+28 3
+29 2
+30 2
+62 4
+5
+61 1
+82 3
+87 1
+90 2
+91 2
+21
+139 2
+129 2
+119 2
+109 2
+99 2
+74 2
+85 3
+134 2
+124 2
+114 2
+104 2
+94 2
+83 2
+84 4
+87 1
+90 2
+91 2
+32 3
+33 2
+34 2
+64 4
+5
+63 1
+85 3
+87 1
+90 2
+91 2
+21
+139 2
+129 2
+119 2
+109 2
+99 2
+76 2
+86 3
+132 2
+122 2
+112 2
+102 2
+92 2
+83 2
+84 4
+87 1
+90 2
+91 2
+36 3
+37 2
+38 2
+66 4
+5
+65 1
+86 3
+87 1
+90 2
+91 2
+21
+139 2
+129 2
+119 2
+109 2
+99 2
+78 2
+89 3
+137 2
+127 2
+117 2
+107 2
+97 2
+83 2
+84 4
+87 1
+90 2
+91 2
+44 3
+40 2
+42 2
+68 4
+5
+67 1
+89 3
+87 1
+90 2
+91 2
+21
+139 2
+129 2
+119 2
+109 2
+99 2
+80 2
+88 3
+133 2
+123 2
+113 2
+103 2
+93 2
+83 2
+84 4
+87 1
+90 2
+91 2
+58 3
+39 2
+41 2
+70 4
+5
+69 1
+88 3
+87 1
+90 2
+91 2
+25
+138 2
+128 2
+118 2
+108 2
+98 2
+27 2
+61 2
+82 3
+140 2
+130 2
+120 2
+110 2
+100 2
+73 2
+83 6
+84 2
+87 1
+90 2
+91 2
+25 3
+26 2
+28 2
+31 2
+29 3
+72 4
+5
+71 1
+82 3
+87 1
+90 2
+91 2
+16
+126 2
+55 4
+57 4
+53 4
+47 4
+27 4
+11 2
+14 2
+17 2
+20 2
+23 2
+49 2
+50 2
+51 2
+45 2
+25 2
+25
+138 2
+128 2
+118 2
+108 2
+98 2
+53 2
+63 2
+85 3
+134 2
+124 2
+114 2
+104 2
+94 2
+73 2
+83 6
+84 2
+87 1
+90 2
+91 2
+51 3
+52 2
+32 2
+35 2
+33 3
+75 4
+5
+74 1
+85 3
+87 1
+90 2
+91 2
+25
+138 2
+128 2
+118 2
+108 2
+98 2
+55 2
+65 2
+86 3
+132 2
+122 2
+112 2
+102 2
+92 2
+73 2
+83 6
+84 2
+87 1
+90 2
+91 2
+49 3
+54 2
+36 2
+59 2
+37 3
+77 4
+5
+76 1
+86 3
+87 1
+90 2
+91 2
+25
+138 2
+128 2
+118 2
+108 2
+98 2
+47 2
+67 2
+89 3
+137 2
+127 2
+117 2
+107 2
+97 2
+73 2
+83 6
+84 2
+87 1
+90 2
+91 2
+45 3
+46 2
+44 2
+43 2
+40 3
+79 4
+5
+78 1
+89 3
+87 1
+90 2
+91 2
+25
+138 2
+128 2
+118 2
+108 2
+98 2
+57 2
+69 2
+88 3
+133 2
+123 2
+113 2
+103 2
+93 2
+73 2
+83 6
+84 2
+87 1
+90 2
+91 2
+50 3
+56 2
+58 2
+60 2
+39 3
+81 4
+5
+80 1
+88 3
+87 1
+90 2
+91 2
+22
+141 2
+131 2
+121 2
+111 2
+71 2
+61 2
+140 2
+130 2
+120 2
+110 2
+100 2
+83 2
+84 2
+87 3
+90 6
+101 2
+91 6
+31 3
+30 3
+9 3
+72 3
+62 3
+21
+118 2
+76 6
+80 6
+74 6
+78 6
+71 6
+54 2
+56 2
+52 2
+46 2
+26 2
+36 2
+58 2
+32 2
+44 2
+28 2
+59 2
+60 2
+35 2
+43 2
+31 2
+16
+109 2
+65 4
+69 4
+63 4
+67 4
+61 4
+37 2
+39 2
+33 2
+40 2
+29 2
+38 2
+41 2
+34 2
+42 2
+30 2
+22
+141 2
+131 2
+121 2
+111 2
+74 2
+63 2
+134 2
+124 2
+114 2
+104 2
+94 2
+83 2
+84 2
+87 3
+90 6
+101 2
+91 6
+35 3
+34 3
+7 3
+75 3
+64 3
+22
+141 2
+131 2
+121 2
+111 2
+76 2
+65 2
+132 2
+122 2
+112 2
+102 2
+92 2
+83 2
+84 2
+87 3
+90 6
+101 2
+91 6
+59 3
+38 3
+5 3
+77 3
+66 3
+21
+86 3
+88 3
+85 3
+89 3
+82 3
+90 15
+5 1
+6 1
+7 1
+8 1
+9 1
+77 1
+81 1
+75 1
+79 1
+72 1
+66 1
+70 1
+64 1
+68 1
+62 1
+22
+141 2
+131 2
+121 2
+111 2
+80 2
+69 2
+133 2
+123 2
+113 2
+103 2
+93 2
+83 2
+84 2
+87 3
+90 6
+101 2
+91 6
+60 3
+41 3
+6 3
+81 3
+70 3
+22
+141 2
+131 2
+121 2
+111 2
+78 2
+67 2
+137 2
+127 2
+117 2
+107 2
+97 2
+83 2
+84 2
+87 3
+90 6
+101 2
+91 6
+43 3
+42 3
+8 3
+79 3
+68 3
+22
+86 3
+88 3
+85 3
+89 3
+82 3
+101 1
+91 16
+5 1
+6 1
+7 1
+8 1
+9 1
+77 1
+81 1
+75 1
+79 1
+72 1
+66 1
+70 1
+64 1
+68 1
+62 1
+21
+86 3
+88 3
+85 3
+89 3
+82 3
+101 1
+5 1
+6 1
+7 1
+8 1
+9 1
+77 1
+81 1
+75 1
+79 1
+72 1
+66 1
+70 1
+64 1
+68 1
+62 1
+6
+142 1
+95 2
+96 2
+98 2
+99 2
+101 2
+6
+142 1
+95 2
+96 2
+98 2
+99 2
+101 2
+6
+142 1
+95 2
+96 2
+98 2
+99 2
+101 2
+5
+92 1
+93 1
+94 1
+97 1
+100 1
+5
+92 1
+93 1
+94 1
+97 1
+100 1
+6
+142 1
+95 2
+96 2
+98 2
+99 2
+101 2
+5
+92 1
+93 1
+94 1
+97 1
+100 1
+5
+92 1
+93 1
+94 1
+97 1
+100 1
+6
+142 1
+95 2
+96 2
+98 2
+99 2
+101 2
+5
+92 1
+93 1
+94 1
+97 1
+100 1
+6
+143 1
+105 2
+106 2
+108 2
+109 2
+111 2
+6
+143 1
+105 2
+106 2
+108 2
+109 2
+111 2
+6
+143 1
+105 2
+106 2
+108 2
+109 2
+111 2
+5
+102 1
+103 1
+104 1
+107 1
+110 1
+5
+102 1
+103 1
+104 1
+107 1
+110 1
+6
+143 1
+105 2
+106 2
+108 2
+109 2
+111 2
+5
+102 1
+103 1
+104 1
+107 1
+110 1
+5
+102 1
+103 1
+104 1
+107 1
+110 1
+6
+143 1
+105 2
+106 2
+108 2
+109 2
+111 2
+5
+102 1
+103 1
+104 1
+107 1
+110 1
+6
+144 1
+115 2
+116 2
+118 2
+119 2
+121 2
+6
+144 1
+115 2
+116 2
+118 2
+119 2
+121 2
+6
+144 1
+115 2
+116 2
+118 2
+119 2
+121 2
+5
+112 1
+113 1
+114 1
+117 1
+120 1
+5
+112 1
+113 1
+114 1
+117 1
+120 1
+6
+144 1
+115 2
+116 2
+118 2
+119 2
+121 2
+5
+112 1
+113 1
+114 1
+117 1
+120 1
+5
+112 1
+113 1
+114 1
+117 1
+120 1
+6
+144 1
+115 2
+116 2
+118 2
+119 2
+121 2
+5
+112 1
+113 1
+114 1
+117 1
+120 1
+6
+145 1
+125 2
+126 2
+128 2
+129 2
+131 2
+6
+145 1
+125 2
+126 2
+128 2
+129 2
+131 2
+6
+145 1
+125 2
+126 2
+128 2
+129 2
+131 2
+5
+122 1
+123 1
+124 1
+127 1
+130 1
+5
+122 1
+123 1
+124 1
+127 1
+130 1
+6
+145 1
+125 2
+126 2
+128 2
+129 2
+131 2
+5
+122 1
+123 1
+124 1
+127 1
+130 1
+5
+122 1
+123 1
+124 1
+127 1
+130 1
+6
+145 1
+125 2
+126 2
+128 2
+129 2
+131 2
+5
+122 1
+123 1
+124 1
+127 1
+130 1
+6
+146 1
+135 2
+136 2
+138 2
+139 2
+141 2
+6
+146 1
+135 2
+136 2
+138 2
+139 2
+141 2
+6
+146 1
+135 2
+136 2
+138 2
+139 2
+141 2
+5
+132 1
+133 1
+134 1
+137 1
+140 1
+5
+132 1
+133 1
+134 1
+137 1
+140 1
+6
+146 1
+135 2
+136 2
+138 2
+139 2
+141 2
+5
+132 1
+133 1
+134 1
+137 1
+140 1
+5
+132 1
+133 1
+134 1
+137 1
+140 1
+6
+146 1
+135 2
+136 2
+138 2
+139 2
+141 2
+5
+132 1
+133 1
+134 1
+137 1
+140 1
+0
+0
+0
+0
+0
+end_CG

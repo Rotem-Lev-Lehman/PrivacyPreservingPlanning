@@ -1,0 +1,241 @@
+probBLOCKS-10-0,  success, 28, 26,6.6651849
+probBLOCKS-10-1,  success, 32, 28,1.4097182
+probBLOCKS-10-2,  success, 30, 26,1.3407604
+probBLOCKS-11-0,  success, 26, 23,1.5123456
+probBLOCKS-11-1,  success, 38, 36,5.2484973
+probBLOCKS-11-2,  success, 26, 21,1.4982859
+probBLOCKS-12-0,  success, 28, 23,1.8457719
+probBLOCKS-12-1,  success, 26, 22,1.7114462
+probBLOCKS-13-0,  success, 34, 33,2.1880488
+probBLOCKS-13-1,  success, 40, 38,2.8713716
+probBLOCKS-14-0,  success, 28, 22,2.5522689
+probBLOCKS-14-1,  success, 34, 28,5.251109
+probBLOCKS-15-0,  success, 102, 61,12.9387633
+probBLOCKS-15-1,  success, 46, 45,3.1829806
+probBLOCKS-16-1,  success, 104, 66,13.1585162
+probBLOCKS-16-2,  success, 44, 41,3.6274097
+probBLOCKS-17-0,  success, 116, 81,16.3504785
+probBLOCKS-9-0,  success, 42, 33,3.9923067
+probBLOCKS-9-1,  success, 24, 20,1.1103912
+probBLOCKS-9-2,  success, 20, 18,1.0738671
+pfile1,  success, 10, 4,0.6246037
+pfile10,  success, 32, 11,36.708314
+pfile11,  success, 63, 29,10.4914393
+pfile12,  success, 89, 28,32.0584492
+pfile13,  success, 26, 8,3.4391269
+pfile14,  success, 37, 24,11.5304397
+pfile15,  success, 75, 30,26.3354899
+pfile16,  success, 30, 11,17.5742974
+pfile17,  success, 36, 20,18.6264973
+pfile18,  success, 67, 17,47.8103582
+pfile19,  success, 47, 17,51.0715117
+pfile2,  success, 15, 6,0.7584384
+pfile20,  failed - timeout, -1, -1,-63643079640.2182
+pfile3,  success, 37, 15,8.6319657
+pfile4,  success, 67, 30,11.1151828
+pfile5,  success, 75, 37,7.2502077
+pfile6,  failed - timeout, -1, -1,-63643079849.0012
+pfile7,  success, 27, 12,3.546848
+pfile8,  success, 60, 34,18.3884694
+pfile9,  success, 75, 30,8.3972785
+pfile1,  success, 6, 6,1.1567284
+pfile10,  success, 15, 15,1.6848842
+pfile11,  success, 20, 20,1.9918577
+pfile12,  success, 29, 17,2.9525392
+pfile13,  success, 34, 23,3.8424379
+pfile14,  success, 40, 23,3.4654586
+pfile15,  success, 53, 33,23.7723987
+pfile16,  success, 71, 23,86.0776309
+pfile17,  failed - timeout, -1, -1,-63643080187.2386
+pfile18,  failed - timeout, -1, -1,-63643080368.8572
+pfile19,  failed - timeout, -1, -1,-63643080550.3105
+pfile2,  success, 13, 11,1.2458302
+pfile20,  failed - timeout, -1, -1,-63643080733.5081
+pfile3,  success, 12, 12,1.2086875
+pfile4,  success, 14, 14,0.6690214
+pfile5,  success, 18, 14,0.7291381
+pfile6,  success, 8, 4,1.8997884
+pfile7,  success, 12, 12,1.9818007
+pfile8,  success, 22, 14,2.1257992
+pfile9,  success, 22, 12,1.5963021
+p01,  success, 20, 12,2.7248092
+p02,  success, 23, 13,2.3237439
+p03,  success, 30, 14,2.9495593
+p04,  success, 36, 16,1.9297045
+p05,  success, 46, 25,3.4397873
+p06,  success, 55, 33,4.4118472
+p07,  success, 59, 25,2.9533984
+p08,  success, 44, 25,3.3583615
+p09,  success, 59, 27,4.5830895
+p10,  success, 80, 34,4.2727599
+p11,  success, 49, 38,5.7128859
+p12,  success, 83, 61,6.9086616
+p13,  success, 86, 39,10.2081714
+p14,  success, 143, 74,17.9289433
+p15,  success, 169, 109,16.5348355
+p16,  success, 177, 100,23.1401026
+p17,  success, 117, 62,23.05492
+p18,  success, 228, 130,39.5889749
+p19,  success, 236, 145,46.3142857
+p20,  success, 193, 99,50.2415058
+probLOGISTICS-10-0,  success, 56, 20,2.7817844
+probLOGISTICS-10-1,  success, 50, 24,2.0492944
+probLOGISTICS-11-0,  success, 63, 27,1.461299
+probLOGISTICS-11-1,  success, 66, 45,2.3652212
+probLOGISTICS-12-0,  success, 52, 20,2.6052283
+probLOGISTICS-12-1,  success, 76, 48,2.4377169
+probLOGISTICS-13-0,  success, 90, 42,5.6506217
+probLOGISTICS-13-1,  success, 78, 35,3.3566216
+probLOGISTICS-14-0,  success, 70, 32,3.8629227
+probLOGISTICS-14-1,  success, 93, 41,4.5993971
+probLOGISTICS-15-0,  success, 104, 45,5.2959998
+probLOGISTICS-15-1,  success, 92, 40,4.5423136
+probLOGISTICS-4-0,  success, 22, 17,1.7172272
+probLOGISTICS-4-0-PrivateGoal,  failed - timeout, -1, -1,-63643081253.5539
+probLOGISTICS-5-0,  success, 34, 17,1.187109
+probLOGISTICS-6-0,  success, 36, 18,1.1762248
+probLOGISTICS-7-0,  success, 50, 25,1.2670934
+probLOGISTICS-8-0,  success, 40, 17,1.2702064
+probLOGISTICS-8-1,  success, 54, 21,1.8431102
+probLOGISTICS-9-0,  success, 47, 21,2.3892113
+probLOGISTICS-9-1,  success, 36, 18,1.2464767
+p10,  success, 45, 30,1.5129482
+p11,  success, 49, 39,1.5912077
+p12,  success, 26, 15,0.8418623
+p13,  success, 70, 60,1.4272866
+p14,  success, 49, 46,1.0985539
+p15,  success, 69, 52,1.2942361
+p16,  success, 58, 29,1.2940645
+p17,  success, 84, 58,3.7398404
+p18,  success, 56, 19,2.919184
+p19,  success, 107, 71,7.637129
+p20,  success, 178, 133,10.9818035
+p21,  success, 91, 58,16.1581012
+p22,  success, 111, 69,20.2453019
+p23,  success, 140, 79,31.5889886
+p24,  success, 191, 119,30.9829992
+p25,  success, 60, 15,14.020243
+p26,  success, 93, 49,12.0877979
+p27,  success, 155, 69,18.1967452
+p28,  success, 131, 75,39.6884944
+p29,  success, 105, 49,33.7432148
+p05-pfile5,  success, 15, 15,0.7813725
+p06-pfile6,  success, 20, 11,0.8084842
+p07-pfile7,  success, 36, 31,1.0364512
+p08-pfile8,  success, 43, 43,1.4349667
+p09-pfile9,  success, 34, 25,1.5628237
+p10-pfile10,  success, 44, 31,2.6171857
+p11-pfile11,  success, 35, 21,3.3700523
+p12-pfile12,  success, 59, 43,6.66548
+p13-pfile13,  success, 57, 23,9.3535333
+p14-pfile14,  success, 55, 55,6.0473008
+p15-pfile15,  success, 50, 39,8.0144833
+p16-pfile16,  success, 73, 73,10.7751441
+p18-pfile18,  success, 37, 37,4.6449801
+p19-pfile19,  success, 67, 42,7.5393879
+p20-pfile20,  success, 166, 153,26.8085545
+p21-HC-pfile1,  success, 73, 41,33.5146667
+p22-HC-pfile2,  success, 92, 59,74.4966316
+p23-HC-pfile3,  success, 100, 65,115.3465617
+p24-HC-pfile4,  failed - timeout, -1, -1,-63643082030.7327
+p25-HC-pfile5,  failed - timeout, -1, -1,-63643082212.218
+p01,  success, 34, 23,0.9687307
+p01-1,  success, 20, 14,0.8455195
+p02,  success, 127, 76,3.9035662
+p02-1,  success, 133, 99,7.1167195
+p03,  success, 11, 8,1.5142927
+p03-1,  success, 10, 8,1.5462755
+p04,  success, 107, 51,40.1158169
+p04-1,  failed - timeout, -1, -1,-63643082457.654
+p05,  success, 48, 45,6.7870187
+p05-1,  success, 34, 22,5.0050456
+p06,  success, 29, 18,2.9431666
+p06-1,  success, 24, 13,3.6904443
+p07,  success, 93, 65,3.1453497
+p07-1,  success, 38, 26,2.2900346
+p08,  success, 227, 149,17.5719789
+p08-1,  success, 105, 74,27.0120743
+p09,  failed - timeout, -1, -1,-63643082726.1757
+p09-1,  failed - timeout, -1, -1,-63643082907.4325
+p10,  failed - timeout, -1, -1,-63643083216.7439
+p10-1,  failed - timeout, -1, -1,-63643083269.893
+p01,  success, 10, 6,2.2669638
+p02,  success, 14, 8,3.4113264
+p03,  success, 16, 10,3.4599863
+p04,  success, 14, 8,3.4299846
+p05,  success, 17, 10,4.0121729
+p06,  success, 16, 10,4.0077019
+p07,  success, 14, 8,0.6439406
+p08,  success, 14, 9,4.1088212
+p09,  success, 18, 10,4.0936528
+p10,  success, 14, 9,4.1303551
+p11,  success, 14, 9,3.4516757
+p12,  success, 19, 11,4.0303981
+p13,  success, 24, 14,4.058522
+p14,  success, 23, 13,3.0394199
+p15,  success, 28, 16,3.0807737
+p16,  success, 27, 16,3.0705396
+p17,  success, 31, 18,3.1258354
+p18,  success, 29, 15,5.9327924
+p19,  success, 33, 15,5.4017456
+p20,  success, 30, 15,2.5702159
+p01,  success, 25, 21,1.3180061
+p02,  success, 35, 24,168.1827866
+p03,  success, 25, 21,1.3352953
+p04,  success, 31, 19,33.1391614
+p05,  failed - timeout, -1, -1,-63643083728.2845
+p06,  failed - timeout, -1, -1,-63643083909.2994
+p07,  failed - timeout, -1, -1,-63643084090.7498
+p08,  failed - timeout, -1, -1,-63643084271.8974
+p09,  failed - timeout, -1, -1,-63643084453.1565
+p10,  failed - timeout, -1, -1,-63643084634.3363
+p11,  failed - timeout, -1, -1,-63643084816.0603
+p12,  failed - timeout, -1, -1,-63643084997.5047
+p13,  failed - timeout, -1, -1,-63643085178.8621
+p14,  failed - timeout, -1, -1,-63643085360.3699
+p15,  failed - timeout, -1, -1,-63643085541.8717
+p16,  failed - timeout, -1, -1,-63643085723.4628
+p17,  failed - timeout, -1, -1,-63643085904.9434
+p18,  success, 58, 19,143.9303296
+p19,  success, 58, 19,150.881574
+p20,  success, 58, 19,142.4053601
+p01,  success, 6, 4,3.1584697
+p02,  success, 14, 5,4.4117259
+p03,  success, 29, 16,31.5571302
+p04,  success, 52, 22,14.2752597
+p05,  success, 36, 16,13.3509967
+p06,  success, 50, 26,79.146437
+p07,  success, 57, 25,41.2719299
+p08,  failed - timeout, -1, -1,-63643086715.5653
+p09,  failed - timeout, -1, -1,-63643086897.0936
+p10,  success, 103, 53,142.2504355
+p11,  failed - timeout, -1, -1,-63643087221.2466
+p12,  success, 13, 8,4.6139652
+p13,  success, 25, 10,7.9553215
+p14,  success, 27, 15,13.2747914
+p15,  success, 40, 18,21.3235142
+p16,  success, 58, 31,39.3540032
+p17,  success, 67, 33,161.9319226
+p18,  success, 63, 29,144.6562247
+p19,  success, 84, 41,113.0627037
+p20,  success, 84, 37,143.2546633
+pfile10,  success, 43, 43,2.3742619
+pfile12,  success, 34, 34,2.5290653
+pfile13,  success, 50, 50,2.7649261
+pfile14,  success, 51, 51,8.517972
+pfile15,  success, 69, 69,15.3942826
+pfile16,  success, 70, 70,26.0743344
+pfile17,  success, 106, 106,53.0680889
+pfile18,  success, 100, 100,67.5695212
+pfile19,  success, 127, 127,122.6100719
+pfile20,  failed - timeout, -1, -1,-63643088360.3827
+pfile21,  success, 172, 172,177.7620598
+pfile22,  failed - timeout, -1, -1,-63643088720.387
+pfile23,  failed - timeout, -1, -1,-63643088902.0225
+pfile3,  success, 7, 7,1.303186
+pfile4,  success, 12, 12,1.2767184
+pfile5,  success, 18, 18,1.3333125
+pfile6,  success, 19, 19,1.3284089
+pfile7,  success, 21, 21,1.4033509
+pfile8,  success, 16, 16,2.2260356
+pfile9,  success, 38, 38,2.3689952

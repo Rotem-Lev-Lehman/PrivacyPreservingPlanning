@@ -1,0 +1,10 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=0041C113
+eax=00000000 ebx=000001B4 ecx=00000000 edx=F5E4A228 esi=F2D6F9B0 edi=0000001F
+ebp=039BA958 esp=039BA8E0 program=D:\Privacy Preserving\GPPP\GPPP - new format\All PP-Planner\All PP-Planner\Privacy Preserving All And MAFS - PP_LAMA\bin\Debug\ff.exe, pid 12356, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+039BA958  0041C113 (0042398C, 039BABD8, 004230C0, 00000148)
+039BAC08  0040208F (00000001, 039BAC2C, 200280E8, 61007F58)
+039BACE8  61007FB5 (00000000, 039BCD74, 61007120, 00000000)
+End of stack trace

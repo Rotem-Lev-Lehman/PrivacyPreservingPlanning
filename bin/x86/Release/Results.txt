@@ -1,0 +1,12 @@
+---------------------
+D:\Privacy Preserving\GPPP\8.11.14 (GPPP - LANDMARKS)\GPPP - new format\DOMAINS\factored
+---------------------
+---------------------
+blocksworld
+---------------------
+probBLOCKS-10-0 fail, plan is null
+probBLOCKS-10-0 success
+probBLOCKS-10-1 fail, plan is null
+probBLOCKS-10-1 success
+probBLOCKS-10-2 fail, plan is null
+probBLOCKS-10-2 success

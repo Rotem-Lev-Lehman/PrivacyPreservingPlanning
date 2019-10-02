@@ -1,0 +1,504 @@
+pfile1,  success, 6, 6,0.0720549,0.3652648,2,12,25
+pfile10,  success, 16, 16,3.9511433,7.7569267,326,650,3413
+pfile11,  success, 18, 14,2.0608998,4.2233113,137,276,1606
+pfile12,  success, 36, 30,35.3068733999999,67.6442637,886,1835,9208
+pfile13,  success, 23, 21,126.5283841,240.3766362,1404,2808,15444
+pfile14,  success, 31, 31,121.1749985,337.3300974,4750,7177,34729
+pfile15,  failed - timeout, -1, -1,254.7068009,-63644235389.1942,3435,4611,20236
+pfile16,  failed - timeout, -1, -1,122.6781882,-63644235990.5244,2356,2946,13970
+pfile17,  failed - timeout, -1, -1,119.102943,-63644236591.8173,524,655,4116
+pfile18,  failed - timeout, -1, -1,118.5631945,-63644237193.1456,616,770,4483
+pfile19,  failed - timeout, -1, -1,175.2696047,-63644237794.722,24,31,141
+pfile2,  success, 17, 17,0.0214254,0.2899315,15,36,105
+pfile20,  failed - timeout, -1, -1,72.3463554,-63644238397.0132,336,385,2167
+pfile3,  success, 11, 11,0.0180126,1.5913876,13,26,93
+pfile4,  success, 12, 10,0.1111209,0.3142253,168,251,750
+pfile5,  success, 20, 20,0.627536099999999,1.5761422,492,750,2373
+pfile6,  success, 9, 5,0.0535463,0.1936672,32,54,146
+pfile7,  success, 13, 13,0.2602796,0.7621045,170,258,829
+pfile8,  success, 22, 18,4.1436515,11.0885601,1488,2249,7816
+pfile9,  success, 24, 20,0.5973618,1.2373406,74,180,705
+p01,  success, 19, 15,0.5624596,1.1883242,219,407,1883
+p02,  failed - timeout, -1, -1,286.47796229974,-63644239018.7927,417,868,3988
+p03,  success, 25, 14,0.8255499,2.4353633,549,708,3457
+p04,  failed - timeout, -1, -1,301.118504099814,-63644239622.5594,1026,2660,12474
+p05,  failed - timeout, -1, -1,325.264673299891,-63644240223.7804,6057,10299,53987
+p06,  failed - timeout, -1, -1,236.825388499685,-63644240824.8756,402,760,3603
+p07,  failed - timeout, -1, -1,269.7987792,-63644241426.0484,10266,17387,87690
+p08,  failed - timeout, -1, -1,268.3619287,-63644242027.5014,9213,16483,86908
+p09,  failed - timeout, -1, -1,276.320515699568,-63644242628.8548,3717,6396,32286
+p10,  failed - timeout, -1, -1,268.2809747,-63644243230.1553,9702,16839,87778
+p11,  failed - timeout, -1, -1,360.7973532,-63644243831.7165,2463,5763,43356
+p12,  failed - timeout, -1, -1,438.6612443,-63644244432.8986,2163,4821,36561
+p13,  failed - timeout, -1, -1,356.0086421,-63644245034.0446,2361,5366,40488
+p14,  failed - timeout, -1, -1,277.7663712,-63644245635.2711,3726,6042,47126
+p15,  failed - timeout, -1, -1,287.8511022,-63644246236.5152,2154,4715,35762
+p16,  failed - timeout, -1, -1,341.274016,-63644246837.7283,2676,4757,39333
+p17,  failed - timeout, -1, -1,350.235700300001,-63644247439.0903,2133,4267,33640
+p18,  failed - timeout, -1, -1,261.1568799,-63644248040.3276,2565,4583,36386
+p19,  failed - timeout, -1, -1,290.0558039,-63644248641.6216,2268,4110,33026
+p20,  failed - timeout, -1, -1,285.9137519,-63644249242.9066,2172,3871,30119
+probLOGISTICS-10-0,  failed - timeout, -1, -1,277.082281599718,-63644249844.1975,1104,1529,5719
+probLOGISTICS-10-1,  success, 54, 36,3.91425919999999,9.1520425,4096,3905,14769
+probLOGISTICS-11-0,  success, 69, 40,2.027458,4.4445075,1916,2207,8499
+probLOGISTICS-11-1,  failed - timeout, -1, -1,280.394742999717,-63644250459.3611,528,732,6667
+probLOGISTICS-12-0,  success, 55, 40,2.1045911,4.4753749,1792,2176,8253
+probLOGISTICS-12-1,  failed - timeout, -1, -1,274.6510214997,-63644251065.2158,528,732,6667
+probLOGISTICS-13-0,  failed - timeout, -1, -1,307.883323399845,-63644251666.3271,3804,5595,21044
+probLOGISTICS-13-1,  failed - timeout, -1, -1,307.060700399865,-63644252267.4708,816,871,3277
+probLOGISTICS-14-0,  success, 83, 38,19.705507,53.0068491,15168,10783,42659
+probLOGISTICS-14-1,  failed - timeout, -1, -1,307.665422099848,-63644252921.9567,6402,6519,26245
+probLOGISTICS-15-0,  success, 114, 78,13.2453585,34.6067748,11826,7864,31763
+probLOGISTICS-15-1,  success, 96, 61,8.95362870000001,24.6006361,9084,6343,26469
+probLOGISTICS-4-0,  success, 28, 14,0.1821386,0.2311734,224,430,1483
+probLOGISTICS-4-0-PrivateGoal,  failed - timeout, -1, -1,281.228767599735,-63644253583.8772,268,627,2334
+probLOGISTICS-5-0,  success, 38, 23,0.1636503,0.2206715,274,450,1558
+probLOGISTICS-6-0,  success, 34, 23,0.1587713,0.2097745,260,446,1546
+probLOGISTICS-7-0,  success, 51, 36,0.9472717,1.8498417,1326,1559,5593
+probLOGISTICS-8-0,  success, 40, 23,0.4964211,1.0500578,981,944,3400
+probLOGISTICS-8-1,  success, 65, 40,0.6893523,1.4638172,1053,1331,4791
+probLOGISTICS-9-0,  success, 48, 32,0.3832219,0.7094017,444,701,2503
+probLOGISTICS-9-1,  success, 44, 21,0.345647,0.713679,489,698,2624
+p10,  success, 41, 22,6.8841027,16.4549561,1173,3217,21522
+p11,  success, 36, 26,16.889559,19.5757108,633,1571,8775
+p12,  success, 19, 11,0.6945038,1.4740099,204,500,2401
+p13,  success, 46, 29,12.5319453,32.1916828,1053,3242,23062
+p14,  success, 30, 24,6.6057683,9.4218433,252,998,5572
+p15,  success, 43, 33,49.9951342,104.2312741,1725,5712,37771
+p16,  success, 43, 36,31.0514027,61.6844175,2406,4753,26375
+p17,  failed - timeout, -1, -1,233.0813902,-63644254439.9636,6540,16717,113468
+p18,  failed - timeout, -1, -1,170.8282364,-63644255041.6338,8885,12541,83165
+p19,  failed - timeout, -1, -1,162.9441283,-63644255643.008,4600,10268,77626
+p20,  failed - timeout, -1, -1,144.3244645,-63644256244.583,5649,9759,62566
+p21,  failed - timeout, -1, -1,179.2211209,-63644256846.0014,4310,5112,38241
+p22,  failed - timeout, -1, -1,136.9207116,-63644257447.5355,2650,4412,38734
+p23,  failed - timeout, -1, -1,125.8897495,-63644258049.014,4172,5433,36734
+p24,  failed - timeout, -1, -1,130.6190655,-63644258650.4178,5726,5614,40120
+p25,  success, 30, 13,27.4035318,193.1204776,4914,3783,24664
+p26,  failed - timeout, -1, -1,104.0674529,-63644259445.5725,16218,13438,67147
+p27,  failed - timeout, -1, -1,115.762694,-63644260047.2352,7047,9305,53041
+p28,  failed - timeout, -1, -1,103.330206,-63644260648.8775,3582,5104,36011
+p29,  failed - timeout, -1, -1,113.6273095,-63644261250.4692,4851,4564,33987
+p05-pfile5,  success, 15, 15,0.1929205,0.5070573,32,216,2446
+p06-pfile6,  success, 20, 13,7.6648802,19.2767313,708,2838,33890
+p07-pfile7,  success, 23, 13,40.6797759,147.5391155,3144,8930,118183
+p08-pfile8,  success, 26, 19,47.0486345,177.46328,1860,7894,129623
+p09-pfile9,  failed - timeout, -1, -1,127.5011362,-63644262197.6561,5388,16989,281328
+p10-pfile10,  failed - timeout, -1, -1,153.9271786,-63644262798.9919,6204,16253,245987
+p11-pfile11,  success, 30, 12,63.5242645999999,292.5851884,1772,8537,178132
+p12-pfile12,  failed - timeout, -1, -1,138.0966177,-63644263693.9155,1168,9255,242747
+p13-pfile13,  failed - timeout, -1, -1,129.8277677,-63644264295.1734,552,7210,223737
+p14-pfile14,  failed - timeout, -1, -1,109.1782336,-63644264896.4131,3065,9756,257342
+p15-pfile15,  failed - timeout, -1, -1,80.7504076,-63644265497.8343,819,11253,296480
+p16-pfile16,  failed - timeout, -1, -1,66.1783916999999,-63644266099.1011,639,12089,315156
+p18-pfile18,  failed - timeout, -1, -1,129.8903881,-63644266700.3741,1536,8870,235195
+p19-pfile19,  failed - timeout, -1, -1,137.0558226,-63644267301.6969,624,8150,225721
+p20-pfile20,  failed - timeout, -1, -1,143.8949763,-63644267902.9532,1740,7573,212306
+p21-HC-pfile1,  success, 63, 63,65.8895349999999,310.0408141,324,3242,144708
+p22-HC-pfile2,  failed - timeout, -1, -1,130.6855157,-63644268815.9828,212,3371,181640
+p23-HC-pfile3,  failed - timeout, -1, -1,89.4439391,-63644269417.0928,318,3506,189143
+p24-HC-pfile4,  failed - timeout, -1, -1,77.9771347,-63644270018.7348,150,1394,102918
+p25-HC-pfile5,  failed - timeout, -1, -1,64.9573067,-63644270620.3348,112,1391,102549
+p01,  failed - timeout, -1, -1,259.975244899613,-63644271221.8372,31,56,130
+p01-1,  success, 21, 19,0.7270071,1.3789182,285,386,887
+p02,  failed - timeout, -1, -1,278.242701699752,-63644271824.7182,3236,5864,15256
+p02-1,  failed - timeout, -1, -1,361.063166599999,-63644272425.9211,16828,30566,79820
+p03,  failed - timeout, -1, -1,258.112083299673,-63644273027.557,103,173,404
+p03-1,  success, 11, 8,0.4526849,0.8758081,81,138,302
+p04,  failed - timeout, -1, -1,219.8315959,-63644273629.9985,22953,26432,65256
+p04-1,  failed - timeout, -1, -1,221.1227982,-63644274231.9059,28260,30737,76595
+p05,  failed - timeout, -1, -1,268.244155899709,-63644274833.8181,11848,9874,22521
+p05-1,  success, 24, 21,15.2536476,42.3392382,2018,2373,5902
+p06,  failed - timeout, -1, -1,247.660539099691,-63644275478.1476,1089,1929,5147
+p06-1,  success, 31, 16,171.3956248,472.2597742,15770,19274,48865
+p07,  failed - timeout, -1, -1,284.373474699719,-63644276552.7441,7364,13366,32673
+p07-1,  failed - timeout, -1, -1,235.508453099999,-63644277153.9797,38400,43400,110841
+p08,  failed - timeout, -1, -1,326.6108263,-63644277756.2059,12515,19010,46569
+p08-1,  failed - timeout, -1, -1,322.0085458,-63644278358.1555,26180,29362,65838
+p09,  failed - timeout, -1, -1,209.934501399999,-63644278959.2682,16900,19309,46827
+p09-1,  failed - timeout, -1, -1,210.452047199999,-63644279560.7975,17294,19562,47644
+p10,  failed - timeout, -1, -1,111.5857083,-63644280255.0224,3171,4167,5807
+p10-1,  failed - timeout, -1, -1,218.8898812,-63644280763.5351,15262,17584,39002
+p01,  success, 10, 6,0.0130077,0.0522805,57,76,55
+p02,  success, 14, 8,0.0810703999999999,0.196174,400,451,281
+p03,  success, 16, 10,0.045045,0.1330946,250,264,168
+p04,  success, 14, 8,0.0380315,0.1260884,180,202,150
+p05,  success, 18, 10,0.0585614,0.223939,354,376,256
+p06,  success, 16, 10,0.0933245,0.3112223,474,524,370
+p07,  success, 14, 8,0.0681124,0.2691971,384,426,289
+p08,  success, 14, 9,0.0558303,0.2889782,240,258,274
+p09,  success, 18, 10,0.0735793,0.3192356,276,300,315
+p10,  success, 14, 9,0.0625673,0.3013686,252,272,289
+p11,  success, 14, 9,0.0564574,0.1930402,210,234,243
+p12,  success, 18, 11,0.0838976999999999,0.298169,348,371,327
+p13,  success, 21, 11,0.1173679,0.4413346,606,675,576
+p14,  success, 21, 10,0.1053887,0.4596282,448,457,450
+p15,  success, 25, 12,0.1188866,0.6585646,704,712,625
+p16,  success, 25, 11,0.1341147,0.6518835,712,649,578
+p17,  success, 28, 14,0.1616535,0.8827348,999,851,710
+p18,  success, 32, 13,0.2446923,1.0692927,1287,952,842
+p19,  success, 32, 12,0.2989372,1.4529849,1971,1364,1234
+p20,  success, 30, 15,0.2231689,1.1244947,1431,1146,1086
+p01,  success, 25, 21,0.0652815,0.3083444,285,246,217
+p02,  failed - timeout, -1, -1,248.511188500001,-63644281380.8547,121141,89435,119136
+p03,  success, 25, 21,0.0785734999999999,0.3732644,285,246,223
+p04,  success, 37, 27,42.1724628999999,141.0013888,42970,33354,50864
+p05,  failed - timeout, -1, -1,166.907591,-63644282127.1886,62734,42396,79469
+p06,  success, 50, 32,15.457294,80.4542361,11522,7624,13279
+p07,  failed - timeout, -1, -1,120.0560431,-63644282811.6066,30132,19328,34720
+p08,  failed - timeout, -1, -1,95.0464751,-63644283413.5792,25479,19675,46436
+p09,  failed - timeout, -1, -1,137.1825712,-63644284015.4686,31212,30711,52063
+p10,  failed - timeout, -1, -1,99.8423168,-63644284621.0666,26388,15922,39984
+pfile1,  success, 6, 6,0.1435966,0.5638773,2,8,16
+pfile10,  success, 16, 16,0.4397943,0.9746511,20,40,230
+pfile11,  success, 20, 20,0.5078402,1.2493345,26,55,325
+probBLOCKS-10-0,  success, 64, 42,0,37.3105738,0,0,0
+probBLOCKS-10-1,  success, 46, 30,0,24.0401493,0,0,0
+probBLOCKS-10-2,  success, 46, 33,0,21.5510228,0,0,0
+probBLOCKS-11-0,  success, 60, 43,0,26.4116836,0,0,0
+probBLOCKS-11-1,  success, 54, 34,0,24.3742005,0,0,0
+probBLOCKS-11-2,  success, 48, 37,0,22.2344451,0,0,0
+probBLOCKS-12-0,  success, 102, 73,0,39.5184415,0,0,0
+probBLOCKS-12-1,  success, 62, 44,0,26.9738534,0,0,0
+probBLOCKS-13-0,  success, 58, 36,0,27.2461045,0,0,0
+probBLOCKS-13-1,  success, 72, 55,0,30.6134469,0,0,0
+probBLOCKS-14-0,  success, 70, 49,0,30.905772,0,0,0
+probBLOCKS-14-1,  success, 144, 94,0,57.0157749,0,0,0
+probBLOCKS-15-0,  success, 102, 61,0,41.9549513,0,0,0
+probBLOCKS-15-1,  success, 88, 59,0,36.688803,0,0,0
+probBLOCKS-16-1,  success, 104, 66,0,43.3240851,0,0,0
+probBLOCKS-16-2,  success, 98, 65,0,41.1230678,0,0,0
+probBLOCKS-17-0,  success, 116, 81,0,46.4463302,0,0,0
+probBLOCKS-9-0,  success, 42, 33,0,21.1251808,0,0,0
+probBLOCKS-9-1,  success, 46, 37,0,21.4568921,0,0,0
+probBLOCKS-9-2,  success, 36, 26,0,18.1546972,0,0,0
+pfile1,  success, 6, 6,0,5.9389272,0,0,0
+pfile10,  success, 21, 21,0,13.4631418,0,0,0
+pfile11,  success, 25, 25,0,13.4666431,0,0,0
+pfile12,  success, 36, 31,0,17.7199726,0,0,0
+pfile13,  success, 27, 19,0,20.3944225,0,0,0
+pfile14,  success, 42, 25,0,21.2977229,0,0,0
+pfile15,  success, 40, 40,0,42.0483839,0,0,0
+pfile16,  success, 83, 30,0,72.6150419,0,0,0
+pfile17,  success, 105, 39,0,94.194417,0,0,0
+pfile18,  plan verification failed, -1, -1,0,111.2187311,0,0,0
+pfile19,  success, 176, 55,0,162.0935297,0,0,0
+pfile2,  success, 16, 10,0,9.5835574,0,0,0
+pfile20,  success, 116, 82,0,185.8839568,0,0,0
+pfile3,  success, 11, 11,0,8.9288643,0,0,0
+pfile4,  success, 14, 14,0,9.4443247,0,0,0
+pfile5,  success, 18, 16,0,10.6331441,0,0,0
+pfile6,  success, 10, 6,0,8.3486553,0,0,0
+pfile7,  success, 13, 13,0,10.4991065,0,0,0
+pfile8,  success, 22, 14,0,12.299186,0,0,0
+pfile9,  success, 20, 16,0,10.6132161,0,0,0
+p01,  success, 19, 12,0,9.1942512,0,0,0
+p02,  success, 27, 12,0,10.9885202,0,0,0
+p03,  success, 22, 11,0,10.2998378,0,0,0
+p04,  success, 39, 16,0,13.0541082,0,0,0
+p05,  success, 35, 14,0,13.4996251,0,0,0
+p06,  success, 45, 31,0,14.0544254,0,0,0
+p07,  success, 60, 31,0,17.3558855,0,0,0
+p08,  success, 47, 36,0,15.7962293,0,0,0
+p09,  success, 54, 31,0,15.6877305,0,0,0
+p10,  success, 83, 43,0,21.5583896,0,0,0
+p11,  success, 38, 33,0,13.3359889,0,0,0
+p12,  success, 54, 45,0,15.8379835,0,0,0
+p13,  success, 58, 37,0,18.6548322,0,0,0
+p14,  success, 79, 50,0,23.9346545,0,0,0
+p15,  success, 95, 62,0,25.6955284,0,0,0
+p16,  success, 92, 66,0,28.1284592,0,0,0
+p17,  success, 98, 61,0,30.4892438,0,0,0
+p18,  success, 120, 88,0,35.2937532,0,0,0
+p19,  success, 140, 108,0,40.4044605,0,0,0
+p20,  success, 117, 65,0,39.2474204,0,0,0
+probLOGISTICS-10-0,  success, 61, 26,0,15.8032638,0,0,0
+probLOGISTICS-10-1,  success, 57, 29,0,15.2161815,0,0,0
+probLOGISTICS-11-0,  success, 71, 31,0,16.1346653,0,0,0
+probLOGISTICS-11-1,  success, 71, 55,0,23.9479412,0,0,0
+probLOGISTICS-12-0,  success, 59, 27,0,15.2689569,0,0,0
+probLOGISTICS-12-1,  success, 82, 60,0,26.7591741,0,0,0
+probLOGISTICS-13-0,  success, 106, 47,0,25.0929512,0,0,0
+probLOGISTICS-13-1,  success, 86, 56,0,22.1383514,0,0,0
+probLOGISTICS-14-0,  success, 84, 33,0,20.822136,0,0,0
+probLOGISTICS-14-1,  success, 107, 58,0,23.5069004,0,0,0
+probLOGISTICS-15-0,  success, 115, 50,0,25.3846498,0,0,0
+probLOGISTICS-15-1,  success, 101, 49,0,21.7807346,0,0,0
+probLOGISTICS-4-0,  success, 29, 20,0,9.5392692,0,0,0
+probLOGISTICS-4-0-PrivateGoal,  success, 26, 14,0,7.8113349,0,0,0
+probLOGISTICS-5-0,  success, 40, 24,0,11.4500519,0,0,0
+probLOGISTICS-6-0,  success, 36, 17,0,10.8765996,0,0,0
+probLOGISTICS-7-0,  success, 50, 27,0,13.6682874,0,0,0
+probLOGISTICS-8-0,  success, 44, 21,0,13.3484122,0,0,0
+probLOGISTICS-8-1,  success, 66, 33,0,16.4610278,0,0,0
+probLOGISTICS-9-0,  success, 51, 23,0,13.4026965,0,0,0
+probLOGISTICS-9-1,  success, 44, 18,0,12.1329163,0,0,0
+p10,  success, 44, 32,0,13.3846081,0,0,0
+p11,  success, 36, 27,0,12.8809635,0,0,0
+p12,  success, 27, 17,0,9.0139471,0,0,0
+p13,  success, 51, 38,0,14.6868812,0,0,0
+p14,  success, 32, 28,0,11.3990082,0,0,0
+p15,  success, 48, 36,0,13.8333733,0,0,0
+p16,  success, 50, 32,0,14.8027718,0,0,0
+p17,  success, 66, 39,0,15.6800331,0,0,0
+p18,  success, 57, 24,0,14.3964889,0,0,0
+p19,  success, 86, 53,0,19.4713664,0,0,0
+p20,  success, 123, 97,0,24.8820574,0,0,0
+p21,  success, 72, 50,0,24.1056334,0,0,0
+p22,  success, 89, 50,0,26.3270659,0,0,0
+p23,  success, 112, 67,0,30.826629,0,0,0
+p24,  success, 141, 89,0,34.8352518,0,0,0
+p25,  success, 43, 15,0,21.2489294,0,0,0
+p26,  success, 82, 41,0,21.4602311,0,0,0
+p27,  success, 121, 61,0,28.4481862,0,0,0
+p28,  success, 96, 53,0,35.731037,0,0,0
+p29,  success, 88, 29,0,35.8044932,0,0,0
+p05-pfile5,  success, 15, 15,0,7.7323924,0,0,0
+p06-pfile6,  success, 24, 15,0,7.9982511,0,0,0
+p07-pfile7,  success, 29, 24,0,8.4774403,0,0,0
+p08-pfile8,  success, 41, 41,0,9.7468642,0,0,0
+p09-pfile9,  success, 35, 26,0,10.28243,0,0,0
+p10-pfile10,  success, 65, 48,0,10.2308166,0,0,0
+p11-pfile11,  success, 40, 26,0,11.1334173,0,0,0
+p12-pfile12,  success, 72, 56,0,15.0379853,0,0,0
+p13-pfile13,  success, 57, 23,0,18.9328926,0,0,0
+p14-pfile14,  success, 63, 63,0,14.6897315,0,0,0
+p15-pfile15,  success, 71, 60,0,16.7231891,0,0,0
+p16-pfile16,  success, 74, 74,0,18.8523049,0,0,0
+p18-pfile18,  success, 57, 57,0,12.9182957,0,0,0
+p19-pfile19,  success, 121, 87,0,18.3634017,0,0,0
+p20-pfile20,  success, 204, 191,0,23.7926567,0,0,0
+p21-HC-pfile1,  success, 70, 37,0,41.9401866,0,0,0
+p22-HC-pfile2,  success, 92, 59,0,149.5914255,0,0,0
+p23-HC-pfile3,  success, 100, 65,0,155.2718986,0,0,0
+p24-HC-pfile4,  success, 135, 135,0,225.4460784,0,0,0
+p25-HC-pfile5,  failed - timeout, -1, -1,0,-63644349773.3833,0,0,0
+p01,  success, 36, 27,0,17.6057498,0,0,0
+p01-1,  success, 34, 23,0,17.174073,0,0,0
+p02,  success, 143, 99,0,54.9314923,0,0,0
+p02-1,  success, 185, 129,0,69.0048157,0,0,0
+p03,  success, 11, 8,0,10.0728705,0,0,0
+p03-1,  success, 10, 8,0,9.555667,0,0,0
+p04,  success, 96, 53,0,53.3563923,0,0,0
+p04-1,  failed - timeout, -1, -1,0,-63644350613.7408,0,0,0
+p05,  success, 62, 43,0,45.0118989,0,0,0
+p05-1,  success, 40, 22,0,24.7488749,0,0,0
+p06,  success, 25, 14,0,19.7868695,0,0,0
+p06-1,  success, 24, 13,0,28.1354572,0,0,0
+p07,  success, 55, 38,0,27.3412186,0,0,0
+p07-1,  success, 38, 26,0,23.1040435,0,0,0
+p08,  success, 146, 98,0,64.089419,0,0,0
+p08-1,  success, 151, 120,0,94.0633115,0,0,0
+p09,  failed - timeout, -1, -1,0,-63644351559.2753,0,0,0
+p09-1,  failed - timeout, -1, -1,0,-63644352160.4969,0,0,0
+p10,  success, 216, 212,0,379.4998993,0,0,0
+p10-1,  plan verification failed, -1, -1,0,476.0020533,0,0,0
+p01,  success, 10, 6,0,9.1276751,0,0,0
+p02,  success, 14, 8,0,11.0433835,0,0,0
+p03,  success, 16, 10,0,12.0371841,0,0,0
+p04,  success, 15, 9,0,11.3141233,0,0,0
+p05,  success, 20, 12,0,13.2318779,0,0,0
+p06,  success, 17, 10,0,12.2309873,0,0,0
+p07,  success, 15, 8,0,11.629619,0,0,0
+p08,  success, 18, 10,0,12.671496,0,0,0
+p09,  success, 18, 10,0,12.691111,0,0,0
+p10,  success, 18, 10,0,13.1336357,0,0,0
+p11,  success, 18, 10,0,15.6171744,0,0,0
+p12,  success, 24, 10,0,14.4637928,0,0,0
+p13,  success, 23, 13,0,14.1193817,0,0,0
+p14,  success, 21, 11,0,13.7353033,0,0,0
+p15,  success, 25, 13,0,15.4708863,0,0,0
+p16,  success, 28, 13,0,16.3305487,0,0,0
+p17,  success, 34, 13,0,18.4341615,0,0,0
+p18,  success, 30, 16,0,17.2433574,0,0,0
+p19,  success, 35, 17,0,18.7787279,0,0,0
+p20,  success, 30, 16,0,17.8296968,0,0,0
+p01,  success, 25, 21,0,13.5304222,0,0,0
+p02,  success, 35, 24,0,41.208147,0,0,0
+p03,  success, 27, 23,0,13.4705637,0,0,0
+p04,  success, 31, 19,0,19.2783468,0,0,0
+p05,  fail: plan is null, -1, -1,0,403.2842514,0,0,0
+p06,  fail: plan is null, -1, -1,0,432.0111087,0,0,0
+p07,  fail: plan is null, -1, -1,0,450.6562419,0,0,0
+p08,  fail: plan is null, -1, -1,0,444.5935301,0,0,0
+p09,  fail: plan is null, -1, -1,0,414.2346385,0,0,0
+p10,  fail: plan is null, -1, -1,0,427.8865922,0,0,0
+p11,  fail: plan is null, -1, -1,0,499.5285239,0,0,0
+p12,  fail: plan is null, -1, -1,0,527.1116114,0,0,0
+p13,  fail: plan is null, -1, -1,0,465.8837753,0,0,0
+p14,  fail: plan is null, -1, -1,0,465.4446352,0,0,0
+p15,  fail: plan is null, -1, -1,0,509.0076493,0,0,0
+p16,  fail: plan is null, -1, -1,0,432.9548038,0,0,0
+p17,  fail: plan is null, -1, -1,0,526.0092966,0,0,0
+p18,  success, 58, 19,0,40.9361985,0,0,0
+p19,  success, 58, 19,0,41.080073,0,0,0
+p20,  success, 58, 19,0,41.052776,0,0,0
+p01,  success, 6, 3,0,9.1829353,0,0,0
+p02,  success, 17, 8,0,13.3043591,0,0,0
+p03,  success, 29, 16,0,20.756691,0,0,0
+p04,  success, 56, 31,0,32.0164369,0,0,0
+p05,  success, 53, 29,0,31.1291388,0,0,0
+p06,  success, 50, 26,0,37.509898,0,0,0
+p07,  success, 77, 50,0,51.0424684,0,0,0
+p08,  success, 80, 35,0,75.8993529,0,0,0
+p09,  success, 96, 46,0,84.1167991,0,0,0
+p10,  success, 103, 53,0,95.2894482,0,0,0
+p11,  plan verification failed, -1, -1,0,6.5827014,0,0,0
+p12,  success, 17, 10,0,13.7935605,0,0,0
+p13,  success, 31, 18,0,20.4417656,0,0,0
+p14,  success, 42, 25,0,26.6275663,0,0,0
+p15,  success, 46, 20,0,28.0781577,0,0,0
+p16,  success, 58, 31,0,41.1785484,0,0,0
+p17,  success, 67, 33,0,57.5347588,0,0,0
+p18,  success, 63, 29,0,56.1841435,0,0,0
+p19,  success, 84, 41,0,82.6203051,0,0,0
+p20,  success, 110, 63,0,99.186497,0,0,0
+pfile10,  success, 44, 44,0,11.8331803,0,0,0
+pfile12,  success, 36, 36,0,11.6158386,0,0,0
+pfile13,  success, 46, 46,0,13.0045576,0,0,0
+pfile14,  success, 48, 48,0,17.8311937,0,0,0
+pfile15,  success, 67, 67,0,38.5986942,0,0,0
+pfile16,  success, 68, 68,0,30.5074909,0,0,0
+pfile17,  success, 102, 102,0,109.8962502,0,0,0
+pfile18,  success, 102, 102,0,94.2356093,0,0,0
+pfile19,  success, 129, 129,0,112.1841242,0,0,0
+pfile20,  success, 144, 144,0,487.7485028,0,0,0
+pfile21,  success, 174, 174,0,282.9292999,0,0,0
+pfile22,  success, 174, 174,0,334.1198371,0,0,0
+pfile23,  success, 174, 174,0,480.0322327,0,0,0
+pfile3,  success, 7, 7,0,7.1083861,0,0,0
+pfile4,  success, 10, 10,0,7.0928509,0,0,0
+pfile5,  success, 22, 22,0,8.5977678,0,0,0
+pfile6,  success, 19, 19,0,8.5340018,0,0,0
+pfile7,  success, 21, 21,0,8.6855146,0,0,0
+pfile8,  success, 11, 11,0,8.5979219,0,0,0
+pfile9,  success, 40, 40,0,11.4638707,0,0,0
+pfile1,  success, 11, 4,0,9.6550173,0,0,0
+pfile10,  success, 32, 11,0,19.924751,0,0,0
+pfile11,  success, 81, 22,0,42.0381075,0,0,0
+pfile12,  failed - timeout, -1, -1,0,-63644363318.7388,0,0,0
+pfile13,  success, 26, 8,0,17.4888288,0,0,0
+pfile14,  failed - timeout, -1, -1,0,-63644363937.9434,0,0,0
+pfile15,  success, 128, 47,0,73.9338282,0,0,0
+pfile16,  success, 27, 9,0,18.8229311,0,0,0
+pfile17,  success, 26, 13,0,22.7876334,0,0,0
+pfile18,  failed - timeout, -1, -1,0,-63644364655.7828,0,0,0
+pfile19,  success, 52, 15,0,34.3072722,0,0,0
+pfile2,  success, 15, 6,0,11.6214674,0,0,0
+pfile20,  failed - timeout, -1, -1,0,-63644365304.1267,0,0,0
+pfile3,  success, 31, 10,0,16.9332182,0,0,0
+pfile4,  success, 67, 30,0,28.3635527,0,0,0
+pfile5,  success, 87, 31,0,37.4508813,0,0,0
+pfile6,  success, 140, 50,0,594.5807505,0,0,0
+pfile7,  success, 24, 10,0,14.6650898,0,0,0
+pfile8,  success, 60, 34,0,28.5599384,0,0,0
+pfile9,  success, 142, 57,0,71.5747522,0,0,0
+probBLOCKS-10-0,  success, 48, 42,0,2.9176954,0,322,0
+probBLOCKS-10-1,  success, 60, 56,0,2.3268477,0,710,0
+probBLOCKS-10-0,  success, 38, 34,3.19726259999999,11.1715256,3828,2126,6188
+probBLOCKS-10-0,  success, 38, 34,3.1482264,11.0273544,3828,2126,6188
+probBLOCKS-10-0,  success, 38, 34,3.2492694,11.2274895,3828,2126,6188
+probLOGISTICS-10-0,  success, 46, 21,0.309222,1.355906,244,375,1588
+probLOGISTICS-10-1,  success, 42, 20,0.2061547,0.7194802,244,325,1348
+probLOGISTICS-11-0,  success, 49, 25,0.2081473,0.7302922,264,350,1511
+probLOGISTICS-11-1,  success, 65, 54,1.5961008,6.5805102,1524,852,10988
+probLOGISTICS-12-0,  success, 42, 21,0.1938254,0.7108835,236,310,1348
+probLOGISTICS-10-0,  success, 46, 21,0.3212313,1.2968647,244,375,1588
+probLOGISTICS-10-1,  success, 42, 20,0.1901426,0.7244832,244,325,1348
+probLOGISTICS-11-0,  success, 49, 25,0.2071408,0.7374916,264,350,1511
+probLOGISTICS-10-0,  success, 46, 21,40.6411953,41.5878055,244,375,1898
+probLOGISTICS-10-1,  success, 42, 20,0.226182,0.7615079,244,325,1348
+probLOGISTICS-11-0,  success, 49, 25,0.1901608,0.7104752,264,350,1511
+probLOGISTICS-11-1,  success, 65, 54,1.5685555,6.6008501,1524,852,10988
+probLOGISTICS-12-0,  success, 42, 21,0.2001446,0.7404949,236,310,1500
+probLOGISTICS-10-0,  success, 46, 21,0.343235,1.3649097,244,375,1898
+probLOGISTICS-10-1,  success, 42, 20,0.2091501,0.7434966,244,325,1348
+probLOGISTICS-11-0,  success, 49, 25,0.1991502,0.7414949,264,350,1511
+probLOGISTICS-11-1,  success, 65, 54,1.592625,6.7232962,1524,852,10988
+probLOGISTICS-12-0,  success, 42, 21,0.1971286,0.7485002,236,310,1500
+probLOGISTICS-12-1,  success, 70, 55,2.2681738,8.1920768,1500,972,14864
+probLOGISTICS-13-0,  success, 78, 34,1.0327334,4.56007,852,1034,4632
+probLOGISTICS-13-1,  success, 65, 27,0.9446564,4.1287535,708,829,3635
+probLOGISTICS-14-0,  success, 60, 27,0.6014245,2.7293301,588,667,3362
+probLOGISTICS-14-1,  success, 78, 28,0.734513,3.2481665,732,846,4002
+probLOGISTICS-15-0,  success, 83, 40,1.1287625,4.6187316,894,1037,4864
+probLOGISTICS-15-1,  success, 69, 37,0.6194217,2.7172804,642,716,3428
+probLOGISTICS-4-0,  success, 20, 13,0.0270199,0.0580371,38,71,250
+probLOGISTICS-4-0-PrivateGoal,  success, 20, 13,0.0250381,0.0650431,30,65,246
+probLOGISTICS-5-0,  success, 27, 15,0.0330269,0.0660437,60,94,365
+probLOGISTICS-6-0,  success, 25, 15,0.0300227,0.0630421,56,88,340
+probLOGISTICS-7-0,  success, 36, 21,0.0830586,0.2511672,123,190,792
+probLOGISTICS-8-0,  success, 34, 17,0.1040816,0.2991986,147,216,902
+probLOGISTICS-8-1,  success, 48, 25,0.1231503,0.364243,171,288,1265
+probLOGISTICS-9-0,  success, 39, 24,0.0900843,0.2881913,138,218,974
+probLOGISTICS-9-1,  success, 31, 16,0.0590653,0.2137579,105,152,604
+probLOGISTICS-10-0,  success, 46, 21,0.3102196,1.3128776,244,375,1588
+probLOGISTICS-10-0,  success, 46, 21,0.3312305,1.3418947,244,375,1588
+probLOGISTICS-10-0,  success, 46, 21,0.730793,1.2590421,244,375,1588
+probLOGISTICS-10-1,  success, 42, 20,0.5287548,0.7020835,244,325,1348
+probLOGISTICS-11-0,  success, 49, 25,0.5693466,0.7196629,264,350,1511
+probLOGISTICS-10-0,  success, 54, 23,0,0.5167456,0,32,0
+probLOGISTICS-10-1,  success, 51, 25,0,0.1718838,0,63,0
+probLOGISTICS-11-0,  success, 66, 31,0,0.1633251,0,97,0
+probLOGISTICS-11-1,  success, 77, 66,0,0.8067334,0,171,0
+probLOGISTICS-12-0,  success, 53, 26,0,0.1781645,0,201,0
+probLOGISTICS-12-1,  success, 99, 70,0,1.6864003,0,353,0
+probLOGISTICS-13-0,  success, 91, 51,0,0.7074996,0,412,0
+probLOGISTICS-13-1,  success, 75, 38,0,0.4701357,0,461,0
+probLOGISTICS-14-0,  success, 72, 33,0,0.6201479,0,505,0
+probLOGISTICS-14-1,  success, 94, 48,0,0.689165,0,559,0
+probLOGISTICS-15-0,  success, 98, 47,0,0.5324423,0,619,0
+?,  fail Could not find file 'C:\Users\Rotem\Desktop\תואר'.:    at System.IO.__Error.WinIOError(Int32 errorCode: String maybeFullPath)
+   at System.IO.FileStream.Init(String path: FileMode mode: FileAccess access: Int32 rights: Boolean useRights: FileShare share: Int32 bufferSize: FileOptions options: SECURITY_ATTRIBUTES secAttrs: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.FileStream..ctor(String path: FileMode mode: FileAccess access: FileShare share: Int32 bufferSize: FileOptions options: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path: Encoding encoding: Boolean detectEncodingFromByteOrderMarks: Int32 bufferSize: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path)
+   at Planning.Parser.ParseDomain(String sDomainFile) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Parser.cs:line 164
+   at Planning.Program.ReadAgentFiles(List`1 lDomainFiles: List`1 lProblemFiles: List`1 lDomains: List`1 lProblems) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 276
+   at Planning.Program.Main(String[] args) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 1367, 0, 0,0,0,0,0,0
+?,  fail Could not find file 'C:\Users\Rotem\Desktop\תואר'.:    at System.IO.__Error.WinIOError(Int32 errorCode: String maybeFullPath)
+   at System.IO.FileStream.Init(String path: FileMode mode: FileAccess access: Int32 rights: Boolean useRights: FileShare share: Int32 bufferSize: FileOptions options: SECURITY_ATTRIBUTES secAttrs: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.FileStream..ctor(String path: FileMode mode: FileAccess access: FileShare share: Int32 bufferSize: FileOptions options: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path: Encoding encoding: Boolean detectEncodingFromByteOrderMarks: Int32 bufferSize: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path)
+   at Planning.Parser.ParseDomain(String sDomainFile) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Parser.cs:line 164
+   at Planning.Program.ReadAgentFiles(List`1 lDomainFiles: List`1 lProblemFiles: List`1 lDomains: List`1 lProblems) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 276
+   at Planning.Program.Main(String[] args) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 1367, 0, 0,0,0,0,0,0
+?,  fail Could not find file 'C:\Users\Rotem\Desktop\תואר'.:    at System.IO.__Error.WinIOError(Int32 errorCode: String maybeFullPath)
+   at System.IO.FileStream.Init(String path: FileMode mode: FileAccess access: Int32 rights: Boolean useRights: FileShare share: Int32 bufferSize: FileOptions options: SECURITY_ATTRIBUTES secAttrs: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.FileStream..ctor(String path: FileMode mode: FileAccess access: FileShare share: Int32 bufferSize: FileOptions options: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path: Encoding encoding: Boolean detectEncodingFromByteOrderMarks: Int32 bufferSize: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path)
+   at Planning.Parser.ParseDomain(String sDomainFile) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Parser.cs:line 164
+   at Planning.Program.ReadAgentFiles(List`1 lDomainFiles: List`1 lProblemFiles: List`1 lDomains: List`1 lProblems) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 276
+   at Planning.Program.Main(String[] args) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 1367, 0, 0,0,0,0,0,0
+probLOGISTICS-4-0,  success, 22, 17,0.9594354,2.402577,28,27,111
+?,  fail Could not find file 'C:\Users\Rotem\Desktop\תואר'.:    at System.IO.__Error.WinIOError(Int32 errorCode: String maybeFullPath)
+   at System.IO.FileStream.Init(String path: FileMode mode: FileAccess access: Int32 rights: Boolean useRights: FileShare share: Int32 bufferSize: FileOptions options: SECURITY_ATTRIBUTES secAttrs: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.FileStream..ctor(String path: FileMode mode: FileAccess access: FileShare share: Int32 bufferSize: FileOptions options: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path: Encoding encoding: Boolean detectEncodingFromByteOrderMarks: Int32 bufferSize: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path)
+   at Planning.Parser.ParseDomain(String sDomainFile) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Parser.cs:line 164
+   at Planning.Program.ReadAgentFiles(List`1 lDomainFiles: List`1 lProblemFiles: List`1 lDomains: List`1 lProblems) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 276
+   at Planning.Program.Main(String[] args) in C:\Users\Rotem\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 1367, 0, 0,0,0,0,0,0
+probBLOCKS-9-0,  success, 40, 36,9.556447,11.342677,120,59,216
+probLOGISTICS-14-0,  failed - timeout, -1, -1,0,-63691650563.9933,0,0,0
+?,  fail Could not find file 'C:\Users\User\Desktop\second'.:    at System.IO.__Error.WinIOError(Int32 errorCode: String maybeFullPath)
+   at System.IO.FileStream.Init(String path: FileMode mode: FileAccess access: Int32 rights: Boolean useRights: FileShare share: Int32 bufferSize: FileOptions options: SECURITY_ATTRIBUTES secAttrs: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.FileStream..ctor(String path: FileMode mode: FileAccess access: FileShare share: Int32 bufferSize: FileOptions options: String msgPath: Boolean bFromProxy: Boolean useLongPath: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path: Encoding encoding: Boolean detectEncodingFromByteOrderMarks: Int32 bufferSize: Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path)
+   at Planning.Parser.ParseDomain(String sDomainFile) in C:\Users\User\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Parser.cs:line 164
+   at Planning.Program.ReadAgentFiles(List`1 lDomainFiles: List`1 lProblemFiles: List`1 lDomains: List`1 lProblems) in C:\Users\User\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 275
+   at Planning.Program.Main(String[] args) in C:\Users\User\Desktop\תואר שני\code\GPPP (last v)\Privacy Preserving All And MAFS - PP_LAMA\Program.cs:line 1367, 0, 0,0,0,0,0,0
+p01,  fail: plan is null, -1, -1,0,29.9239347,0,0,0
+p01,  fail: plan is null, -1, -1,0,0.3941668,0,0,0
+p01,  success, 20, 12,0,3.5812565,0,0,0
+p01,  success, 20, 12,0,3.5943247,0,0,0
+p01,  success, 20, 12,0,4.01468,0,0,0
+p01,  success, 20, 15,0,3.5484925,0,0,0
+p01,  success, 23, 12,0,4.0825676,0,0,0
+p01,  success, 23, 12,0,4.0315853,0,0,0
+p01,  success, 20, 13,0,3.9990367,0,0,0
+p02,  success, 26, 15,0,5.186607,0,0,0
+p03,  success, 21, 11,0,4.686531,0,0,0
