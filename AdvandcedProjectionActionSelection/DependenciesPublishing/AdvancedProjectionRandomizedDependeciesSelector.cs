@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Planning
 {
-    class AdvancedProjectionRandomizedDependeciesSelector : IAdvancedProjectionDependeciesSelector
+    class AdvancedProjectionRandomizedDependeciesSelector : AAdvancedProjectionDependenciesSelector
     {
         private Random rnd;
 
@@ -15,7 +15,7 @@ namespace Planning
             this.rnd = new Random();
         }
 
-        public void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
+        public override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
         {
             //check if it is a legal operation
             if (percentageToSelect > 1 || percentageToSelect < 0)
@@ -32,6 +32,10 @@ namespace Planning
             {
                 int r = rnd.Next(totalAmountOfEffectsToReveal);
                 Tuple<Action, Predicate> tuple = effectsWeCanReveal[r];
+
+                //record selection:
+                RecordSelection(agent, tuple);
+
                 ((CompoundFormula)tuple.Item1.Effects).AddOperand(tuple.Item2);
                 tuple.Item1.HashEffects.Add(tuple.Item2);
                 effectsWeCanReveal.RemoveAt(r);

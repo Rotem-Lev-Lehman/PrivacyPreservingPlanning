@@ -59,6 +59,13 @@ namespace Planning
         public static bool collaborationUsed = false;
         public static string typeOfSelector = null;
 
+        //dependencies recording files:
+        public static Dictionary<Agent, string> recordingDependencyPickingPerAgent = null;
+        public static string recordingDependencyPickingAllTogether = null;
+        public static int currentParsingRound = 0;
+        public static string recordingFolderWithPercentage = null;
+        public static string agentsRecordingFolder = null;
+
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"C:\Users\levlerot\Desktop\GPPP(last_v)"; //Server's path
 
@@ -324,6 +331,12 @@ namespace Planning
             }
         }
 
+        public static string ConvertAgentNameToItsUsableName(Agent agent)
+        {
+            string[] split = agent.name.Split(' ');
+            return split[1];
+        }
+
         public static double pdbCreationTime;
         static List<string> SolveFactored(List<Domain> lDomains, List<Problem> lProblems, ref List<Agent> m_agents, Domain joinDomain)
         {
@@ -472,6 +485,12 @@ namespace Planning
 
                 publisher = new AdvancedProjectionCollaborationPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner);
                 */
+
+                foreach(Agent a in agents)
+                {
+                    string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
+                    recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
+                }
 
                 publisher = GetAdvancedProjectionPublisher();
 
@@ -1147,12 +1166,26 @@ namespace Planning
                 if (di.ToString().Contains("PdbFiles"))
                     return;
 
+                //create recording folder:
+                string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
+                System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
+                recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
+
+                agentsRecordingFolder = currentRecordingFolder + @"\Agents";
+                System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
+                recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
+
+                sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
+
+                /* previous...
                 if (sOutputPlanFile == "")
                     sOutputPlanFile = "Plan.txt";
                 else
                 {
                     sOutputPlanFile += @"\Plan.txt";
                 }
+                */
+
                 Vertex.agents = new List<Agent>();
                 Vertex.ffLplan = new List<string>();
                 Vertex.map = new Dictionary<string, int>();
@@ -1366,7 +1399,7 @@ namespace Planning
             return false;
         }
 
-        static void Experiment(string folderPath, string resultsFolderPath)
+        static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
         {
             List<double> percentages = new List<double>();
             for (double i = 0; i <= 1; i += 0.05)
@@ -1395,6 +1428,22 @@ namespace Planning
                 {
                     Console.WriteLine("Error creating a directory: " + e.ToString());
                 }
+
+                recordingFolderWithPercentage = recordingFolderPath + @"\percentage_" + percentage;
+                try
+                {
+                    // Determine whether the directory exists.
+                    if (!Directory.Exists(recordingFolderWithPercentage))
+                    {
+                        // Try to create the directory.
+                        DirectoryInfo di = Directory.CreateDirectory(recordingFolderWithPercentage);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error creating a directory: " + e.ToString());
+                }
+
                 currPercentageForSelectingActionInAdvancedProjectionPlaner = percentage;
                 Console.WriteLine("*****************************************************************************");
                 Console.WriteLine("Current percentage is: " + percentage);
@@ -1402,6 +1451,7 @@ namespace Planning
                 domainFolderPath = folderPath;
                 for (int i = 0; i < 15; i++)
                 {
+                    currentParsingRound = i;
                     Console.WriteLine("*****************************************************************************");
                     Console.WriteLine("Current parsing round is: " + i);
 
@@ -1444,7 +1494,7 @@ namespace Planning
         {
             if (dependencyUsed) //selecting dependencies
             {
-                IAdvancedProjectionDependeciesSelector selector = null;
+                AAdvancedProjectionDependenciesSelector selector = null;
                 if(typeOfSelector == "Random")
                 {
                     selector = new AdvancedProjectionRandomizedDependeciesSelector();
@@ -1458,7 +1508,7 @@ namespace Planning
                     selector = new AdvancedProjectionPublicPredicatesAchieverDependenciesSelector();
                 }
 
-                return new AdvancedProjectionDependeciesPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner);
+                return new AdvancedProjectionDependeciesPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner, recordingDependencyPickingPerAgent, recordingDependencyPickingAllTogether);
             }
             else //selecting actions
             {
@@ -1509,7 +1559,7 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = { "Public_Predicates_Achiever" };
+            string[] dependenciesSelectors = { "Actions_Achiever"/* "Random"*/};
             string[] dependenciesDomains = { "elevators08" };
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
@@ -1535,6 +1585,7 @@ namespace Planning
             string resultName = @"\experiment_results";
             string outputFileDirectory = @"\Experiment_Output_File";
             string outputFileName = @"\output.csv";
+            string recordingsDirectoryName = @"\Recordings";
 
             foreach (string domainName in domains)
             { 
@@ -1561,7 +1612,10 @@ namespace Planning
                     System.IO.Directory.CreateDirectory(outputFolder); //create the directory if it does not exist
                     string outputFilePath = outputFolder + outputFileName;
 
-                    Experiment(problemsPath, resultsPath);
+                    string recordingFolder = currPath + recordingsDirectoryName;
+                    System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
+
+                    Experiment(problemsPath, resultsPath, recordingFolder);
                     fixExperimentsResults(resultsPath, outputFilePath);
                 }
             }

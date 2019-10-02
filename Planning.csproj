@@ -103,11 +103,11 @@
     <Compile Include="AdvancedProjectionPlaner.cs" />
     <Compile Include="AdvancedProjectionHeuristic.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\ActionsPublishing\NonCollaborative\AdvancedProjectionRandomizedActionSelector.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionActionsAchieverDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionDependeciesPublisher.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionPublicPredicatesAchieverDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionRandomizedDependeciesSelector.cs" />
-    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\IAdvancedProjectionDependeciesSelector.cs" />
     <Compile Include="Agent.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Block.cs" />

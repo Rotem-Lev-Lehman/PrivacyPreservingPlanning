@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Planning
 {
-    class AdvancedProjectionActionsAchieverDependeciesSelector : IAdvancedProjectionDependeciesSelector
+    class AdvancedProjectionActionsAchieverDependeciesSelector : AAdvancedProjectionDependenciesSelector
     {
         private Random rnd;
 
@@ -15,7 +15,7 @@ namespace Planning
             this.rnd = new Random();
         }
 
-        public void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
+        public override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
         {
             //check if it is a legal operation
             if (percentageToSelect > 1 || percentageToSelect < 0)
@@ -31,28 +31,28 @@ namespace Planning
 
             //select the amount of needed dependencies
             int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
-            
-            for(int i = 0; i < amountToSelect; i++)
+
+            for (int i = 0; i < amountToSelect; i++)
             {
                 //pick the effect with the most achievable actions.
                 //if there are several actions with the max remaining predication, pick randomly between them.
                 int maxAmountOfPredicated = -1;
                 List<Tuple<Action, Predicate>> bestEffects = new List<Tuple<Action, Predicate>>();
-                
+
                 foreach (Tuple<Action, Predicate> effect in effectsWeCanReveal)
                 {
                     int count = 0;
 
                     if (actionsWithOnePreconditionLeft.ContainsKey(effect.Item2))
                         count = actionsWithOnePreconditionLeft[effect.Item2].Count;
-                    
-                    if(count > maxAmountOfPredicated)
+
+                    if (count > maxAmountOfPredicated)
                     {
                         maxAmountOfPredicated = count;
                         bestEffects = new List<Tuple<Action, Predicate>>();
                         bestEffects.Add(effect);
                     }
-                    else if(count == maxAmountOfPredicated)
+                    else if (count == maxAmountOfPredicated)
                     {
                         bestEffects.Add(effect);
                     }
@@ -60,14 +60,16 @@ namespace Planning
 
                 int r = rnd.Next(bestEffects.Count);
                 Tuple<Action, Predicate> chosen = bestEffects[r];
+
+                //record selection:
+                RecordSelection(agent, chosen);
+
                 ((CompoundFormula)chosen.Item1.Effects).AddOperand(chosen.Item2);
                 chosen.Item1.HashEffects.Add(chosen.Item2);
 
                 effectsWeCanReveal.Remove(chosen);
                 UpdatePreconditions(preconditionsRemaining, actionsWithOnePreconditionLeft, chosen.Item2);
             }
-            
-
         }
 
         private void UpdatePreconditions(Dictionary<Action, List<Predicate>> actions, Dictionary<Predicate, List<Action>> actionsWithOnePreconditionLeft, Predicate p)
@@ -104,6 +106,7 @@ namespace Planning
         private void InitializeActionsWeDidntAchieveYet(List<Action> possibleActions, Dictionary<Action, List<Predicate>> preconditionsRemaining, Dictionary<Predicate, List<Action>> actionsWithOnePreconditionLeft, Agent agent)
         {
             HashSet<GroundedPredicate> startState = agent.GetPublicStartState();
+            
 
             foreach (Action action in possibleActions)
             {
