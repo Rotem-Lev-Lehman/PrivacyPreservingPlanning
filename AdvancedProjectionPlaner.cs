@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Planning
 {
-     class AdvancedLandmarkProjectionPlaner
+    class AdvancedLandmarkProjectionPlaner
     {
-        public static bool threadContinueSearchFlag=true;
+        public static bool threadContinueSearchFlag = true;
         public static Mutex mutex = new Mutex();
         public static Mutex mutex2 = new Mutex();
         public List<bool> threadAns = null;
         HashSet<GroundedPredicate> allKindOfpublicPreconditions = null;
-        public  List<string> lplan;
-        public  Dictionary<string,int> map=null;
-        public  Dictionary<string, Action> mapActionNameToAction = null;
-        public  List<Agent> agents = null;
-        public  List<string> highLevelplan;
-        public enum GroundingType { MultiThreading, MinimalLocalsPlan, RegularGrounding,ActionGrounding, RegularPrivateGrounding };
+        public List<string> lplan;
+        public Dictionary<string, int> map = null;
+        public Dictionary<string, Action> mapActionNameToAction = null;
+        public List<Agent> agents = null;
+        public List<string> highLevelplan;
+        public enum GroundingType { MultiThreading, MinimalLocalsPlan, RegularGrounding, ActionGrounding, RegularPrivateGrounding };
         GroundingType groundingType = GroundingType.RegularPrivateGrounding;
-        public  List<string> ffLplan = null;
+        public List<string> ffLplan = null;
         State globalInitialState = null;
         private AAdvancedProjectionActionPublisher publisher;
+        private string recordingHighLevelPlanFilename;
 
-        public AdvancedLandmarkProjectionPlaner(AAdvancedProjectionActionPublisher publisher)
+        public AdvancedLandmarkProjectionPlaner(AAdvancedProjectionActionPublisher publisher, string recordingHighLevelPlanFilename)
         {
             //in order to use the regular Advanced Projection Planner, that does not select actions, use the no collaboration publisher, with AdvancedProjectionAllActionsSelector, does not matter what you put in the percentageToSelected.
             this.publisher = publisher;
+            this.recordingHighLevelPlanFilename = recordingHighLevelPlanFilename;
         }
 
         public List<string> Plan(List<Agent> m_agents, List<Domain> lDomains, List<Problem> lProblems, Domain joinDomain)
@@ -46,7 +45,7 @@ namespace Planning
             agents = m_agents;
             map = new Dictionary<string, int>();
             int j = 0;
-            foreach(Agent agent in agents)
+            foreach (Agent agent in agents)
             {
                 map.Add(agent.name, j);
                 j++;
@@ -64,16 +63,16 @@ namespace Planning
             Problem pPublic = new Problem("PublicProblem", dPublic);
             State publicStartState = new State(pPublic);
             GroundedPredicate newPrePredicate = null;
-            newPrePredicate = new GroundedPredicate(Domain.ARTIFICIAL_PREDICATE+"StartState");
+            newPrePredicate = new GroundedPredicate(Domain.ARTIFICIAL_PREDICATE + "StartState");
             publicStartState.AddPredicate(newPrePredicate);
             predicates.Add(newPrePredicate);
-            
-            mapActionNameToAction=new Dictionary<string,Action>();
+
+            mapActionNameToAction = new Dictionary<string, Action>();
             allKindOfpublicPreconditions = new HashSet<GroundedPredicate>(); ;
 
             HashSet<GroundedPredicate> allPreFroTest = new HashSet<GroundedPredicate>();
             HashSet<Action> allActionToTest = new HashSet<Action>();
-            
+
             HashSet<GroundedPredicate> allprivatePreFroTest = new HashSet<GroundedPredicate>();
             HashSet<Action> allprivateActionToTest = new HashSet<Action>();
 
@@ -117,26 +116,26 @@ namespace Planning
                 //this returns all of the projections, we will need to take only some of them and look at how does it affect the solution
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
                 agentsProjections.Add(agent, currentlProjAction);
-                
-                
+
+
                 foreach (Predicate pred in agent.PublicPredicates)
                 {
                     predicates.Add(pred);
                 }
-                
+
                 foreach (GroundedPredicate pgp in agent.GetPublicStartState())
                 {
                     publicStartState.AddPredicate(pgp);
                 }
                 index += 1000;
-                lGoal.UnionWith(agent.GetPublicGoals());             
+                lGoal.UnionWith(agent.GetPublicGoals());
             }
 
             //publish all of the chosen projections, by the chosen policy:
             publisher.setAgents(agents);
             publisher.publishActions(allProjectionAction, agentsProjections);
 
-           
+
             dPublic.Actions = allProjectionAction;
             foreach (Domain d in lDomains)
             {
@@ -177,18 +176,21 @@ namespace Planning
 
             bool ans;
             ExternalPlanners externalPlanners = new ExternalPlanners();
-            highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10*60000, out ans);
-           
+            highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10 * 60000, out ans);
+
             if (highLevelplan == null)
             {
                 return null;
             }
-            
+
+            //high level plan was successfully found
+            WriteHighLevelPlanToFile(highLevelplan);
+
             string fault;
             List<string> finalPlan = null;
             Program.StartGrounding = DateTime.Now;
             bool success = false;
-            
+
             if (groundingType == GroundingType.MultiThreading)
             {
                 finalPlan = this.GetGroundPlan(joinDomain);
@@ -216,31 +218,43 @@ namespace Planning
                 finalPlan.Add(null);
             }
             return finalPlan;
-            
+
             return null;
         }
 
-        public List<string> ManualSolve(Domain d,Problem p,State s, Formula goal)
+        private void WriteHighLevelPlanToFile(List<string> highLevelplan)
+        {
+            string data = "Index,Action\n"; //header
+            int i = 0;
+            foreach(string action in highLevelplan) //add the actions to the total data...
+            {
+                data += i + "," + action + "\n";
+                i++;
+            }
+            File.WriteAllText(recordingHighLevelPlanFilename, data); //write to the high level plan file
+        }
+
+        public List<string> ManualSolve(Domain d, Problem p, State s, Formula goal)
         {
             bool isGoal = false;
             Dictionary<string, Action> mapActionTOIndex = null;
             List<string> lplan = new List<string>();
-            while(!isGoal)
+            while (!isGoal)
             {
                 int i = 0;
                 mapActionTOIndex = new Dictionary<string, Action>();
                 foreach (Action action in d.Actions)
                 {
-                    if(s.CanDo(action))
+                    if (s.CanDo(action))
                     {
                         mapActionTOIndex.Add(i.ToString(), action);
                         i++;
-                    }                  
+                    }
                 }
                 Console.WriteLine("Choose Action:");
-                foreach(var item in mapActionTOIndex)
+                foreach (var item in mapActionTOIndex)
                 {
-                    Console.WriteLine(item.Key+" - " + item.Value.Name);
+                    Console.WriteLine(item.Key + " - " + item.Value.Name);
                 }
                 string number = Console.ReadLine();
                 Action act = mapActionTOIndex[number];
@@ -251,7 +265,7 @@ namespace Planning
             }
             return lplan;
         }
-        private  List<string> GeneratePlan(State sBeforeLast, Action aLast, Dictionary<State, State> dParents, Dictionary<State, Action> dMapStateToGeneratingAction)
+        private List<string> GeneratePlan(State sBeforeLast, Action aLast, Dictionary<State, State> dParents, Dictionary<State, Action> dMapStateToGeneratingAction)
         {
             List<string> lPlan = new List<string>();
             State sCurrent = sBeforeLast;
@@ -268,7 +282,7 @@ namespace Planning
 
 
 
-        public  bool Grounding(out List<string> finalPlan, out string fault)
+        public bool Grounding(out List<string> finalPlan, out string fault)
         {
             Console.WriteLine("\nPublic global plan found, searching for private plans");
             List<Dictionary<CompoundFormula, string>> newPlan = new List<Dictionary<CompoundFormula, string>>();
@@ -328,7 +342,7 @@ namespace Planning
                              goalFormula.AddOperand(publicPos);
                      }
                  }*/
-                  
+
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
                 ffLplan = externalPlanners.FFPlan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
@@ -470,9 +484,9 @@ namespace Planning
                 foreach (GroundedPredicate gp in act.HashEffects)
                 {
                     if (agents[map[act.agent]].PublicPredicates.Contains(gp))
-                    {                        
-                            effect.AddOperand(gp);
-                            flag = true;                        
+                    {
+                        effect.AddOperand(gp);
+                        flag = true;
                     }
                 }
                 if (flag)
@@ -516,7 +530,7 @@ namespace Planning
                   * */
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
-                ffLplan = externalPlanners.Plan(true,false,agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
+                ffLplan = externalPlanners.Plan(true, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
 
                 //List<string> todo = Plan(d, p, agentState[agentName], goalFormula, agents[map[agentName]].m_actions);
                 //planTheard = new Thread(() => FF_Plan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions));
@@ -601,8 +615,8 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true,true,agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
-                  
+                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+
                     //ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)
                     {
@@ -703,7 +717,7 @@ namespace Planning
                   * */
                 counter++;
                 List<Action> privateAndMore = new List<Action>(agents[map[agentName]].privateActions);
-                foreach(Action pubAct in agents[map[agentName]].publicActions)
+                foreach (Action pubAct in agents[map[agentName]].publicActions)
                 {
                     bool con = true;
                     foreach (GroundedPredicate gp in eff.Value.GetAllPredicates())
@@ -842,7 +856,7 @@ namespace Planning
 
 
         }
-        public  bool TasksDistributionGrounding(out List<string> finalPlan, out string fault)
+        public bool TasksDistributionGrounding(out List<string> finalPlan, out string fault)
         {
             Console.WriteLine("\nPublic global plan found, searching for private plans");
             Program.StartGrounding = DateTime.Now;
@@ -853,7 +867,7 @@ namespace Planning
             {
                 Action act = mapActionNameToAction[actname];
                 CompoundFormula effect = new CompoundFormula("and");
-                bool flag=false;
+                bool flag = false;
                 foreach (GroundedPredicate gp in act.HashEffects)
                 {
                     if (agents[map[act.agent]].PublicPredicates.Contains(gp))
@@ -863,14 +877,14 @@ namespace Planning
                             effect.AddOperand(gp);
                             flag = true;
                         }
-                       /* else
-                        {
-                            Console.Write("*");
-                        }*/
+                        /* else
+                         {
+                             Console.Write("*");
+                         }*/
 
                     }
                 }
-                if(flag)
+                if (flag)
                     lplan.Add(new KeyValuePair<string, CompoundFormula>(act.agent, effect));
             }
             int count = 0;
@@ -889,7 +903,7 @@ namespace Planning
             foreach (KeyValuePair<string, CompoundFormula> eff in lplan)
             {
                 iStep++;
-               // Console.Write("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" + iStep + "/" + lplan.Count);
+                // Console.Write("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" + iStep + "/" + lplan.Count);
                 agentName = eff.Key;
                 goalFormula = new CompoundFormula(eff.Value);
 
@@ -916,21 +930,21 @@ namespace Planning
                 List<List<string>> localPlans = new List<List<string>>();
                 foreach (Agent agent in agents)
                 {
-                    agentName=agent.name;
+                    agentName = agent.name;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
                     ffLplan = externalPlanners.FFPlan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
-                    
-                     localPlans.Add(ffLplan);
-                    
+
+                    localPlans.Add(ffLplan);
+
                 }
                 //ffLplan = ExternalPlanners.FFPlan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
                 int min = 10000;
 
-                for(int i=0;i<agents.Count;i++)
+                for (int i = 0; i < agents.Count; i++)
                 {
                     if (localPlans[i] != null && localPlans[i].Count < min)
                     {
-                        min=localPlans[i].Count;
+                        min = localPlans[i].Count;
                         ffLplan = localPlans[i];
                         agentName = agents[i].name;
                     }
@@ -1040,7 +1054,7 @@ namespace Planning
                     }
                     else
                     {
-                        
+
                         Program.KillPlanners();
                         return RegTasksDistributionGrounding(out finalPlan, out fault);
                         //return planToGoalIIII(out finalPlan, out fault);
@@ -1276,7 +1290,7 @@ namespace Planning
 
 
         }
-        public  bool GroundingActions(out List<string> finalPlan, out string fault)
+        public bool GroundingActions(out List<string> finalPlan, out string fault)
         {
             Console.WriteLine("\nPublic global plan found, searching for private plans");
             List<Dictionary<CompoundFormula, string>> newPlan = new List<Dictionary<CompoundFormula, string>>();
@@ -1310,7 +1324,7 @@ namespace Planning
 
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
-                ffLplan = externalPlanners.Plan(true,false,agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
+                ffLplan = externalPlanners.Plan(true, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
 
                 //List<string> todo = Plan(d, p, agentState[agentName], goalFormula, agents[map[agentName]].m_actions);
                 //planTheard = new Thread(() => FF_Plan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions));
@@ -1325,16 +1339,16 @@ namespace Planning
                     {
                         State s = agentState[agentName].ApplyII(agents[map[agentName]].domain.mapActionNameToAction[localAct]);
                         if (s == null)
-                            throw new Exception(); 
+                            throw new Exception();
                         agentState[agentName] = s;
                         finalPlan.Add(localAct);
-                         foreach (Agent a in agents)
-                         {
-                             if (!a.name.Equals(agentName))
-                             {
-                                 agentState[a.name] = agentState[a.name].ApplyEffect(agents[map[agentName]].domain.mapActionNameToAction[localAct], a.Predicates);
-                             }
-                         }
+                        foreach (Agent a in agents)
+                        {
+                            if (!a.name.Equals(agentName))
+                            {
+                                agentState[a.name] = agentState[a.name].ApplyEffect(agents[map[agentName]].domain.mapActionNameToAction[localAct], a.Predicates);
+                            }
+                        }
                     }
                     State state = agentState[agentName].ApplyII(agents[map[agentName]].domain.mapActionNameToAction[act.Name]);
                     if (state == null)
@@ -1355,7 +1369,7 @@ namespace Planning
                 else
                 {
                     Program.KillPlanners();
-                    return false ;
+                    return false;
                 }
 
 
@@ -1382,7 +1396,7 @@ namespace Planning
                     }
 
                 }
-                
+
             }
             foreach (var agent in agents)
             {
@@ -1395,9 +1409,9 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true,true,agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
-                  
-                  //  ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+
+                    //  ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)
                     {
 
@@ -1499,7 +1513,7 @@ namespace Planning
 
         public List<string> GetGroundPlan(Domain joinDomain)
         {
-           // Console.WriteLine("\nPublic global plan found, searching for private plans");
+            // Console.WriteLine("\nPublic global plan found, searching for private plans");
             List<string> finalPlan = new List<string>();
             threadContinueSearchFlag = true;
             Dictionary<string, State> agentState = new Dictionary<string, State>();
@@ -1531,7 +1545,7 @@ namespace Planning
                 {
                     agentState.Add(a.name, new State(a.startState));
                 }
-                threadAns=new List<bool>();
+                threadAns = new List<bool>();
                 List<Thread> threads = new List<Thread>();
                 for (int i = 0; i < agents.Count; i++)
                 {
@@ -1545,9 +1559,9 @@ namespace Planning
                 }
                 foreach (Thread t in threads)
                 {
-                    t.Join(5*60000);
+                    t.Join(5 * 60000);
                 }
-               
+
                 if (threadAns.Count != agents.Count)
                 {
                     threadContinueSearchFlag = false;
@@ -1582,8 +1596,8 @@ namespace Planning
 
                         bool bUnsolvable = false;
                         ExternalPlanners externalPlanners = new ExternalPlanners();
-                       // ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
-                      
+                        // ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+
                         ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                         if (ffLplan != null)
                         {
@@ -1625,19 +1639,19 @@ namespace Planning
                     }
                 }
 
-               /* State sCurrent = new State(globalInitialState);
-                foreach (string sAction in finalPlan)
-                {
-                    State sNew = sCurrent.Apply(sAction, joinDomain);
-                    if (sNew == null)
-                    {
-                        string f;
-                        List<string> path = null;
-                        RegGrounding(out path, out f);
-                        return path;
-                    }
-                    sCurrent = sNew;
-                }*/
+                /* State sCurrent = new State(globalInitialState);
+                 foreach (string sAction in finalPlan)
+                 {
+                     State sNew = sCurrent.Apply(sAction, joinDomain);
+                     if (sNew == null)
+                     {
+                         string f;
+                         List<string> path = null;
+                         RegGrounding(out path, out f);
+                         return path;
+                     }
+                     sCurrent = sNew;
+                 }*/
 
                 return finalPlan;
             }

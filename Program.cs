@@ -62,6 +62,7 @@ namespace Planning
         //dependencies recording files:
         public static Dictionary<Agent, string> recordingDependencyPickingPerAgent = null;
         public static string recordingDependencyPickingAllTogether = null;
+        public static string recordingHighLevelPlanFileName = null;
         public static int currentParsingRound = 0;
         public static string recordingFolderWithPercentage = null;
         public static string agentsRecordingFolder = null;
@@ -495,7 +496,7 @@ namespace Planning
                 publisher = GetAdvancedProjectionPublisher();
 
                 //Create the planner:
-                AdvancedLandmarkProjectionPlaner planner = new AdvancedLandmarkProjectionPlaner(publisher);
+                AdvancedLandmarkProjectionPlaner planner = new AdvancedLandmarkProjectionPlaner(publisher, recordingHighLevelPlanFileName);
                 lPlan = planner.Plan(agents, lDomains, lProblems, joinDomain);
             }
             else
@@ -1170,6 +1171,7 @@ namespace Planning
                 string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
                 System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
                 recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
+                recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
 
                 agentsRecordingFolder = currentRecordingFolder + @"\Agents";
                 System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
