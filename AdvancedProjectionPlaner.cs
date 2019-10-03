@@ -230,6 +230,7 @@ namespace Planning
             {
                 data += i + "," + action + "\n";
                 i++;
+
             }
             File.WriteAllText(recordingHighLevelPlanFilename, data); //write to the high level plan file
         }
