@@ -1561,7 +1561,7 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = { "Actions_Achiever"/* "Random"*/};
+            string[] dependenciesSelectors = {"Actions_Achiever", "Public_Predicates_Achiever", "Random"};
             string[] dependenciesDomains = { "elevators08" };
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
