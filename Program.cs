@@ -1509,6 +1509,14 @@ namespace Planning
                 {
                     selector = new AdvancedProjectionPublicPredicatesAchieverDependenciesSelector();
                 }
+                else if(typeOfSelector == "Actions_Achiever_Without_Negation")
+                {
+                    selector = new AdvancedProjectionActionsAchieverWithoutNegationDependeciesSelector();
+                }
+                else if(typeOfSelector == "Public_Predicates_Achiever_Without_Negation")
+                {
+                    selector = new AdvancedProjectionPublicPredicatesAchieverWithoutNegationDependenciesSelector();
+                }
 
                 return new AdvancedProjectionDependeciesPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner, recordingDependencyPickingPerAgent, recordingDependencyPickingAllTogether);
             }
@@ -1561,8 +1569,8 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = {"Actions_Achiever", "Public_Predicates_Achiever", "Random"};
-            string[] dependenciesDomains = { "elevators08" };
+            string[] dependenciesSelectors = { "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"/*"Actions_Achiever", "Public_Predicates_Achiever", "Random"*/ };
+            string[] dependenciesDomains = {/*"logistics00" */ "elevators08"};
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
 
@@ -1623,6 +1631,62 @@ namespace Planning
             }
         }
 
+        static void SummarizeHighLevelPlanWithTheirPublishedEffects(string directoryPath)
+        {
+            //the directory must contain the files: "AllTogether.csv", and "HighLevelPlan.csv" among other files.
+            string outputData = "Action,Effects\n";
+            string outputFilename = directoryPath + @"\HighLevelPlanWithEffects.csv";
+
+            string planFilename = directoryPath + @"\HighLevelPlan.csv";
+            string publishedEffectsFilename = directoryPath + @"\AllTogether.csv";
+
+            string publishedEffectsText = File.ReadAllText(publishedEffectsFilename);
+            string[] effectsLines = publishedEffectsText.Split('\n');
+            Dictionary<string, List<string>> actionToEffects = new Dictionary<string, List<string>>();
+            for(int i = 1; i < effectsLines.Length - 1; i++)
+            {
+                string[] split = effectsLines[i].Split(',');
+                string action = split[3];
+                string effect = split[4];
+                List<string> effects;
+                if (actionToEffects.ContainsKey(action))
+                {
+                    effects = actionToEffects[action];
+                }
+                else
+                {
+                    effects = new List<string>();
+                    actionToEffects.Add(action, effects);
+                }
+                effects.Add(effect);
+            }
+
+            string planFileText = File.ReadAllText(planFilename);
+            string[] planLines = planFileText.Split('\n');
+            for(int i = 1; i < planLines.Length - 1; i++) //ignore the first line which is a header
+            {
+                string action = planLines[i].Split(',')[1];
+                List<string> effectsPublished;
+                if (actionToEffects.ContainsKey(action))
+                {
+                    effectsPublished = actionToEffects[action];
+                }
+                else
+                {
+                    effectsPublished = new List<string>(); //didn't publish any effect for this action...
+                }
+
+                outputData += action;
+                for(int j = 0; j < effectsPublished.Count; j++)
+                {
+                    outputData += "," + effectsPublished[j];
+                }
+                outputData += "\n";
+            }
+
+            File.WriteAllText(outputFilename, outputData);
+        }
+
 
         static StreamWriter swResults;
         static void Main(string[] args)
@@ -1641,6 +1705,7 @@ namespace Planning
             if (runningMyExperiment)
             {
                 RunExperimentOnAlotOfDomains();
+                //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
             }
             else
             {

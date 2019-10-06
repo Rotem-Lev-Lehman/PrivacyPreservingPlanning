@@ -45,7 +45,7 @@ namespace Planning
                 HashSet<Predicate> effectsToChooseFrom = new HashSet<Predicate>();
                 foreach (Predicate p in privateEffects)
                 {
-                    int score = preconditionAmount[p] - appearanceAmount[p];
+                    int score = getScore(preconditionAmount, appearanceAmount, p, privateEffects);
                     if (score > maxAmountOfPredicated)
                     {
                         maxAmountOfPredicated = score;
@@ -125,6 +125,12 @@ namespace Planning
 
             //calculate preconditionAmount dictionary:
             CalculatePreconditionAmountDictionary(possibleActions, preconditionAmount);
+        }
+
+        protected virtual int getScore(Dictionary<Predicate, int> preconditionAmount, Dictionary<Predicate, int> appearanceAmount, Predicate p, List<Predicate> privateEffects)
+        {
+            int score = preconditionAmount[p] - appearanceAmount[p];
+            return score;
         }
 
         protected abstract void CalculatePreconditionAmountDictionary(List<Action> possibleActions, Dictionary<Predicate, int> preconditionAmount);
