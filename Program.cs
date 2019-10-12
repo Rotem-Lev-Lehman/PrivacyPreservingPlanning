@@ -1561,7 +1561,7 @@ namespace Planning
             } 
         }
 
-        static void RunExperimentOnAlotOfDomains()
+        static void RunExperimentOnAlotOfDomains(int[] domainIndexesToUse)
         {
             //string[] collaborationSelectors = { "Diversity", "Achievable_Diversity" };
             string[] nonCollaborationSelectors = { "Random", "Diversity", "Achievable_Diversity" };
@@ -1569,8 +1569,14 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = { "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"/*"Actions_Achiever", "Public_Predicates_Achiever", "Random"*/ };
-            string[] dependenciesDomains = {/*"logistics00" */ "elevators08"};
+            string[] dependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+
+            string[] dependenciesDomains = new string[domainIndexesToUse.Length];
+            for(int i = 0; i < domainIndexesToUse.Length; i++)
+            {
+                dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
+            }
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
 
@@ -1704,7 +1710,8 @@ namespace Planning
             bool runningMyExperiment = true;
             if (runningMyExperiment)
             {
-                RunExperimentOnAlotOfDomains();
+                int[] domainIndexesToUse = GetDomainIndexesToUse(args);
+                RunExperimentOnAlotOfDomains(domainIndexesToUse);
                 //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
             }
             else
@@ -1768,6 +1775,19 @@ namespace Planning
 
         }
 
-
+        private static int[] GetDomainIndexesToUse(string[] args)
+        {
+            int[] domains = new int[args.Length];
+            Console.WriteLine("Domains are:");
+            for(int i = 0; i < args.Length; i++)
+            {
+                domains[i] = int.Parse(args[i]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
+            }
+            Console.WriteLine("Now Running those domains indexes by order");
+            return domains;
+        }
     }
 }
