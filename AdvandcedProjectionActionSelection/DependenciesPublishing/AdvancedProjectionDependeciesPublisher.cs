@@ -59,10 +59,10 @@ namespace Planning
                     act.agent = agent.name;
                 }
 
-                WriteToFile(recordingDependencyPickingPerAgent[agent], recordingDependencyPickingDataPerAgent[agent]);
+                //WriteToFile(recordingDependencyPickingPerAgent[agent], recordingDependencyPickingDataPerAgent[agent]);
             }
 
-            WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
+            //WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
         }
 
         private void WriteToFile(string filename, string data)
@@ -103,6 +103,7 @@ namespace Planning
 
         public void RecordDependencyPicked(Agent agent, Tuple<Action, Predicate> chosen)
         {
+            /*
             //The stuff to record:
             string actionChosen = chosen.Item1.Name;
             Predicate predicate;
@@ -139,6 +140,7 @@ namespace Planning
             //Increase counters:
             currentDependencyRecordNumberPerAgent[agent]++;
             currentDependencyRecordNumber++;
+            */
         }
     }
 }
