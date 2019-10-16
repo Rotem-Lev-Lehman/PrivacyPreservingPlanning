@@ -67,6 +67,8 @@ namespace Planning
         public static string recordingFolderWithPercentage = null;
         public static string agentsRecordingFolder = null;
 
+        public static string currentFFProcessName = null;
+
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"C:\Users\levlerot\Desktop\GPPP(last_v)"; //Server's path
 
@@ -1226,9 +1228,10 @@ namespace Planning
         public static List<Process> GetPlanningProcesses()
         {
             List<Process> l = new List<Process>();
-            foreach (Process p in Process.GetProcesses())
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
             {
-                if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains("ff"))
+                if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(currentFFProcessName))
                     l.Add(p);
             }
             return l;
@@ -1236,7 +1239,6 @@ namespace Planning
 
         public static void KillAll(List<Process> l)
         {
-
             foreach (Process p in l)
             {
                 try
@@ -1604,7 +1606,15 @@ namespace Planning
             string recordingsDirectoryName = @"\Recordings";
 
             foreach (string domainName in domains)
-            { 
+            {
+                // copy the ff.exe file to be as the domain's name:
+                string oldPathAndName = @"ff.exe";
+                currentFFProcessName = "ff_" + domainName;
+                string newPathAndName = currentFFProcessName + ".exe";
+                if(!File.Exists(newPathAndName))
+                    System.IO.File.Copy(oldPathAndName, newPathAndName);
+                ExternalPlanners.ffPath = newPathAndName;
+
                 foreach (string selectorType in selectors)
                 {
                     Console.WriteLine("*************************************************************");

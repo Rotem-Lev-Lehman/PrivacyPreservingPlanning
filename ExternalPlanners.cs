@@ -186,6 +186,7 @@ namespace Planning
                 //List<Process> l = GetPlanningProcesses();
                 foreach (Process p in a)
                 {
+                    
                     if (p.HasExited)
                     {
                         if (p.StartInfo.FileName == ffPath)
@@ -788,9 +789,10 @@ namespace Planning
         public static List<Process> GetPlanningProcesses()
         {
             List<Process> l = new List<Process>();
-            foreach (Process p in Process.GetProcesses())
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
             {
-                if ((p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains("ff")) && (!p.ProcessName.ToLower().Contains("office")))
+                if ((p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(Program.currentFFProcessName)) && (!p.ProcessName.ToLower().Contains("office")))
                     l.Add(p);
             }
             return l;
@@ -871,7 +873,6 @@ namespace Planning
 
         public static void KillAll(List<Process> l)
         {
-
             foreach (Process p in l)
             {
                 try

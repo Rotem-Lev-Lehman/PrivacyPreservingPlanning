@@ -132,9 +132,10 @@ namespace Planning
             }
 
             //publish all of the chosen projections, by the chosen policy:
+            Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
             publisher.publishActions(allProjectionAction, agentsProjections);
-
+            Console.WriteLine("Published dependencies, now trying to find a high level plan");
 
             dPublic.Actions = allProjectionAction;
             foreach (Domain d in lDomains)
