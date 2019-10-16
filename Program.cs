@@ -1563,22 +1563,36 @@ namespace Planning
             } 
         }
 
-        static void RunExperimentOnAlotOfDomains(int[] domainIndexesToUse)
+        static void RunExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains)
         {
+            int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
+            int[] domainIndexesToUse = selectorsAndDomains["domains"];
+
             //string[] collaborationSelectors = { "Diversity", "Achievable_Diversity" };
             string[] nonCollaborationSelectors = { "Random", "Diversity", "Achievable_Diversity" };
 
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] dependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
+            string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
 
+            string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
+            Console.WriteLine("Selectors that we will run:");
+            for(int i = 0; i < selectorIndexesToUse.Length; i++)
+            {
+                dependenciesSelectors[i] = allPossibleDependenciesSelectors[selectorIndexesToUse[i]];
+                Console.WriteLine(dependenciesSelectors[i]);
+            }
+
             string[] dependenciesDomains = new string[domainIndexesToUse.Length];
+            Console.WriteLine("Domains that we will run the selectors on:");
             for(int i = 0; i < domainIndexesToUse.Length; i++)
             {
                 dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
+                Console.WriteLine(dependenciesDomains[i]);
             }
+            Console.WriteLine("Lets start running them :)");
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
 
@@ -1605,18 +1619,21 @@ namespace Planning
             string outputFileName = @"\output.csv";
             string recordingsDirectoryName = @"\Recordings";
 
+            string oldPathAndName = @"ff.exe";
+
             foreach (string domainName in domains)
             {
-                // copy the ff.exe file to be as the domain's name:
-                string oldPathAndName = @"ff.exe";
-                currentFFProcessName = "ff_" + domainName;
-                string newPathAndName = currentFFProcessName + ".exe";
-                if(!File.Exists(newPathAndName))
-                    System.IO.File.Copy(oldPathAndName, newPathAndName);
-                ExternalPlanners.ffPath = newPathAndName;
-
                 foreach (string selectorType in selectors)
                 {
+                    // copy the ff.exe file to be as the domain's name:
+                    currentFFProcessName = "ff_" + domainName + "_" + selectorType;
+                    string newPathAndName = currentFFProcessName + ".exe";
+                    if (!File.Exists(newPathAndName))
+                        System.IO.File.Copy(oldPathAndName, newPathAndName);
+                    ExternalPlanners.ffPath = newPathAndName;
+
+                    // start:
+
                     Console.WriteLine("*************************************************************");
                     Console.WriteLine("Now using " + dependencyString + " selection");
                     Console.WriteLine("Now using " + collaborativeString + " approaches");
@@ -1720,8 +1737,8 @@ namespace Planning
             bool runningMyExperiment = true;
             if (runningMyExperiment)
             {
-                int[] domainIndexesToUse = GetDomainIndexesToUse(args);
-                RunExperimentOnAlotOfDomains(domainIndexesToUse);
+                Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
+                RunExperimentOnAlotOfDomains(selectorsAndDomains);
                 //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
             }
             else
@@ -1785,19 +1802,45 @@ namespace Planning
 
         }
 
-        private static int[] GetDomainIndexesToUse(string[] args)
+        private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
-            int[] domains = new int[args.Length];
-            Console.WriteLine("Domains are:");
+            int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
-                domains[i] = int.Parse(args[i]);
-                Console.WriteLine(domains[i]);
-                if (domains[i] < 0 || domains[i] > 11)
-                    throw new Exception("The domains indexes must be between [0, 11]");
+                if (args[i].Equals("d"))
+                {
+                    seperatorIndex = i;
+                    break;
+                }
             }
-            Console.WriteLine("Now Running those domains indexes by order");
-            return domains;
+
+            int[] selectors = new int[seperatorIndex];
+            int[] domains = new int[args.Length - seperatorIndex - 1];
+
+            Console.WriteLine("Selectors are:");
+            for(int i = 0; i < seperatorIndex; i++)
+            {
+                selectors[i] = int.Parse(args[i]);
+                Console.WriteLine(selectors[i]);
+                if (selectors[i] < 0 || selectors[i] > 2)
+                    throw new Exception("The selectors indexes must be between [0, 2]");
+            }
+
+            Console.WriteLine("Domains are:");
+            for (int i = 0; i < domains.Length; i++)
+            {
+                domains[i] = int.Parse(args[i + seperatorIndex + 1]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 10)
+                    throw new Exception("The domains indexes must be between [0, 10]");
+            }
+
+            Dictionary<string, int[]> selectorsAndDomains = new Dictionary<string, int[]>();
+            selectorsAndDomains.Add("selectors", selectors);
+            selectorsAndDomains.Add("domains", domains);
+
+            Console.WriteLine("Now Running those selectors on the domains indexes by order");
+            return selectorsAndDomains;
         }
     }
 }
