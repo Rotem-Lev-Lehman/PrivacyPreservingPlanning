@@ -1576,6 +1576,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { "TestingExample" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1631,6 +1632,8 @@ namespace Planning
                     if (!File.Exists(newPathAndName))
                         System.IO.File.Copy(oldPathAndName, newPathAndName);
                     ExternalPlanners.ffPath = newPathAndName;
+
+                    currentFFProcessName = currentFFProcessName.ToLower();
 
                     // start:
 
@@ -1803,7 +1806,7 @@ namespace Planning
         }
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
-        {
+        { 
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -1841,6 +1844,13 @@ namespace Planning
 
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
+            
+            /*
+            Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
+            dict.Add("selectors", new int[] { 0 });
+            dict.Add("domains", new int[] { 0 });
+            return dict;
+            */
         }
     }
 }
