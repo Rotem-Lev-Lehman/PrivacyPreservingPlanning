@@ -49,6 +49,8 @@ namespace Planning
                 List<Tuple<Action, Predicate>> effectsWeCanReveal = new List<Tuple<Action, Predicate>>();
                 InitializeEffectsWeCanReveal(currentlProjAction, effectsWeCanReveal);
 
+                agent.amountOfDependenciesThatICanShare = effectsWeCanReveal.Count;
+
                 dependeciesSelector.SelectDependencies(currentlProjAction, effectsWeCanReveal, percentageToSelected, agent);
                 //now we have selected the dependencies we want
                 //we are now adding the actions to the projection:

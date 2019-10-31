@@ -67,6 +67,8 @@ namespace Planning
         public static string recordingFolderWithPercentage = null;
         public static string agentsRecordingFolder = null;
 
+        public static double amountOfDependenciesUsed = 0;
+
         public static string currentFFProcessName = null;
 
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
@@ -1176,8 +1178,10 @@ namespace Planning
                 recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
 
                 agentsRecordingFolder = currentRecordingFolder + @"\Agents";
-                System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
+                //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
                 recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
+
+                amountOfDependenciesUsed = 0;
 
                 sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
 
@@ -1343,6 +1347,7 @@ namespace Planning
                  + "," + sendedStateCounter
                  + "," + StateExpendCounter
                  + "," + MapsPlanner.generateCounter
+                 + "," + amountOfDependenciesUsed
                //  + "," + ffMessageCounter
                //  + "," + countMacro
                // + "," + countAvgPerMacro
@@ -1453,7 +1458,15 @@ namespace Planning
                 Console.WriteLine("Current percentage is: " + percentage);
                 //run the solvers:
                 domainFolderPath = folderPath;
-                for (int i = 0; i < 15; i++)
+
+                //All are deterministic except the Random approach, so only the Random one will be done 15 times:
+                int amountOfReturns = 1;
+                if (typeOfSelector.Equals("Random"))
+                {
+                    amountOfReturns = 15;
+                }
+
+                for (int i = 0; i < amountOfReturns; i++)
                 {
                     currentParsingRound = i;
                     Console.WriteLine("*****************************************************************************");
@@ -1472,7 +1485,7 @@ namespace Planning
 
             using (System.IO.StreamWriter outFile = new System.IO.StreamWriter(outputFile))
             {
-                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?";
+                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used";
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
@@ -1510,6 +1523,14 @@ namespace Planning
                 else if(typeOfSelector == "Public_Predicates_Achiever")
                 {
                     selector = new AdvancedProjectionPublicPredicatesAchieverDependenciesSelector();
+                }
+                else if (typeOfSelector == "New_Actions_Achiever")
+                {
+                    selector = new AdvancedProjectionNewActionsAchieverDependeciesSelector();
+                }
+                else if (typeOfSelector == "New_Public_Predicates_Achiever")
+                {
+                    selector = new AdvancedProjectionNewPublicPredicatesAchieverDependenciesSelector();
                 }
                 else if(typeOfSelector == "Actions_Achiever_Without_Negation")
                 {
@@ -1574,8 +1595,8 @@ namespace Planning
             //string[] collaborationDomains = { "elevators08", "logistics00", "rovers" };
             string[] nonCollaborationDomains = { "logistics00" };
 
-            string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", /*"sokoban",*/ "taxi", /*"wireless", "woodworking08",*/ "zenotravel" };
             //string[] allPossibleDependenciesDomains = { "TestingExample" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
@@ -1825,8 +1846,8 @@ namespace Planning
             {
                 selectors[i] = int.Parse(args[i]);
                 Console.WriteLine(selectors[i]);
-                if (selectors[i] < 0 || selectors[i] > 2)
-                    throw new Exception("The selectors indexes must be between [0, 2]");
+                if (selectors[i] < 0 || selectors[i] > 3)
+                    throw new Exception("The selectors indexes must be between [0, 3]");
             }
 
             Console.WriteLine("Domains are:");
@@ -1834,8 +1855,8 @@ namespace Planning
             {
                 domains[i] = int.Parse(args[i + seperatorIndex + 1]);
                 Console.WriteLine(domains[i]);
-                if (domains[i] < 0 || domains[i] > 10)
-                    throw new Exception("The domains indexes must be between [0, 10]");
+                if (domains[i] < 0 || domains[i] > 8)
+                    throw new Exception("The domains indexes must be between [0, 8]");
             }
 
             Dictionary<string, int[]> selectorsAndDomains = new Dictionary<string, int[]>();

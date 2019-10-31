@@ -8,11 +8,11 @@ namespace Planning
 {
     abstract class AAdvancedProjectionScoreBasedDependeciesSelector : AAdvancedProjectionDependenciesSelector
     {
-        private Random rnd;
+        //private Random rnd;
 
         public AAdvancedProjectionScoreBasedDependeciesSelector()
         {
-            this.rnd = new Random();
+            //this.rnd = new Random();
         }
 
         public override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
@@ -66,7 +66,10 @@ namespace Planning
                     }
                 }
 
-                int r = rnd.Next(bestEffects.Count);
+                //previously, we chose randomly from the best effects list.
+                //int r = rnd.Next(bestEffects.Count);
+                //now we choose determinsticly from it (choose the first one there):
+                int r = 0;
                 Tuple<Action, Predicate> chosen = bestEffects[r];
 
                 //record selection:

@@ -104,10 +104,13 @@
     <Compile Include="AdvancedProjectionHeuristic.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\ActionsPublishing\NonCollaborative\AdvancedProjectionRandomizedActionSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionDependenciesSelector.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionNewScoreBasedDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionScoreBasedDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionActionsAchieverDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionActionsAchieverWithoutNegationDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionDependeciesPublisher.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionNewActionsAchieverDependeciesSelector.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionNewPublicPredicatesAchieverDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionPublicPredicatesAchieverDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionPublicPredicatesAchieverWithoutNegationDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionRandomizedDependeciesSelector.cs" />

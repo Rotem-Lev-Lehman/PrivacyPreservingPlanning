@@ -185,6 +185,7 @@ namespace Planning
             }
 
             //high level plan was successfully found
+            Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsed(highLevelplan, allProjectionAction, agents);
             WriteHighLevelPlanToFile(highLevelplan);
 
             string fault;
@@ -221,6 +222,125 @@ namespace Planning
             return finalPlan;
 
             return null;
+        }
+
+        private double CalculateAmountOfDependenciesUsed(List<string> highLevelplan, List<Action> allProjectionAction, List<Agent> agents)
+        {
+            Dictionary<string, int> amount = new Dictionary<string, int>();
+            HashSet<Predicate> effectsTold = new HashSet<Predicate>();
+            HashSet<Predicate> effectsActive = new HashSet<Predicate>();
+            Dictionary<Predicate, string> whoToldThis = new Dictionary<Predicate, string>();
+
+            foreach(Agent agent in agents)
+            {
+                amount[agent.name] = 0;
+            }
+
+            foreach(string act in highLevelplan)
+            {
+                bool found = false;
+                foreach(Action action in allProjectionAction)
+                {
+                    if (action.Name.Equals(act))
+                    {
+                        found = true;
+                        //check how many effects have made this action possible
+                        List<Predicate> removeList = new List<Predicate>();
+                        foreach(Predicate p in effectsTold)
+                        {
+                            if (action.HashPrecondition.Contains(p))
+                            {
+                                amount[whoToldThis[p]]++;
+                                removeList.Add(p);
+                            }
+                        }
+                        foreach(Predicate p in removeList)
+                        {
+                            effectsTold.Remove(p);
+                        }
+                        //tell this action's effects:
+                        foreach(Predicate p in action.HashEffects)
+                        {
+                            if (p.Name.Contains(Domain.ARTIFICIAL_PREDICATE)) //private effect
+                            {
+                                insertToEffectsSet(effectsActive, effectsTold, whoToldThis, p, action.agent);
+                            }
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    throw new Exception("The action in the plan is not an action...");
+                }
+            }
+
+            /*
+            int maxPublished = -1;
+            foreach(Agent agent in agents)
+            {
+                if(amount[agent.name] > maxPublished)
+                {
+                    maxPublished = amount[agent.name];
+                }
+            }
+            return maxPublished;
+            */
+            double maxPublished = -1;
+            foreach(Agent agent in agents)
+            {
+                double currPercentage = RoundToPercentage((double)amount[agent.name] / (double)agent.amountOfDependenciesThatICanShare);
+                if(currPercentage > maxPublished)
+                {
+                    maxPublished = currPercentage;
+                }
+            }
+            return maxPublished;
+        }
+
+        private double RoundToPercentage(double percentage)
+        {
+            List<double> percentages = new List<double>();
+            for (double i = 0; i <= 1; i += 0.05)
+            {
+                percentages.Add(i);
+            }
+            if (!percentages.Contains(1))
+            {
+                percentages.Add(1);
+            }
+
+            foreach(double per in percentages)
+            {
+                if (percentage <= per)
+                {
+                    return per;
+                }
+            }
+            throw new Exception("Should not get here...");
+        }
+
+        private void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent)
+        {
+            Predicate negation = p.Negate();
+            if (effectsActive.Contains(negation))
+            {
+                effectsActive.Remove(negation);
+                effectsTold.Remove(negation);
+                if (effectsActive.Contains(p) || effectsTold.Contains(p))
+                {
+                    //not possible
+                    throw new Exception("Can't contain both negation and regular predicate...");
+                }
+                effectsActive.Add(p);
+                effectsTold.Add(p);
+                whoToldThis[p] = agent;
+            }
+            else if (!effectsActive.Contains(p))
+            {
+                effectsActive.Add(p);
+                effectsTold.Add(p);
+                whoToldThis[p] = agent;
+            }
         }
 
         private void WriteHighLevelPlanToFile(List<string> highLevelplan)

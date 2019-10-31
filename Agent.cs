@@ -78,6 +78,8 @@ namespace Planning
         public Dictionary<GroundedPredicate, GroundedPredicate> ArtificialToPrivate;
         public HashSet<GroundedPredicate> invariantPredicate = null;
 
+        public int amountOfDependenciesThatICanShare = 0;
+
         public Agent(Problem p, Domain d, List<Action> actions, List<Action> m_pablicActions, List<Action> m_privateActions,
             HashSet<GroundedPredicate> m_Predicates, HashSet<GroundedPredicate> m_PublicPredicates, State m_startState, List<GroundedPredicate> m_Goal, string m_Name, List<Action> m_ProjectionPublicAction, Dictionary<Predicate, HashSet<Predicate>> lInvariants)
         {
