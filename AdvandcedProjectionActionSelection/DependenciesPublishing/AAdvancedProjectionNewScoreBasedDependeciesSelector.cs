@@ -22,7 +22,7 @@ namespace Planning
             Dictionary<Predicate, ISet<object>> affecting = new Dictionary<Predicate, ISet<object>>();
             Dictionary<object, int> n_achieved = new Dictionary<object, int>();
             Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances = new Dictionary<object, Dictionary<Predicate, int>>();
-            InitializeDictionaries(privateEffects, possibleActions, affecting, n_achieved, preconditionsAndAmountOfAppearances);
+            InitializeDictionaries(effectsWeCanReveal, privateEffects, possibleActions, affecting, n_achieved, preconditionsAndAmountOfAppearances, agent);
 
             //select the amount of needed dependencies
             int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
@@ -163,28 +163,104 @@ namespace Planning
             return achieved;
         }
 
-        private void InitializeDictionaries(List<Predicate> privateEffects, List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances)
+        private void InitializeDictionaries(List<Tuple<Action, Predicate>> effectsWeCanReveal, List<Predicate> privateEffects, List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances, Agent agent)
         {
+            //insert the negations to the private effects list:
             List<Predicate> negations = new List<Predicate>();
+            foreach (Predicate p in privateEffects)
+            {
+                Predicate negation = p.Negate();
+                negations.Add(negation);
+            }
+            privateEffects.AddRange(negations);
+
+            //if the predicate is not interesting (it is not an effect that we can reveal - i.e a constant), remove it from the private effects:
+            List<Predicate> removeList = FindEffectsThatCantBePublished(effectsWeCanReveal, privateEffects);
+
+            foreach(Predicate p in removeList)
+            {
+                privateEffects.Remove(p);
+            }
+
             foreach (Predicate p in privateEffects)
             {
                 //add p to the dictionaries, start it there with a new hashset:
                 affecting.Add(p, new HashSet<object>());
-
-                //add p's negation to the dictionaries, start it there with a new hashset as well (we will count them differently):
-                Predicate negation = p.Negate();
-                affecting.Add(negation, new HashSet<object>());
-
-                negations.Add(negation);
             }
 
-            privateEffects.AddRange(negations);
-
             //calculate preconditionAmount dictionary:
-            InitObjectsSpecifiedDictionaries(possibleActions, affecting, n_achieved, preconditionsAndAmountOfAppearances);
+            InitObjectsSpecifiedDictionaries(privateEffects, possibleActions, affecting, n_achieved, preconditionsAndAmountOfAppearances);
+
+            List<GroundedPredicate> startState = agent.GetPrivateStartState();
+            List<Predicate> artificialStartState = new List<Predicate>();
+            foreach(Predicate p in startState)
+            {
+                Predicate artificial = GetArtificialPredicate(privateEffects, p, agent);
+                if(artificial != null) //if this is an interesting predicate, which is in the private effects list
+                {
+                    artificialStartState.Add(artificial);
+                }
+            }
+
+            InitCountersUsingTheStartState(affecting, n_achieved, preconditionsAndAmountOfAppearances, artificialStartState);
         }
 
-        protected abstract void InitObjectsSpecifiedDictionaries(List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances);
+        private Predicate GetArtificialPredicate(List<Predicate> privateEffects, Predicate p, Agent agent)
+        {
+            foreach(Predicate artificial in privateEffects)
+            {
+                if (artificial.Negation && p.Negation)
+                {
+                    Predicate artificialNegation = artificial.Negate();
+                    if (agent.ArtificialToPrivate.ContainsKey((GroundedPredicate)artificialNegation))
+                    {
+                        Predicate negation = agent.ArtificialToPrivate[(GroundedPredicate)artificialNegation].Negate();
+                        if (negation.Equals(p))
+                        {
+                            return artificial;
+                        }
+                    }
+                    
+                }
+                else if(!artificial.Negation && !p.Negation)
+                {
+                    if (agent.ArtificialToPrivate.ContainsKey((GroundedPredicate)artificial))
+                    {
+                        if (agent.ArtificialToPrivate[(GroundedPredicate)artificial].Equals(p))
+                        {
+                            return artificial;
+                        }
+                    }
+                }
+                
+            }
+
+            return null; //not found == not an interesting predicate
+        }
+
+        private void InitCountersUsingTheStartState(Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances, List<Predicate> startState)
+        {
+            foreach(Predicate p in startState)
+            {
+                fixDictionaries(affecting, n_achieved, preconditionsAndAmountOfAppearances, p);
+            }
+        }
+
+        private List<Predicate> FindEffectsThatCantBePublished(List<Tuple<Action, Predicate>> effectsWeCanReveal, List<Predicate> privateEffects)
+        {
+            HashSet<Predicate> predicatesThatCantBePublished = new HashSet<Predicate>(privateEffects);
+            foreach(Tuple<Action,Predicate> tuple in effectsWeCanReveal)
+            {
+                Predicate p = tuple.Item2;
+                if (predicatesThatCantBePublished.Contains(p)){
+                    predicatesThatCantBePublished.Remove(p);
+                }
+            }
+
+            return new List<Predicate>(predicatesThatCantBePublished);
+        }
+
+        protected abstract void InitObjectsSpecifiedDictionaries(List<Predicate> privateEffects, List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances);
 
         private void FixPrivateEffectsList(List<Tuple<Action, Predicate>> effectsWeCanReveal, List<Predicate> privateEffects)
         {

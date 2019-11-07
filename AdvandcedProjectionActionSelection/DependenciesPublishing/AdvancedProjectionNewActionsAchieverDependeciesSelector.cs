@@ -8,8 +8,9 @@ namespace Planning
 {
     class AdvancedProjectionNewActionsAchieverDependeciesSelector : AAdvancedProjectionNewScoreBasedDependeciesSelector
     {
-        protected override void InitObjectsSpecifiedDictionaries(List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances)
+        protected override void InitObjectsSpecifiedDictionaries(List<Predicate> privateEffects, List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances)
         {
+            HashSet<Predicate> privateEffectsSet = new HashSet<Predicate>(privateEffects);
             foreach (Action action in possibleActions)
             {
                 //new dictionary:
@@ -20,7 +21,8 @@ namespace Planning
 
                 foreach (Predicate precondition in action.HashPrecondition)
                 {
-                    if (precondition.Name.Contains(Domain.ARTIFICIAL_PREDICATE)) //private precondition
+                    //if (precondition.Name.Contains(Domain.ARTIFICIAL_PREDICATE)) //private precondition
+                    if (privateEffectsSet.Contains(precondition)) //private precondition that is interesting to us
                     {
                         //Add this link to the dictionaries:
                         affecting[precondition].Add(action);

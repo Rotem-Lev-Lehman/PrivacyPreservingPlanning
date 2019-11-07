@@ -8,9 +8,8 @@ namespace Planning
 {
     class AdvancedProjectionNewPublicPredicatesAchieverDependenciesSelector : AAdvancedProjectionNewScoreBasedDependeciesSelector
     {
-        protected override void InitObjectsSpecifiedDictionaries(List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances)
+        protected override void InitObjectsSpecifiedDictionaries(List<Predicate> privateEffects, List<Action> possibleActions, Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances)
         {
-            List<Predicate> privateEffects = new List<Predicate>(affecting.Keys);
             foreach (Predicate predicate in privateEffects)
             {
                 ISet<object> publicEffectsThisPredicateCanReveal = affecting[predicate];

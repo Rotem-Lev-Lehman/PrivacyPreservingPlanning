@@ -1868,7 +1868,7 @@ namespace Planning
             /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             dict.Add("selectors", new int[] { 2 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 3 });
             return dict;
             */
         }
