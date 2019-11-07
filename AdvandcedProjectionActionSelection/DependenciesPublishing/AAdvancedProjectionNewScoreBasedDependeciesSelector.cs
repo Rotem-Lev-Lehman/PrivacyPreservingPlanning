@@ -117,7 +117,7 @@ namespace Planning
                 {
                     //we have achieved this object!
                     n_achieved[a]++;
-                    foreach(Predicate precondition in curr_preconditions.Keys)
+                    foreach(Predicate precondition in curr_preconditions.Keys.ToList())
                     {
                         curr_preconditions[precondition]--;
                     }

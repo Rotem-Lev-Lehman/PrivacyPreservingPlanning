@@ -316,7 +316,7 @@ namespace Planning
                     return per;
                 }
             }
-            throw new Exception("Should not get here...");
+            return 0;
         }
 
         private void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent)
