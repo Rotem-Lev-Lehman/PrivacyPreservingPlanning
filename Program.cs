@@ -67,7 +67,8 @@ namespace Planning
         public static int currentParsingRound = 0;
         public static string recordingFolderWithPercentage = null;
         public static string agentsRecordingFolder = null;
-
+        public static Dictionary<string, bool> alreadySolved = null;
+        public static string currentProblemName = null;
         //golden standard calculation:
         public static int amountOfDependenciesUsed = 0;
         public static string goldenStandardRootDirectory = null;
@@ -84,8 +85,8 @@ namespace Planning
         //ff process name:
         public static string currentFFProcessName = null;
 
-        public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
-        //public static string baseFolderName = @"C:\Users\levlerot\Desktop\GPPP(last_v)"; //Server's path
+        //public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -1204,7 +1205,11 @@ namespace Planning
                 amountOfDependenciesUsed = 0;
                 goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
                 System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
-
+                if (!alreadySolved.ContainsKey(di.Name))
+                {
+                    alreadySolved.Add(di.Name, false);
+                }
+                currentProblemName = di.Name;
                 //amount of dependencies to reveal:
                 amountOfDependenciesPublished = 0;
 
@@ -1446,7 +1451,9 @@ namespace Planning
                 percentages.Add(1);
             }
 
-            for (int j = percentages.Count - 1; j >= 0; j--)
+            alreadySolved = new Dictionary<string, bool>();
+
+            for (int j = 0; j < percentages.Count; j++)
             {
                 double percentage = percentages[j];
                 outputPath = resultsFolderPath + @"/percentage_" + percentage;

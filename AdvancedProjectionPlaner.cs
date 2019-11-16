@@ -208,11 +208,13 @@ namespace Planning
 
             if (highLevelplan == null)
             {
+                /*
                 //if we don't have a high level plan, write the trace to the file without the high level plan...
                 foreach(Agent agent in agents)
                 {
                     WriteTraceToFile(agent, traces[agent]);
                 }
+                */
                 return null;
             }
 
@@ -253,10 +255,14 @@ namespace Planning
             else
             {
                 //if we have a valid plan, write the *high level* plan to the trace and only then write the trace to a file:
-                foreach (Agent agent in agents)
+                if (!Program.alreadySolved[Program.currentProblemName])
                 {
-                    traces[agent].plan = highLevelplan;
-                    WriteTraceToFile(agent, traces[agent]);
+                    Program.alreadySolved[Program.currentProblemName] = true;
+                    foreach (Agent agent in agents)
+                    {
+                        traces[agent].plan = highLevelplan;
+                        WriteTraceToFile(agent, traces[agent]);
+                    }
                 }
                 //calculate amount of dependencies used:
                 Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces);
