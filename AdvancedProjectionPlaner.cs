@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
+using Newtonsoft.Json;
 
 namespace Planning
 {
@@ -23,6 +25,8 @@ namespace Planning
         State globalInitialState = null;
         private AAdvancedProjectionActionPublisher publisher;
         private string recordingHighLevelPlanFilename;
+
+        public static Dictionary<Agent, Dictionary<Predicate, List<Action>>> actionsAffectedForAgent;
 
         public AdvancedLandmarkProjectionPlaner(AAdvancedProjectionActionPublisher publisher, string recordingHighLevelPlanFilename)
         {
@@ -117,6 +121,10 @@ namespace Planning
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
                 agentsProjections.Add(agent, currentlProjAction);
 
+                foreach (Action act in currentlProjAction)
+                {
+                    act.agent = agent.name;
+                }
 
                 foreach (Predicate pred in agent.PublicPredicates)
                 {
@@ -131,9 +139,28 @@ namespace Planning
                 lGoal.UnionWith(agent.GetPublicGoals());
             }
 
+            LeakageTrace.setAgents(agents);
+            Dictionary<Agent, LeakageTrace> traces = new Dictionary<Agent, LeakageTrace>();
+            List<Action> publicActionsForTraces = new List<Action>();
+            foreach(Agent agent in agents)
+            {
+                LeakageTrace trace = new LeakageTrace(agent);
+                traces.Add(agent, trace);
+                publicActionsForTraces.AddRange(agentsProjections[agent]);
+            }
+            foreach(Agent agent in agents)
+            {
+                traces[agent].initializeOperators(publicActionsForTraces, agent.privateActions);
+            }
+
+            //clear the actions affected dictionary:
+            actionsAffectedForAgent = new Dictionary<Agent, Dictionary<Predicate, List<Action>>>();
+
             //publish all of the chosen projections, by the chosen policy:
             Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
+            publisher.setTraces(traces);
+            
             publisher.publishActions(allProjectionAction, agentsProjections);
             Console.WriteLine("Published dependencies, now trying to find a high level plan");
 
@@ -181,11 +208,15 @@ namespace Planning
 
             if (highLevelplan == null)
             {
+                //if we don't have a high level plan, write the trace to the file without the high level plan...
+                foreach(Agent agent in agents)
+                {
+                    WriteTraceToFile(agent, traces[agent]);
+                }
                 return null;
             }
 
             //high level plan was successfully found
-            Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsed(highLevelplan, allProjectionAction, agents);
             WriteHighLevelPlanToFile(highLevelplan);
 
             string fault;
@@ -219,17 +250,39 @@ namespace Planning
                 finalPlan = new List<string>();
                 finalPlan.Add(null);
             }
+            else
+            {
+                //if we have a valid plan, write the *high level* plan to the trace and only then write the trace to a file:
+                foreach (Agent agent in agents)
+                {
+                    traces[agent].plan = highLevelplan;
+                    WriteTraceToFile(agent, traces[agent]);
+                }
+                //calculate amount of dependencies used:
+                Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces);
+
+            }
+
             return finalPlan;
 
             return null;
         }
 
-        private double CalculateAmountOfDependenciesUsed(List<string> highLevelplan, List<Action> allProjectionAction, List<Agent> agents)
+        private void WriteTraceToFile(Agent agent, LeakageTrace leakageTrace)
+        {
+            string filename = Program.tracesFolder + @"\agent" + agent.getID() + ".json";
+            string content = JsonConvert.SerializeObject(leakageTrace);
+            File.WriteAllText(filename, content);
+        }
+
+        private int CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(List<string> highLevelplan, List<Action> allProjectionAction, List<Agent> agents, Dictionary<Agent, LeakageTrace> traces)
         {
             Dictionary<string, int> amount = new Dictionary<string, int>();
             HashSet<Predicate> effectsTold = new HashSet<Predicate>();
             HashSet<Predicate> effectsActive = new HashSet<Predicate>();
             Dictionary<Predicate, string> whoToldThis = new Dictionary<Predicate, string>();
+            List<Tuple<string, Action, Predicate>> agentActionPredicate = new List<Tuple<string, Action, Predicate>>();
+            Dictionary<Predicate, Action> whichActionThisBelongsTo = new Dictionary<Predicate, Action>();
 
             foreach(Agent agent in agents)
             {
@@ -251,6 +304,7 @@ namespace Planning
                             if (action.HashPrecondition.Contains(p))
                             {
                                 amount[whoToldThis[p]]++;
+                                agentActionPredicate.Add(new Tuple<string, Action, Predicate>(whoToldThis[p], whichActionThisBelongsTo[p], p));
                                 removeList.Add(p);
                             }
                         }
@@ -263,7 +317,7 @@ namespace Planning
                         {
                             if (p.Name.Contains(Domain.ARTIFICIAL_PREDICATE)) //private effect
                             {
-                                insertToEffectsSet(effectsActive, effectsTold, whoToldThis, p, action.agent);
+                                insertToEffectsSet(effectsActive, effectsTold, whoToldThis, p, action.agent, whichActionThisBelongsTo, action);
                             }
                         }
                     }
@@ -274,7 +328,7 @@ namespace Planning
                 }
             }
 
-            /*
+            
             int maxPublished = -1;
             foreach(Agent agent in agents)
             {
@@ -283,8 +337,8 @@ namespace Planning
                     maxPublished = amount[agent.name];
                 }
             }
-            return maxPublished;
-            */
+            //return maxPublished;
+            /*
             double maxPublished = -1;
             foreach(Agent agent in agents)
             {
@@ -294,7 +348,329 @@ namespace Planning
                     maxPublished = currPercentage;
                 }
             }
+            */
+            int currGoldenStandard = GetCurrGoldenStandard();
+            if(currGoldenStandard == -1 || maxPublished < currGoldenStandard)
+            {
+                //we have a new golden standard!
+                currGoldenStandard = maxPublished;
+                CreateTracesAndSaveGoldenStandard(traces, agentActionPredicate, currGoldenStandard);
+            }
+
             return maxPublished;
+        }
+
+        private void CreateTracesAndSaveGoldenStandard(Dictionary<Agent, LeakageTrace> traces, List<Tuple<string, Action, Predicate>> agentActionPredicate, int goldenStandard)
+        {
+            Dictionary<int, LeakageTrace> goldenTraces = new Dictionary<int, LeakageTrace>();
+            foreach(Agent agent in traces.Keys)
+            {
+                goldenTraces.Add(agent.getID(), LeakageTrace.CopyTraceWithoutStates(traces[agent]));
+            }
+            foreach(Tuple<string, Action, Predicate> tuple in agentActionPredicate)
+            {
+                GenerateStates(goldenTraces, tuple);
+            }
+            string tracesFolder = Program.goldenStandardCurrentDirectory + @"\traces";
+            DeleteGoldenTraceFolder(tracesFolder);
+            System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+            foreach (int agent in goldenTraces.Keys)
+            {
+                WriteGoldenTraceToFile(agent, goldenTraces[agent], tracesFolder);
+            }
+            ReplaceGoldenStandardFile(goldenStandard);
+        }
+
+        private void DeleteGoldenTraceFolder(string tracesFolder)
+        {
+            if (Directory.Exists(tracesFolder))
+            {
+                DirectoryInfo dir = new DirectoryInfo(tracesFolder);
+                dir.Delete(true);
+            }
+        }
+
+        private void ReplaceGoldenStandardFile(int goldenStandard)
+        {
+            DirectoryInfo d = new DirectoryInfo(Program.goldenStandardCurrentDirectory);
+            FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
+            foreach (FileInfo file in Files)
+            {
+                //delete all these files - deletes only one...
+                if (File.Exists(file.FullName))
+                {
+                    File.Delete(file.FullName);
+                }
+            }
+
+            string filename = Program.goldenStandardCurrentDirectory + @"\" + goldenStandard + ".txt";
+            File.Create(filename).Dispose();
+        }
+
+        private void WriteGoldenTraceToFile(int agent, LeakageTrace leakageTrace, string tracesFolder)
+        {
+            string filename = tracesFolder + @"\agent" + agent + ".json";
+            string content = JsonConvert.SerializeObject(leakageTrace);
+            File.WriteAllText(filename, content);
+        }
+
+        private void GenerateStates(Dictionary<int, LeakageTrace> goldenTraces, Tuple<string, Action, Predicate> tuple)
+        {
+            Predicate revealed = tuple.Item3;
+            int agentID = Agent.getID(tuple.Item1);
+            foreach(Agent agent in actionsAffectedForAgent.Keys)
+            {
+                if(agent.getID() == agentID)
+                {
+                    List<Action> affected = actionsAffectedForAgent[agent][revealed];
+                    EnterDependenciesToTrace(agent, new Tuple<Action, Predicate>(tuple.Item2, revealed), affected, goldenTraces);
+                    break;
+                }
+            }
+        }
+
+
+        public void EnterDependenciesToTrace(Agent agent, Tuple<Action, Predicate> chosen, List<Action> actionsAffected, Dictionary<int, LeakageTrace> traces)
+        {
+            if (actionsAffected.Count == 0)
+                return;
+            Predicate predicate;
+            bool negation = false;
+            int val = 0;
+            if (chosen.Item2.Negation)
+            {
+                //if it is a "not Predicate"
+                predicate = chosen.Item2.Negate();
+                negation = true;
+                val = 1;
+            }
+            else
+            {
+                predicate = chosen.Item2;
+            }
+            Predicate privatePredicate = agent.ArtificialToPrivate[(GroundedPredicate)predicate];
+
+            Dictionary<Predicate, int> publicEffectsOfChosen = getPublicEffects(chosen.Item1.HashEffects);
+            int recievedStateID = TraceState.GetNextStateID();
+
+            TraceState recievedState = getRevealerRecievedState(agent, privatePredicate, val, publicEffectsOfChosen, recievedStateID);
+
+            List<TraceState> sentStates = getRevealerSentStates(agent, actionsAffected, val, recievedStateID);
+
+            traces[agent.getID()].AddStates(recievedState, sentStates);
+
+            CopyTraceStatesForAllAgents(agents, agent, recievedState, sentStates, val, traces);
+
+        }
+
+        private void CopyTraceStatesForAllAgents(List<Agent> agents, Agent agent, TraceState recievedState, List<TraceState> sentStates, int val, Dictionary<int, LeakageTrace> traces)
+        {
+            bool found = false;
+            foreach (Agent other in agents)
+            {
+                if (other.Equals(agent))
+                {
+                    found = true;
+                    continue;
+                }
+
+                bool imTheSender = recievedState.senderID == other.getID();
+
+                TraceState rec = AlterState(recievedState, other, true, imTheSender, val, traces);
+
+                List<TraceState> traceStates = new List<TraceState>();
+                foreach (TraceState state in sentStates)
+                {
+                    TraceState temp = AlterState(state, other, false, imTheSender, val, traces);
+                    traceStates.Add(temp);
+                }
+
+                traces[other.getID()].AddStates(rec, traceStates);
+            }
+            if (!found)
+                throw new Exception("Agent not found");
+        }
+
+        private TraceState AlterState(TraceState state, Agent other, bool first, bool imTheSender, int val, Dictionary<int, LeakageTrace> traces)
+        {
+            string context = "received";
+            int iParentID = -1;
+            if (imTheSender)
+            {
+                if (first)
+                {
+                    context = "sending";
+                }
+                else
+                {
+                    iParentID = state.parentID;
+                }
+            }
+
+            List<int> vals = AlterVals(state.values, other, val, traces);
+
+            TraceState altered = new TraceState(other.getID(), state.senderID, state.stateID, state.parentID, iParentID, state.cost, state.heuristic, state.privateIDs, vals, context);
+
+            return altered;
+        }
+
+        private List<int> AlterVals(List<int> values, Agent other, int val, Dictionary<int, LeakageTrace> traces)
+        {
+            int privateVal = 1;
+            if (val == 1)
+                privateVal = 0;
+
+            List<int> altered = new List<int>();
+
+            int amountOfPublicVariables = LeakageTrace.GetAmountOfPublicVariables();
+            for (int i = 0; i < amountOfPublicVariables; i++)
+            {
+                altered.Add(values[i]);
+            }
+            int totalAmountOfVariables = traces[other.getID()].variables.Count;
+
+            int amountOfPrivateVariables = totalAmountOfVariables - amountOfPublicVariables;
+            for (int i = 0; i < amountOfPrivateVariables; i++)
+            {
+                altered.Add(privateVal);
+            }
+
+            return altered;
+        }
+
+        private TraceState getRevealerRecievedState(Agent agent, Predicate predicateBeforeNegation, int val, Dictionary<Predicate, int> publicEffectsOfChosen, int stateID)
+        {
+            List<int> receivedStateVals = GetVals(predicateBeforeNegation, agent, val, publicEffectsOfChosen);
+            Agent sender = LeakageTrace.getNextAgentAndMoveToTheNextInLine(agent);
+            int otherAgentID = sender.getID();
+            int parentID = -1;
+            int iparentID = -1;
+            int cost = 1;
+            int heuristic = 1;
+            List<int> privateIDs = GetIDs(stateID, agents, agent, 0);
+            string receivedContext = "received";
+            TraceState receivedState = new TraceState(agent.getID(), otherAgentID, stateID, parentID, iparentID, cost, heuristic, privateIDs, receivedStateVals, receivedContext);
+
+            return receivedState;
+        }
+
+        private List<TraceState> getRevealerSentStates(Agent agent, List<Action> actionsAffected, int val, int recievedStateID)
+        {
+            int diff = 1;
+            List<TraceState> sentStates = new List<TraceState>();
+            foreach (Action action in actionsAffected)
+            {
+                Dictionary<Predicate, int> publicEffectsOfAffected = getPublicEffects(action.HashEffects);
+                List<int> sentStateVals = GetVals(null, agent, val, publicEffectsOfAffected);
+                int sentSenderID = agent.getID();
+                int sentStateID = TraceState.GetNextStateID();
+                int sentParentID = recievedStateID;
+                int sentIParentID = -1;
+                int sentCost = 1;
+                int sentHeuristic = 1;
+                List<int> sentPrivateIDs = GetIDs(recievedStateID, agents, agent, diff);
+                string sentContext = "sending";
+                TraceState sentState = new TraceState(agent.getID(), sentSenderID, sentStateID, sentParentID, sentIParentID, sentCost, sentHeuristic, sentPrivateIDs, sentStateVals, sentContext);
+
+                sentStates.Add(sentState);
+
+                diff++;
+            }
+
+            return sentStates;
+        }
+
+        private Dictionary<Predicate, int> getPublicEffects(List<Predicate> hashEffects)
+        {
+            Dictionary<Predicate, int> publicEffects = new Dictionary<Predicate, int>();
+            foreach (Predicate p in hashEffects)
+            {
+                if (!p.Name.Contains(Domain.ARTIFICIAL_PREDICATE))
+                {
+                    //public effect
+                    Predicate curr = p;
+                    int val = 0;
+                    if (p.Negation)
+                    {
+                        curr = p.Negate();
+                        val = 1;
+                    }
+                    publicEffects.Add(p, val);
+                }
+            }
+            return publicEffects;
+        }
+
+        private List<int> GetIDs(int stateID, List<Agent> agents, Agent agent, int diff)
+        {
+            List<int> IDs = new List<int>();
+            bool found = false;
+            foreach (Agent other in agents)
+            {
+                if (other.Equals(agent))
+                {
+                    IDs.Add(stateID + 1 + diff);
+                    found = true;
+                }
+                else
+                {
+                    IDs.Add(stateID + 1);
+                }
+            }
+            if (!found)
+                throw new Exception("Agent not found");
+
+            return IDs;
+        }
+
+        private List<int> GetVals(Predicate predicate, Agent agent, int value, Dictionary<Predicate, int> publicEffects)
+        {
+            int oppositeVal = 1;
+            if (value == 1)
+                oppositeVal = 0;
+
+            List<int> vals = new List<int>();
+            Dictionary<Predicate, TraceVariable> agentsVars = TraceVariable.GetVariablesDict(agent.getID());
+            bool found = false;
+            if (predicate == null)
+                found = true;
+            foreach (Predicate p in agentsVars.Keys)
+            {
+                if (predicate != null && p.Equals(predicate))
+                {
+                    vals.Add(value);
+                    found = true;
+                }
+                else
+                {
+                    if (publicEffects.ContainsKey(p))
+                    {
+                        vals.Add(publicEffects[p]);
+                    }
+                    else
+                    {
+                        vals.Add(oppositeVal); //opposite -- dont care about them
+                    }
+                }
+            }
+            if (!found)
+                throw new Exception("Variable not found");
+
+            return vals;
+        }
+
+
+        private int GetCurrGoldenStandard()
+        {
+            DirectoryInfo d = new DirectoryInfo(Program.goldenStandardCurrentDirectory);
+            FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
+            int goldenStandard = -1;
+            foreach (FileInfo file in Files)
+            {
+                string name = file.Name.Split('.')[0];
+                goldenStandard = int.Parse(name);
+            }
+            return goldenStandard;
         }
 
         private double RoundToPercentage(double percentage)
@@ -319,7 +695,7 @@ namespace Planning
             return 0;
         }
 
-        private void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent)
+        private void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent, Dictionary<Predicate, Action> whichActionThisBelongsTo, Action action)
         {
             Predicate negation = p.Negate();
             if (effectsActive.Contains(negation))
@@ -334,12 +710,14 @@ namespace Planning
                 effectsActive.Add(p);
                 effectsTold.Add(p);
                 whoToldThis[p] = agent;
+                whichActionThisBelongsTo[p] = action;
             }
             else if (!effectsActive.Contains(p))
             {
                 effectsActive.Add(p);
                 effectsTold.Add(p);
                 whoToldThis[p] = agent;
+                whichActionThisBelongsTo[p] = action;
             }
         }
 

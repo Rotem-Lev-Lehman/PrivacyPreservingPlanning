@@ -15,14 +15,8 @@ namespace Planning
             //this.rnd = new Random();
         }
 
-        public override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
+        protected override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, int amountToPublish, Agent agent)
         {
-            //check if it is a legal operation
-            if (percentageToSelect > 1 || percentageToSelect < 0)
-            {
-                throw new NotSupportedException("The percentage must be between 0 to 1");
-            }
-
             int totalAmountOfEffectsToReveal = effectsWeCanReveal.Count;
 
             List<Predicate> privateEffects = new List<Predicate>(agent.ArtificialToPrivate.Keys);
@@ -31,7 +25,8 @@ namespace Planning
             InitializeDictionaries(privateEffects, possibleActions, preconditionAmount, appearanceAmount);
 
             //select the amount of needed dependencies
-            int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
+            //int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
+            int amountToSelect = Math.Min(amountToPublish, totalAmountOfEffectsToReveal);
 
             for (int i = 0; i < amountToSelect; i++)
             {

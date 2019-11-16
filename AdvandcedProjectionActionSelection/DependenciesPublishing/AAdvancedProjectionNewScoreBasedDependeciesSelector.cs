@@ -8,13 +8,8 @@ namespace Planning
 {
     abstract class AAdvancedProjectionNewScoreBasedDependeciesSelector : AAdvancedProjectionDependenciesSelector
     {
-        public override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, double percentageToSelect, Agent agent)
+        protected override void SelectDependencies(List<Action> possibleActions, List<Tuple<Action, Predicate>> effectsWeCanReveal, int amountToPublish, Agent agent)
         {
-            //check if it is a legal operation
-            if (percentageToSelect > 1 || percentageToSelect < 0)
-            {
-                throw new NotSupportedException("The percentage must be between 0 to 1");
-            }
             
             int totalAmountOfEffectsToReveal = effectsWeCanReveal.Count;
 
@@ -25,7 +20,59 @@ namespace Planning
             InitializeDictionaries(effectsWeCanReveal, privateEffects, possibleActions, affecting, n_achieved, preconditionsAndAmountOfAppearances, agent);
 
             //select the amount of needed dependencies
-            int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
+            //int amountToSelect = (int)(percentageToSelect * totalAmountOfEffectsToReveal);
+            int amountToSelect = Math.Min(amountToPublish, totalAmountOfEffectsToReveal);
+
+            /*
+            List<Predicate> displayed = new List<Predicate>();
+            
+            Console.WriteLine("effects we can reveal:");
+            foreach(Tuple<Action, Predicate> effect in effectsWeCanReveal)
+            {
+                Console.WriteLine("Action:");
+                Console.WriteLine(effect.Item1.Name);
+                Console.WriteLine("Effect:");
+                Predicate display = DisplayPredicate(effect.Item2, agent);
+                Console.WriteLine(display);
+                displayed.Add(display);
+            }
+            */
+            /*
+            foreach(Predicate p in affecting.Keys)
+            {
+                Predicate display = DisplayPredicate(p, agent);
+                Console.WriteLine("Effect:");
+                Console.WriteLine(display);
+                Console.WriteLine("Actions:");
+                ISet<object> set = affecting[p];
+                foreach(object ob in set)
+                {
+                    Console.WriteLine(((Action)ob).Name);
+                }
+            }
+            */
+            /*
+            foreach(Action action in possibleActions)
+            {
+                Console.WriteLine("Action:");
+                Console.WriteLine(action.Name);
+                Console.WriteLine("PP:");
+                int count = 0;
+                foreach(Predicate p in action.HashEffects)
+                {
+                    if(!p.Name.Contains(Domain.ARTIFICIAL_PREDICATE))
+                    {
+                        Console.WriteLine(p);
+                        count++;
+                    }
+                }
+                if(count > 1)
+                {
+                    int br = 0;
+                }
+            }
+            */
+            //int breakpoint = 0;
 
             for (int i = 0; i < amountToSelect; i++)
             {
@@ -91,6 +138,23 @@ namespace Planning
                 //fix the n_achieved and the preconditionsAndAmountOfAppearances:
                 fixDictionaries(affecting, n_achieved, preconditionsAndAmountOfAppearances, chosen.Item2);
             }
+        }
+
+        private Predicate DisplayPredicate(Predicate p, Agent agent)
+        {
+            bool negation = false;
+            GroundedPredicate curr = (GroundedPredicate)p;
+            if (p.Negation)
+            {
+                negation = true;
+                curr = (GroundedPredicate) p.Negate();
+            }
+            Predicate display = agent.ArtificialToPrivate[curr];
+            if (negation)
+            {
+                display = display.Negate();
+            }
+            return display;
         }
 
         private void fixDictionaries(Dictionary<Predicate, ISet<object>> affecting, Dictionary<object, int> n_achieved, Dictionary<object, Dictionary<Predicate, int>> preconditionsAndAmountOfAppearances, Predicate p)

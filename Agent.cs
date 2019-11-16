@@ -80,6 +80,17 @@ namespace Planning
 
         public int amountOfDependenciesThatICanShare = 0;
 
+        public int getID()
+        {
+            return getID(this.name);
+        }
+
+        public static int getID(string agentsName)
+        {
+            string[] split = agentsName.Split(' ');
+            return int.Parse(split[1]);
+        }
+
         public Agent(Problem p, Domain d, List<Action> actions, List<Action> m_pablicActions, List<Action> m_privateActions,
             HashSet<GroundedPredicate> m_Predicates, HashSet<GroundedPredicate> m_PublicPredicates, State m_startState, List<GroundedPredicate> m_Goal, string m_Name, List<Action> m_ProjectionPublicAction, Dictionary<Predicate, HashSet<Predicate>> lInvariants)
         {

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using Newtonsoft.Json;
 
 
 namespace Planning
@@ -67,8 +68,20 @@ namespace Planning
         public static string recordingFolderWithPercentage = null;
         public static string agentsRecordingFolder = null;
 
-        public static double amountOfDependenciesUsed = 0;
+        //golden standard calculation:
+        public static int amountOfDependenciesUsed = 0;
+        public static string goldenStandardRootDirectory = null;
+        public static string goldenStandardDomainDirectory = null;
+        public static string goldenStandardCurrentDirectory = null;
 
+        //publishing amount and not percentage:
+        public static int amountOfDependenciesPublished;
+
+        //keeping the traces for the privacy leakage calculation:
+        public static string tracesFolder;
+        public static Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace> agentsTraces;
+
+        //ff process name:
         public static string currentFFProcessName = null;
 
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
@@ -490,7 +503,6 @@ namespace Planning
 
                 publisher = new AdvancedProjectionCollaborationPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner);
                 */
-
                 foreach(Agent a in agents)
                 {
                     string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
@@ -1181,7 +1193,20 @@ namespace Planning
                 //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
                 recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
 
+                //leakage traces:
+                tracesFolder = currentRecordingFolder + @"\traces";
+                System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
+
+                AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace.ClearTraces();
+
+                //golden standard calculation:
                 amountOfDependenciesUsed = 0;
+                goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
+                System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
+
+                //amount of dependencies to reveal:
+                amountOfDependenciesPublished = 0;
 
                 sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
 
@@ -1348,6 +1373,7 @@ namespace Planning
                  + "," + StateExpendCounter
                  + "," + MapsPlanner.generateCounter
                  + "," + amountOfDependenciesUsed
+                 + "," + amountOfDependenciesPublished
                //  + "," + ffMessageCounter
                //  + "," + countMacro
                // + "," + countAvgPerMacro
@@ -1485,7 +1511,7 @@ namespace Planning
 
             using (System.IO.StreamWriter outFile = new System.IO.StreamWriter(outputFile))
             {
-                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used";
+                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used, amount of dependecies published";
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
@@ -1596,8 +1622,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", /*"sokoban",*/ "taxi", /*"wireless", "woodworking08",*/ "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { "TestingExample" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*/"TestingExample" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1617,6 +1643,9 @@ namespace Planning
             Console.WriteLine("Lets start running them :)");
 
             string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
+
+            goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
+            System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
             string collaborationPath = experimentPath + @"Collaboration\Order_Of_Agents\";
             string nonCollaborationPath = experimentPath + @"No_Collaboration\exp2\";
@@ -1645,6 +1674,8 @@ namespace Planning
 
             foreach (string domainName in domains)
             {
+                goldenStandardDomainDirectory = goldenStandardRootDirectory + @"\" + domainName;
+                System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
                 foreach (string selectorType in selectors)
                 {
                     // copy the ff.exe file to be as the domain's name:
@@ -1746,6 +1777,7 @@ namespace Planning
 
 
         static StreamWriter swResults;
+
         static void Main(string[] args)
         {
             //CreateMABlocksWorld(@"D:\Privacy Preserving\GPPP\GPPP - new format\DOMAINS\factored\newdomainsMABlocksWorld3",
@@ -1763,7 +1795,22 @@ namespace Planning
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
                 RunExperimentOnAlotOfDomains(selectorsAndDomains);
+                /*
                 //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
+                Console.WriteLine("*****************************************************************************");
+                Console.WriteLine("*****************************************************************************");
+                Console.WriteLine("Done");
+                Console.WriteLine("Max amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.maxAmountOfDependenciesToReveal);
+                Console.WriteLine("Min amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.minAmountOfDependenciesToReveal);
+                Console.WriteLine("*****************************************************************************");
+                Console.WriteLine("*****************************************************************************");
+                Console.WriteLine("Press any key to finish the program...");
+                Console.ReadLine();
+                */
+                /*
+                string blocksPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored\new_domain_blocks";
+                CreateMABlocksWorld(blocksPath, 2, 3, 2, 3, 2, 3, 1);
+                */
             }
             else
             {
@@ -1828,6 +1875,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
+            
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -1855,20 +1903,33 @@ namespace Planning
             {
                 domains[i] = int.Parse(args[i + seperatorIndex + 1]);
                 Console.WriteLine(domains[i]);
-                if (domains[i] < 0 || domains[i] > 8)
-                    throw new Exception("The domains indexes must be between [0, 8]");
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
             }
 
             Dictionary<string, int[]> selectorsAndDomains = new Dictionary<string, int[]>();
             selectorsAndDomains.Add("selectors", selectors);
             selectorsAndDomains.Add("domains", domains);
-
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
+            
+            /*
+            // how to use trace and json:
+            Dictionary<int, string> vals = new Dictionary<int, string>();
+            vals.Add(0, "mission-complete()");
+            vals.Add(1, "(N)mission-complete()");
+            AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace trace = new AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace();
+            trace.variables.Add(new AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.TraceVariable(vals));
+            string jsonTrace = JsonConvert.SerializeObject(trace);
+
+            Console.WriteLine("Json object:");
+            Console.WriteLine(jsonTrace);
+            */
             /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             dict.Add("selectors", new int[] { 2 });
-            dict.Add("domains", new int[] { 3 });
+            //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
+            dict.Add("domains", new int[] { 0 });
             return dict;
             */
         }
