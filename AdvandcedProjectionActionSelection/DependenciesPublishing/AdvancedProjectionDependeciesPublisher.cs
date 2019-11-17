@@ -16,7 +16,7 @@ namespace Planning
         private string recordingDependencyPickingAllTogetherFilename;
         private Dictionary<Agent, int> currentDependencyRecordNumberPerAgent;
         private int currentDependencyRecordNumber;
-        private static string togetherHeader = "Record number,Agent's name,Agent's record number,Action,Effect\n";
+        private static string togetherHeader = "Record number,Agent's name,Agent's record number,Action,Effect,Artificial effect\n";
         private static string agentHeader = "Record number,Action,Effect\n";
 
         private string recordingDependencyPickingAllTogetherData;
@@ -82,7 +82,7 @@ namespace Planning
                 //WriteToFile(recordingDependencyPickingPerAgent[agent], recordingDependencyPickingDataPerAgent[agent]);
             }
 
-            //WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
+            WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
             //int breakpoint = 0;
         }
 
@@ -124,6 +124,9 @@ namespace Planning
 
         public void EnterDependenciesToTrace(Agent agent, Tuple<Action, Predicate> chosen, List<Action> actionsAffected)
         {
+            return;
+            if (Program.alreadySolved[Program.currentProblemName])
+                return;
             if (actionsAffected.Count == 0)
                 return;
             Predicate predicate;
@@ -352,7 +355,6 @@ namespace Planning
 
         public void RecordDependencyPicked(Agent agent, Tuple<Action, Predicate> chosen)
         {
-            /*
             //The stuff to record:
             string actionChosen = chosen.Item1.Name;
             Predicate predicate;
@@ -382,14 +384,13 @@ namespace Planning
             ////recordingDependencyPickingDataPerAgent[agent] = recordingDependencyPickingDataPerAgent[agent] + agentData; //append next line
             ////
             //Record to the all together file:
-            string togetherData = currentDependencyRecordNumber + "," + Program.ConvertAgentNameToItsUsableName(agent) + "," + agentRecordNumber + "," + actionChosen + "," + effectChosen + "\n";
+            string togetherData = currentDependencyRecordNumber + "," + Program.ConvertAgentNameToItsUsableName(agent) + "," + agentRecordNumber + "," + actionChosen + "," + effectChosen + "," + chosen.Item2.ToString() + "\n";
             recordingDependencyPickingAllTogetherData = recordingDependencyPickingAllTogetherData + togetherData;
             //AppendOrCreateFile(recordingDependencyPickingAllTogetherFilename, togetherHeader, togetherData);
 
             //Increase counters:
             currentDependencyRecordNumberPerAgent[agent]++;
             currentDependencyRecordNumber++;
-            */
         }
     }
 }

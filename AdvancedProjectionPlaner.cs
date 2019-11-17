@@ -255,6 +255,7 @@ namespace Planning
             else
             {
                 //if we have a valid plan, write the *high level* plan to the trace and only then write the trace to a file:
+                /*
                 if (!Program.alreadySolved[Program.currentProblemName])
                 {
                     Program.alreadySolved[Program.currentProblemName] = true;
@@ -264,6 +265,7 @@ namespace Planning
                         WriteTraceToFile(agent, traces[agent]);
                     }
                 }
+                */
                 //calculate amount of dependencies used:
                 Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces);
 
