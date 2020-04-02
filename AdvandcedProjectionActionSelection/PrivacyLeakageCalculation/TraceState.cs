@@ -19,6 +19,7 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
         public List<int> values { get; set; }
         public string context { get; set; }
         private static int nextStateID = 0;
+        private static int amountOfStates = 0;
 
         public TraceState(int agentID, int senderID, int stateID, int parentID, int iparentID, int cost, int heuristic, List<int> privateIDs, List<int> values, string context)
         {
@@ -43,7 +44,18 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
         {
             int curr = nextStateID;
             nextStateID++;
+            amountOfStates++;
             return curr;
+        }
+
+        public static bool TimeToFlashStates()
+        {
+            if (amountOfStates > 500)
+            {
+                amountOfStates = 0;
+                return true;
+            }
+            return false;
         }
 
         /*public static TraceState CreateTraceState(Agent agent, Tuple<Action, Predicate> chosen)

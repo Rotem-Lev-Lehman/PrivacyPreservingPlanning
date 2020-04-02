@@ -248,7 +248,6 @@ C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Privacy Preserving All And
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\bin\Debug\GPPP.exe.config
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\bin\Debug\GPPP.exe
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\bin\Debug\GPPP.pdb
-C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CoreCompileInputs.cache
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\GPPP.exe
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\GPPP.pdb
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\Planning.csprojAssemblyReference.cache

@@ -150,5 +150,10 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
             LeakageTrace trace = new LeakageTrace(leakageTrace);
             return trace;
         }
+
+        public void ClearStates()
+        {
+            states = new List<TraceState>();
+        }
     }
 }

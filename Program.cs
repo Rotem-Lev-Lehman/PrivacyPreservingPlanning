@@ -85,8 +85,13 @@ namespace Planning
         //ff process name:
         public static string currentFFProcessName = null;
 
-        //public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
-        public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
+        //creating traces after solution was found:
+        public static List<string> highLevelPlanForTraces = null;
+        public static string tracesFolderForSavingTraces = null;
+        public static bool creatingTracesAfterSolutionWasFound = false; //don't need to change this value, it is changed in the specific code who controls it...
+
+        public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -169,6 +174,10 @@ namespace Planning
                 pdbPath += "/" + dir.Name + ".pdb";
                 List<Agent> agents = null;
                 List<string> lPlan = SolveFactored(lDomains, lProblems, ref agents, dJoint);
+                if (creatingTracesAfterSolutionWasFound)
+                {
+                    return; //don't need to write results...
+                }
                 //Program.projResults.WriteLine(
                 if (lPlan != null)
                 {
@@ -504,10 +513,14 @@ namespace Planning
 
                 publisher = new AdvancedProjectionCollaborationPublisher(selector, currPercentageForSelectingActionInAdvancedProjectionPlaner);
                 */
-                foreach(Agent a in agents)
+                if (!creatingTracesAfterSolutionWasFound)
                 {
-                    string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
-                    recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
+                    foreach (Agent a in agents)
+                    {
+                        string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
+                        recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
+                    }
+                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
                 }
 
                 publisher = GetAdvancedProjectionPublisher();
@@ -1184,37 +1197,47 @@ namespace Planning
                 if (di.ToString().Contains("PdbFiles"))
                     return;
 
-                //create recording folder:
-                string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
-                System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
-                recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
-                recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
+                if (creatingTracesAfterSolutionWasFound)
+                {
+                    tracesFolder = tracesFolderForSavingTraces;
+                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                }
+                else
+                {
+                    //create recording folder:
+                    string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
+                    System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
+                    recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
+                    recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
 
-                agentsRecordingFolder = currentRecordingFolder + @"\Agents";
-                //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
-                recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
+                    agentsRecordingFolder = currentRecordingFolder + @"\Agents";
+                    //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
+                    recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
 
-                //leakage traces:
-                tracesFolder = currentRecordingFolder + @"\traces";
-                System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
-                agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
+                    //leakage traces:
+                    tracesFolder = currentRecordingFolder + @"\traces";
+                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                    agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
 
+                    //golden standard calculation:
+                    amountOfDependenciesUsed = 0;
+                    goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
+                    System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
+                    if (!alreadySolved.ContainsKey(di.Name))
+                    {
+                        alreadySolved.Add(di.Name, false);
+                    }
+                    currentProblemName = di.Name;
+                    //amount of dependencies to reveal:
+                    amountOfDependenciesPublished = 0;
+
+                    sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
+                }
+
+                //clear traces anyways...
                 AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace.ClearTraces();
 
-                //golden standard calculation:
-                amountOfDependenciesUsed = 0;
-                goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
-                System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
-                if (!alreadySolved.ContainsKey(di.Name))
-                {
-                    alreadySolved.Add(di.Name, false);
-                }
-                currentProblemName = di.Name;
-                //amount of dependencies to reveal:
-                amountOfDependenciesPublished = 0;
-
-                sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
-
+                
                 /* previous...
                 if (sOutputPlanFile == "")
                     sOutputPlanFile = "Plan.txt";
@@ -1249,9 +1272,12 @@ namespace Planning
                     //Program.timeResults.Flush();
                     Thread.Sleep(1000);
                     //writing an empty plan file
-                    StreamWriter sw = new StreamWriter(sOutputPlanFile + "plan.txt");
-                    sw.Close();
-                    WriteResults(GetWantedName(di.FullName), " failed - timeout");
+                    if (!creatingTracesAfterSolutionWasFound)
+                    {
+                        StreamWriter sw = new StreamWriter(sOutputPlanFile + "plan.txt");
+                        sw.Close();
+                        WriteResults(GetWantedName(di.FullName), " failed - timeout");
+                    }
                 }
 
                 KillPlanners();
@@ -1800,8 +1826,13 @@ namespace Planning
             bool runningMyExperiment = true;
             if (runningMyExperiment)
             {
+                /*
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
                 RunExperimentOnAlotOfDomains(selectorsAndDomains);
+                */
+                Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
+                //Dictionary<string, string> first = GetFirstSolvedPercentageForEachProblem(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper\Actions_Achiever\blocksworld\Experiment_Output_File\output.csv");
+                RunAndCreateTracesForeachProblemsMinAndMaxSolved(selectorsAndDomains);
                 /*
                 //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
                 Console.WriteLine("*****************************************************************************");
@@ -1880,9 +1911,168 @@ namespace Planning
 
         }
 
+        private static void RunAndCreateTracesForeachProblemsMinAndMaxSolved(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
+            int[] domainIndexesToUse = selectorsAndDomains["domains"];
+
+            string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
+            Console.WriteLine("Selectors that we will examine:");
+            for (int i = 0; i < selectorIndexesToUse.Length; i++)
+            {
+                dependenciesSelectors[i] = allPossibleDependenciesSelectors[selectorIndexesToUse[i]];
+                Console.WriteLine(dependenciesSelectors[i]);
+            }
+
+            string[] dependenciesDomains = new string[domainIndexesToUse.Length];
+            Console.WriteLine("Domains that we will examine the selectors on:");
+            for (int i = 0; i < domainIndexesToUse.Length; i++)
+            {
+                dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
+                Console.WriteLine(dependenciesDomains[i]);
+            }
+            Console.WriteLine("Lets start examining them :)");
+
+            CreateTracesForSelected(dependenciesSelectors, dependenciesDomains);
+        }
+
+        private static void CreateTracesForSelected(string[] dependenciesSelectors, string[] dependenciesDomains)
+        {
+            string rootPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper";
+            string problemsRootPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored";
+            dependencyUsed = true;
+            currentFFProcessName = "ff";
+            foreach (string selector in dependenciesSelectors)
+            {
+                typeOfSelector = selector;
+                string selectorFolder = rootPath + @"\" + selector;
+                foreach(string domain in dependenciesDomains)
+                {
+                    Console.WriteLine("**********************************************************");
+                    Console.WriteLine("Running selector " + selector);
+                    Console.WriteLine("Running domain " + domain);
+
+                    string problemsInCurrentDomainFolder = problemsRootPath + @"\" + domain;
+                    string domainsFolder = selectorFolder + @"\" + domain;
+                    string resultFile = domainsFolder + @"\Experiment_Output_File\output.csv";
+                    Dictionary<string, string> problemToFirstSolvedPercentage = GetFirstSolvedPercentageForEachProblem(resultFile);
+
+                    string recordingFolder = domainsFolder + @"\Recordings";
+                    foreach(string problem in problemToFirstSolvedPercentage.Keys)
+                    {
+                        string percentage = problemToFirstSolvedPercentage[problem];
+                        Console.WriteLine("Running problem " + problem + " on percentage " + percentage);
+                        string usableProblemName = GetUsableProblemName(problem);
+                        string currentProblemMainFolder = recordingFolder + @"\percentage_" + percentage + @"\" + usableProblemName + @"\Round_0";
+                        string planFile = currentProblemMainFolder + @"\HighLevelPlan.csv";
+                        List<string> highLevelPlan = ReadHighLevelPlanFromFile(planFile);
+                        string tracesFolder = currentProblemMainFolder + @"\traces";
+                        double percentageToUse = TranslatePercentageToDouble(percentage);
+                        string problemFolderToParse = problemsInCurrentDomainFolder + @"\" + usableProblemName;
+                        CreateTracesForSpecificProblem(problemFolderToParse, percentageToUse, tracesFolder, highLevelPlan);
+
+                        Console.WriteLine("Finished problem " + problem + " on percentage " + percentage);
+                    }
+                }
+            }
+            Console.WriteLine("Finished all!");
+        }
+
+        private static void CreateTracesForSpecificProblem(string problemFolderToParse, double percentageToUse, string tracesFolder, List<string> highLevelPlan)
+        {
+            tracesFolderForSavingTraces = tracesFolder;
+            highLevelPlanForTraces = highLevelPlan;
+            currPercentageForSelectingActionInAdvancedProjectionPlaner = percentageToUse;
+            creatingTracesAfterSolutionWasFound = true;
+            ParseAll(new DirectoryInfo(problemFolderToParse), null);
+        }
+
+        private static double TranslatePercentageToDouble(string percentage)
+        {
+            List<double> percentages = new List<double>();
+            for (double i = 0; i <= 1; i += 0.05)
+            {
+                percentages.Add(i);
+            }
+            if (!percentages.Contains(1))
+            {
+                percentages.Add(1);
+            }
+            for(int i = 0; i < percentages.Count; i++)
+            {
+                string curr = percentages[i].ToString();
+                if (curr.Equals(percentage))
+                {
+                    return percentages[i];
+                }
+            }
+            //should not reach here...
+            throw new Exception("No percentage match");
+        }
+
+        private static List<string> ReadHighLevelPlanFromFile(string planFile)
+        {
+            List<string> highLevelPlan = new List<string>();
+            using (StreamReader sr = new StreamReader(planFile))
+            {
+                string currentLine;
+                // currentLine will be null when the StreamReader reaches the end of file
+                bool firstLine = true;
+                while ((currentLine = sr.ReadLine()) != null)
+                {
+                    if (firstLine)
+                    {
+                        firstLine = false;
+                        continue;
+                    }
+                    string[] split = currentLine.Split(',');
+                    highLevelPlan.Add(split[1]); //split[1] is the current action in the plan
+                }
+            }
+            return highLevelPlan;
+        }
+
+        private static string GetUsableProblemName(string problem)
+        {
+            string usableName = problem.Split('\\')[1];
+            return usableName;
+        }
+
+        private static Dictionary<string, string> GetFirstSolvedPercentageForEachProblem(string resultFile)
+        {
+            Dictionary<string, string> problemToFirstSolvedPercentage = new Dictionary<string, string>();
+            using (StreamReader sr = new StreamReader(resultFile))
+            {
+                string currentLine;
+                // currentLine will be null when the StreamReader reaches the end of file
+                bool firstLine = true;
+                while ((currentLine = sr.ReadLine()) != null)
+                {
+                    if (firstLine)
+                    {
+                        firstLine = false;
+                        continue;
+                    }
+                    string[] split = currentLine.Split(',');
+                    if (split[2].Equals("  success"))
+                    {
+                        string probName = split[1];
+                        if (!problemToFirstSolvedPercentage.ContainsKey(probName))
+                        {
+                            string percentage = split[0];
+                            problemToFirstSolvedPercentage.Add(probName, percentage);
+                        }
+                    }
+                }
+            }
+            return problemToFirstSolvedPercentage;
+        }
+
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
-            
+            /*
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -1919,7 +2109,7 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
-            
+            */
             /*
             // how to use trace and json:
             Dictionary<int, string> vals = new Dictionary<int, string>();
@@ -1932,13 +2122,13 @@ namespace Planning
             Console.WriteLine("Json object:");
             Console.WriteLine(jsonTrace);
             */
-            /*
+            
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
-            dict.Add("selectors", new int[] { 2 });
+            dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 0, 1, 2, 3, 4, 5, 11 });
             return dict;
-            */
+            
         }
     }
 }

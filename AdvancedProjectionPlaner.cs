@@ -25,6 +25,7 @@ namespace Planning
         State globalInitialState = null;
         private AAdvancedProjectionActionPublisher publisher;
         private string recordingHighLevelPlanFilename;
+        private static Dictionary<Agent, bool> firstTimeWritenStates;
 
         public static Dictionary<Agent, Dictionary<Predicate, List<Action>>> actionsAffectedForAgent;
 
@@ -148,10 +149,14 @@ namespace Planning
                 traces.Add(agent, trace);
                 publicActionsForTraces.AddRange(agentsProjections[agent]);
             }
-            foreach(Agent agent in agents)
+            firstTimeWritenStates = new Dictionary<Agent, bool>();
+            foreach (Agent agent in agents)
             {
                 traces[agent].initializeOperators(publicActionsForTraces, agent.privateActions);
+                writeFirstHalfOfJsonToFile(agent, traces[agent]);
+                firstTimeWritenStates.Add(agent, true);
             }
+            
 
             //clear the actions affected dictionary:
             actionsAffectedForAgent = new Dictionary<Agent, Dictionary<Predicate, List<Action>>>();
@@ -162,6 +167,20 @@ namespace Planning
             publisher.setTraces(traces);
             
             publisher.publishActions(allProjectionAction, agentsProjections);
+
+            if (Program.creatingTracesAfterSolutionWasFound)
+            {
+                //write the traces with the dependencies that were published to the file
+                foreach (Agent agent in agents)
+                {
+                    //get the high level plan from the program...
+                    traces[agent].plan = Program.highLevelPlanForTraces;
+                    writeStatesToFile(agent, traces[agent]); //write the leftovers
+                    writeSecondHalfOfJsonToFile(agent, traces[agent]);
+                    //WriteTraceToFile(agent, traces[agent]);
+                }
+                return null;
+            }
             Console.WriteLine("Published dependencies, now trying to find a high level plan");
 
             dPublic.Actions = allProjectionAction;
@@ -274,6 +293,53 @@ namespace Planning
             return finalPlan;
 
             return null;
+        }
+
+        public static void writeStatesToFile(Agent agent, LeakageTrace leakageTrace)
+        {
+            string content = JsonConvert.SerializeObject(leakageTrace);
+            int startOfStatesIndex = content.IndexOf("\"states\"") + 10;
+            int endOfStatesIndex = content.IndexOf("\"plan\"") - 2;
+            string substring = content.Substring(startOfStatesIndex, endOfStatesIndex - startOfStatesIndex);
+            if (firstTimeWritenStates[agent])
+            {
+                firstTimeWritenStates[agent] = false;
+            }
+            else if (substring.Length > 0)
+            {
+                substring = "," + substring;
+            }
+            WriteToTraceFile(agent, substring, false);
+        }
+
+        private void writeSecondHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
+        {
+            string content = JsonConvert.SerializeObject(leakageTrace);
+            int endOfStatesIndex = content.IndexOf("\"plan\"");
+            string substring = content.Substring(endOfStatesIndex - 2);
+            WriteToTraceFile(agent, substring, false);
+        }
+
+        private void writeFirstHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
+        {
+            string content = JsonConvert.SerializeObject(leakageTrace);
+            int statesIndex = content.IndexOf("\"states\"");
+            string substring = content.Substring(0, statesIndex + 10); //until ..."states":[
+            WriteToTraceFile(agent, substring, true);
+        }
+
+        private static void WriteToTraceFile(Agent agent, string substring, bool createNewFile)
+        {
+            string path = Program.tracesFolder + @"\agent" + agent.getID() + ".json";
+
+            if (createNewFile)
+            {
+                File.WriteAllText(path, substring);
+            }
+            else
+            {
+                File.AppendAllText(path, substring);
+            }
         }
 
         private void WriteTraceToFile(Agent agent, LeakageTrace leakageTrace)

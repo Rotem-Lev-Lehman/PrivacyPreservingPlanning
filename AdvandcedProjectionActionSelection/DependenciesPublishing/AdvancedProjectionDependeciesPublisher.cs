@@ -30,18 +30,23 @@ namespace Planning
             this.dependeciesSelector = dependeciesSelector;
             this.dependeciesSelector.SetPublisher(this);
 
-            //recording:
-            this.recordingDependencyPickingPerAgent = recordingDependencyPickingPerAgent;
-            this.recordingDependencyPickingAllTogetherFilename = recordingDependencyPickingAllTogether;
-            this.recordingDependencyPickingAllTogetherData = togetherHeader;
-            this.recordingDependencyPickingDataPerAgent = new Dictionary<Agent, string>();
-            this.currentDependencyRecordNumberPerAgent = new Dictionary<Agent, int>();
-            foreach(Agent agent in this.recordingDependencyPickingPerAgent.Keys)
+            if (!Program.creatingTracesAfterSolutionWasFound)
             {
-                this.currentDependencyRecordNumberPerAgent.Add(agent, 0);
-                this.recordingDependencyPickingDataPerAgent.Add(agent, agentHeader);
+
+
+                //recording:
+                this.recordingDependencyPickingPerAgent = recordingDependencyPickingPerAgent;
+                this.recordingDependencyPickingAllTogetherFilename = recordingDependencyPickingAllTogether;
+                this.recordingDependencyPickingAllTogetherData = togetherHeader;
+                this.recordingDependencyPickingDataPerAgent = new Dictionary<Agent, string>();
+                this.currentDependencyRecordNumberPerAgent = new Dictionary<Agent, int>();
+                foreach (Agent agent in this.recordingDependencyPickingPerAgent.Keys)
+                {
+                    this.currentDependencyRecordNumberPerAgent.Add(agent, 0);
+                    this.recordingDependencyPickingDataPerAgent.Add(agent, agentHeader);
+                }
+                this.currentDependencyRecordNumber = 0;
             }
-            this.currentDependencyRecordNumber = 0;
         }
 
         public override void publishActions(List<Action> allProjectionAction, Dictionary<Agent, List<Action>> agentsProjections)
@@ -81,8 +86,10 @@ namespace Planning
 
                 //WriteToFile(recordingDependencyPickingPerAgent[agent], recordingDependencyPickingDataPerAgent[agent]);
             }
-
-            WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
+            if (!Program.creatingTracesAfterSolutionWasFound)
+            {
+                WriteToFile(recordingDependencyPickingAllTogetherFilename, recordingDependencyPickingAllTogetherData);
+            }
             //int breakpoint = 0;
         }
 
@@ -124,9 +131,10 @@ namespace Planning
 
         public void EnterDependenciesToTrace(Agent agent, Tuple<Action, Predicate> chosen, List<Action> actionsAffected)
         {
-            return;
-            if (Program.alreadySolved[Program.currentProblemName])
+            if (!Program.creatingTracesAfterSolutionWasFound)
                 return;
+            //if (Program.alreadySolved[Program.currentProblemName])
+            //    return;
             if (actionsAffected.Count == 0)
                 return;
             Predicate predicate;
@@ -138,6 +146,7 @@ namespace Planning
                 predicate = chosen.Item2.Negate();
                 negation = true;
                 val = 1;
+                return;
             }
             else
             {
@@ -156,6 +165,20 @@ namespace Planning
 
             CopyTraceStatesForAllAgents(agents, agent, recievedState, sentStates, val);
 
+            if (TraceState.TimeToFlashStates())
+            {
+                FlashStates();
+            }
+
+        }
+
+        private void FlashStates()
+        {
+            foreach(Agent agent in agents)
+            {
+                AdvancedLandmarkProjectionPlaner.writeStatesToFile(agent, traces[agent]);
+                traces[agent].ClearStates();
+            }
         }
 
         private void CopyTraceStatesForAllAgents(List<Agent> agents, Agent agent, TraceState recievedState, List<TraceState> sentStates, int val)
@@ -355,6 +378,8 @@ namespace Planning
 
         public void RecordDependencyPicked(Agent agent, Tuple<Action, Predicate> chosen)
         {
+            if (Program.creatingTracesAfterSolutionWasFound)
+                return;
             //The stuff to record:
             string actionChosen = chosen.Item1.Name;
             Predicate predicate;
