@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
+
 namespace Planning
 {
     class MapsPlanner
@@ -26,6 +28,9 @@ namespace Planning
         public static Dictionary<string, Dictionary<string, HashSet<Action>>> AgentToInfluActions = null;
         public static Dictionary<string, List<string>> influencedByAgents = null;
         public static Dictionary<string, Dictionary<string, HashSet<string>>> recoverActionEffect = null;
+
+        public static IMAFSPublisher MAFSPublisher = null;
+        public static IDependenciesSelectionPreperation dependenciesSelectionPreperation = null;
 
         public MapsPlanner(List<Agent> agents,List<Domain> lDomains, List<Problem> lProblems)
         {
@@ -238,6 +243,14 @@ namespace Planning
                 }
             }
         }
+
+        public void PrepareDependenciesSelection(List<Agent> agents, AAdvancedProjectionActionPublisher publisher)
+        {
+            Console.WriteLine("Preparing dependencies selection");
+            dependenciesSelectionPreperation.PrepareSelection(publisher, this.MapsAgents, agents);
+            Console.WriteLine("Done preparing dependencies selection");
+        }
+
         public List<string> Plan()
         {
             //List<Thread> threads = new List<Thread>();

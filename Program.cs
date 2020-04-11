@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using Newtonsoft.Json;
+using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
 
 
 namespace Planning
@@ -27,8 +28,11 @@ namespace Planning
         static string domainFolderPath;
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
         public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs };
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        static public bool testingProjectionWithLessDependenciesRevealed = true;
+
         static public bool directMessage = false;
         static public PlanerType internalPlaner;
         public enum ProjectionVersion { Local, Global, GlobalV2, GlobalWithMemo, fullGlobal, ProjectionFF, NULL };
@@ -985,6 +989,28 @@ namespace Planning
                                                         Console.WriteLine("Planning");
 
                                                         MapsPlanner Planner = new MapsPlanner(agents, lDomains, lProblems);
+                                                        /*
+                                                         * Do this in order to run a regular MAFS planner, without limiting the published states:
+                                                        MapsPlanner.MAFSPublisher = new PublishEverything();
+                                                        MapsPlanner.dependenciesSelectionPreperation = new NotSelectionPreperation();
+                                                        */
+                                                        //Do this in order to run MAFS planner while limiting the revealed dependencies:
+                                                        MapsPlanner.MAFSPublisher = new PublishOnlyRevealedDependencies();
+                                                        MapsPlanner.dependenciesSelectionPreperation = new DoSelectionPreperation();
+
+                                                        if (!creatingTracesAfterSolutionWasFound)
+                                                        {
+                                                            foreach (Agent a in agents)
+                                                            {
+                                                                string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
+                                                                recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
+                                                            }
+                                                            System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                                                        }
+
+                                                        AAdvancedProjectionActionPublisher publisher = GetAdvancedProjectionPublisher();
+
+                                                        Planner.PrepareDependenciesSelection(agents, publisher);
 
                                                         StartGrounding = DateTime.Now;
 
@@ -1197,46 +1223,47 @@ namespace Planning
                 if (di.ToString().Contains("PdbFiles"))
                     return;
 
-                if (creatingTracesAfterSolutionWasFound)
-                {
-                    tracesFolder = tracesFolderForSavingTraces;
-                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
-                }
-                else
-                {
-                    //create recording folder:
-                    string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
-                    System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
-                    recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
-                    recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
-
-                    agentsRecordingFolder = currentRecordingFolder + @"\Agents";
-                    //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
-                    recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
-
-                    //leakage traces:
-                    tracesFolder = currentRecordingFolder + @"\traces";
-                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
-                    agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
-
-                    //golden standard calculation:
-                    amountOfDependenciesUsed = 0;
-                    goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
-                    System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
-                    if (!alreadySolved.ContainsKey(di.Name))
+                if (testingProjectionWithLessDependenciesRevealed) {
+                    if (creatingTracesAfterSolutionWasFound)
                     {
-                        alreadySolved.Add(di.Name, false);
+                        tracesFolder = tracesFolderForSavingTraces;
+                        System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
                     }
-                    currentProblemName = di.Name;
-                    //amount of dependencies to reveal:
-                    amountOfDependenciesPublished = 0;
+                    else
+                    {
+                        //create recording folder:
+                        string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
+                        System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
+                        recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
+                        recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
 
-                    sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
+                        agentsRecordingFolder = currentRecordingFolder + @"\Agents";
+                        //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
+                        recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
+
+                        //leakage traces:
+                        tracesFolder = currentRecordingFolder + @"\traces";
+                        System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                        agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
+
+                        //golden standard calculation:
+                        amountOfDependenciesUsed = 0;
+                        goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
+                        System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
+                        if (!alreadySolved.ContainsKey(di.Name))
+                        {
+                            alreadySolved.Add(di.Name, false);
+                        }
+                        currentProblemName = di.Name;
+                        //amount of dependencies to reveal:
+                        amountOfDependenciesPublished = 0;
+
+                        sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
+                    }
+
+                    //clear traces anyways...
+                    AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace.ClearTraces();
                 }
-
-                //clear traces anyways...
-                AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace.ClearTraces();
-
                 
                 /* previous...
                 if (sOutputPlanFile == "")
@@ -1468,10 +1495,12 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
         {
             List<double> percentages = new List<double>();
+            /*
             for (double i = 0; i <= 1; i += 0.05)
             {
                 percentages.Add(i);
             }
+            */
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1643,7 +1672,7 @@ namespace Planning
             } 
         }
 
-        static void RunExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains)
+        static void RunExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType)
         {
             int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
@@ -1655,8 +1684,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*/"TestingExample" };
+            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*/"logistics_3_problems"/*"Logistics_Test_example"*/ };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1675,7 +1704,7 @@ namespace Planning
             }
             Console.WriteLine("Lets start running them :)");
 
-            string experimentPath = baseFolderName + @"\Experiment\Projection_Only\";
+            string experimentPath = baseFolderName + @"\Experiment\" + plannerType + @"\";
 
             goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
             System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
@@ -1808,6 +1837,15 @@ namespace Planning
             File.WriteAllText(outputFilename, outputData);
         }
 
+        static void RunProjectionOnlyExperiment(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only");
+        }
+
+        static void RunMAFSProjectionExperiment(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection");
+        }
 
         static StreamWriter swResults;
 
@@ -1826,29 +1864,38 @@ namespace Planning
             bool runningMyExperiment = true;
             if (runningMyExperiment)
             {
-                /*
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                RunExperimentOnAlotOfDomains(selectorsAndDomains);
-                */
-                Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                //Dictionary<string, string> first = GetFirstSolvedPercentageForEachProblem(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper\Actions_Achiever\blocksworld\Experiment_Output_File\output.csv");
-                RunAndCreateTracesForeachProblemsMinAndMaxSolved(selectorsAndDomains);
-                /*
-                //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
-                Console.WriteLine("*****************************************************************************");
-                Console.WriteLine("*****************************************************************************");
-                Console.WriteLine("Done");
-                Console.WriteLine("Max amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.maxAmountOfDependenciesToReveal);
-                Console.WriteLine("Min amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.minAmountOfDependenciesToReveal);
-                Console.WriteLine("*****************************************************************************");
-                Console.WriteLine("*****************************************************************************");
-                Console.WriteLine("Press any key to finish the program...");
-                Console.ReadLine();
-                */
-                /*
-                string blocksPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored\new_domain_blocks";
-                CreateMABlocksWorld(blocksPath, 2, 3, 2, 3, 2, 3, 1);
-                */
+                bool runningMAFSExperiment = true;
+                if (runningMAFSExperiment)
+                {
+                    RunMAFSProjectionExperiment(selectorsAndDomains);
+                }
+                else
+                {
+                    RunProjectionOnlyExperiment(selectorsAndDomains);
+
+                    /*
+                    Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
+                    //Dictionary<string, string> first = GetFirstSolvedPercentageForEachProblem(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper\Actions_Achiever\blocksworld\Experiment_Output_File\output.csv");
+                    RunAndCreateTracesForeachProblemsMinAndMaxSolved(selectorsAndDomains);
+                    */
+                    /*
+                    //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
+                    Console.WriteLine("*****************************************************************************");
+                    Console.WriteLine("*****************************************************************************");
+                    Console.WriteLine("Done");
+                    Console.WriteLine("Max amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.maxAmountOfDependenciesToReveal);
+                    Console.WriteLine("Min amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.minAmountOfDependenciesToReveal);
+                    Console.WriteLine("*****************************************************************************");
+                    Console.WriteLine("*****************************************************************************");
+                    Console.WriteLine("Press any key to finish the program...");
+                    Console.ReadLine();
+                    */
+                    /*
+                    string blocksPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored\new_domain_blocks";
+                    CreateMABlocksWorld(blocksPath, 2, 3, 2, 3, 2, 3, 1);
+                    */
+                }
             }
             else
             {
@@ -1908,7 +1955,8 @@ namespace Planning
                 }
             }
 
-
+            Console.WriteLine("Press any key to end the program...");
+            Console.ReadKey();
         }
 
         private static void RunAndCreateTracesForeachProblemsMinAndMaxSolved(Dictionary<string, int[]> selectorsAndDomains)
@@ -2124,9 +2172,10 @@ namespace Planning
             */
             
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
-            dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0, 1, 2, 3, 4, 5, 11 });
+            dict.Add("domains", new int[] { 0 });
             return dict;
             
         }

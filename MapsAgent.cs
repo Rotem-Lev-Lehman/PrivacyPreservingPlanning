@@ -51,6 +51,10 @@ namespace Planning
         List<string> agentsNames = null;
         public List<Order> ReasonableOrdering = null;
 
+        Dictionary<string, List<Predicate>> actionName_to_revealedDependenciesList;
+        Dictionary<string, List<Predicate>> actionName_to_preconditionsDependenciesList;
+        List<Predicate> dependenciesAtStartState;
+
         public static void InitMutex()
         {
             heursticCalcultionMutex = new Mutex();
@@ -126,6 +130,40 @@ namespace Planning
             fGoal = false;
             MapsVertex courentVertex = null;
             first = true;
+
+            actionName_to_revealedDependenciesList = new Dictionary<string, List<Predicate>>();
+            actionName_to_preconditionsDependenciesList = new Dictionary<string, List<Predicate>>();
+            dependenciesAtStartState = new List<Predicate>();
+        }
+
+        public void AddToEffectsActionsAndDependencies(string actionName, List<Predicate> predicates)
+        {
+            actionName_to_revealedDependenciesList.Add(actionName, predicates);
+        }
+
+        public void AddToPreconditionActionsAndDependencies(string actionName, List<Predicate> predicates)
+        {
+            actionName_to_preconditionsDependenciesList.Add(actionName, predicates);
+        }
+
+        public void SetDependenciesAtStartState(List<Predicate> predicates)
+        {
+            dependenciesAtStartState = predicates;
+        }
+
+        public List<Predicate> GetPredicatesRevealedByAction(string actionName)
+        {
+            return actionName_to_revealedDependenciesList[actionName];
+        }
+
+        public List<Predicate> GetPredicatesPreconditionsForAction(string actionName)
+        {
+            return actionName_to_preconditionsDependenciesList[actionName];
+        }
+
+        public List<Predicate> GetDependenciesAtStartState()
+        {
+            return dependenciesAtStartState;
         }
 
         public void SetPublicOpenLists(Dictionary<string,HashSet<MapsVertex>> newGlobalOpenList)
@@ -1280,6 +1318,18 @@ namespace Planning
                             if (closeList.Contains(courentVertex, vc))
                             {
                                 flag = false;
+                            }
+
+                            if (flag)
+                            {
+                                flag = MapsPlanner.MAFSPublisher.CanPublish(this, courentVertex);
+                                //TODO: Deny the expantion of this state by the current Agent too.
+                                //(it will be redundent to expand this node if we don't send it because of the dependencies denial...)
+                            }
+
+                            if (!flag)
+                            {
+                                // not sending...
                                 Program.notSendedStates++;
                                 notSended.Add(courentVertex);
                             }
