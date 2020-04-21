@@ -25,7 +25,7 @@ namespace Planning
         State globalInitialState = null;
         private AAdvancedProjectionActionPublisher publisher;
         private string recordingHighLevelPlanFilename;
-        private static Dictionary<Agent, bool> firstTimeWritenStates;
+        public static Dictionary<Agent, bool> firstTimeWritenStates;
 
         public static Dictionary<Agent, Dictionary<Predicate, List<Action>>> actionsAffectedForAgent;
 
@@ -312,7 +312,7 @@ namespace Planning
             WriteToTraceFile(agent, substring, false);
         }
 
-        private void writeSecondHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
+        public static void writeSecondHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
         {
             string content = JsonConvert.SerializeObject(leakageTrace);
             int endOfStatesIndex = content.IndexOf("\"plan\"");
@@ -320,7 +320,7 @@ namespace Planning
             WriteToTraceFile(agent, substring, false);
         }
 
-        private void writeFirstHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
+        public static void writeFirstHalfOfJsonToFile(Agent agent, LeakageTrace leakageTrace)
         {
             string content = JsonConvert.SerializeObject(leakageTrace);
             int statesIndex = content.IndexOf("\"states\"");

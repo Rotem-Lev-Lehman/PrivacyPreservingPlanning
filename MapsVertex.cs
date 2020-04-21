@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
 
 namespace Planning
 {
@@ -53,6 +54,10 @@ namespace Planning
         public int h2;
         //public int gh;
         public int publicCount;
+
+        public TraceState traceStateForPublicRevealedState = null;
+        public Dictionary<string, int> agent2iparent = null;
+
         public static HashSet<GroundedPredicate> allGoals = null;
         public static void init(List<Agent> agents)
         {

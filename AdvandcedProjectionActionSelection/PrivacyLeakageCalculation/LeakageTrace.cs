@@ -140,6 +140,11 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
             states.AddRange(sentStates);
         }
 
+        public void AddState(TraceState state)
+        {
+            states.Add(state);
+        }
+
         public static int GetAmountOfPublicVariables()
         {
             return amountOfPublicVariables;

@@ -20,6 +20,10 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
         public string context { get; set; }
         private static int nextStateID = 0;
         private static int amountOfStates = 0;
+        public static readonly string SendingMessage = "sending";
+        public static readonly string ReceivedMessage = "received";
+        public static readonly string InitMessage = "init";
+        public static readonly string GoalVerifiedMessage = "goal-verified";
 
         public TraceState(int agentID, int senderID, int stateID, int parentID, int iparentID, int cost, int heuristic, List<int> privateIDs, List<int> values, string context)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
          * Use this class in order to limit the publishing of states that reveal a certain dependency that shouldn't be revealed.
          * This class shall pick which dependencies should we reveal and which should we not reveal.
          */
-        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents)
+        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler)
         {
             //TODO: handle traces later...
 
@@ -32,6 +33,26 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 }
                 index += 1000;
             }
+
+            LeakageTrace.setAgents(agents);
+            Dictionary<Agent, LeakageTrace> traces = new Dictionary<Agent, LeakageTrace>();
+            List<Action> publicActionsForTraces = new List<Action>();
+            foreach (Agent agent in agents)
+            {
+                LeakageTrace trace = new LeakageTrace(agent);
+                traces.Add(agent, trace);
+                publicActionsForTraces.AddRange(agentsProjections[agent]);
+            }
+            AdvancedLandmarkProjectionPlaner.firstTimeWritenStates = new Dictionary<Agent, bool>();
+            foreach (Agent agent in agents)
+            {
+                traces[agent].initializeOperators(publicActionsForTraces, agent.privateActions);
+                AdvancedLandmarkProjectionPlaner.writeFirstHalfOfJsonToFile(agent, traces[agent]);
+                AdvancedLandmarkProjectionPlaner.firstTimeWritenStates.Add(agent, true);
+            }
+
+            tracesHandler.setAgents(agents);
+            tracesHandler.setTraces(traces);
 
             //clear the actions affected dictionary:
             AdvancedLandmarkProjectionPlaner.actionsAffectedForAgent = new Dictionary<Agent, Dictionary<Predicate, List<Action>>>();

@@ -12,7 +12,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
          * Use this class in order to not select any dependencies at the execution of the MAFS planner.
          * It is as if it is just a regular MAFS projection planner, without limiting the messages delivered by the planner.
          */
-        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents)
+        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler)
         {
             //Don't do anything here...
         }

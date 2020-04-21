@@ -264,3 +264,4 @@ C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\Planning.cspr
 C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CopyComplete
 C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\GPPP.exe
 C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\GPPP.pdb
+C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CoreCompileInputs.cache

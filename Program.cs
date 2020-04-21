@@ -36,7 +36,7 @@ namespace Planning
         static public bool directMessage = false;
         static public PlanerType internalPlaner;
         public enum ProjectionVersion { Local, Global, GlobalV2, GlobalWithMemo, fullGlobal, ProjectionFF, NULL };
-        static public ProjectionVersion projectionVersion = ProjectionVersion.Global; // Relevant: "Global" (is the full plan h) + "ProjectionFF" 
+        static public ProjectionVersion projectionVersion = ProjectionVersion.ProjectionFF; // Relevant: "Global" (is the full plan h) + "ProjectionFF" 
         static public List<double> times = new List<double>();
         static public List<double> countActions = new List<double>();
         static public double timeSum = 0;
@@ -993,10 +993,12 @@ namespace Planning
                                                          * Do this in order to run a regular MAFS planner, without limiting the published states:
                                                         MapsPlanner.MAFSPublisher = new PublishEverything();
                                                         MapsPlanner.dependenciesSelectionPreperation = new NotSelectionPreperation();
+                                                        MapsPlanner.tracesHandler = new DontHandleTraces();
                                                         */
                                                         //Do this in order to run MAFS planner while limiting the revealed dependencies:
                                                         MapsPlanner.MAFSPublisher = new PublishOnlyRevealedDependencies();
                                                         MapsPlanner.dependenciesSelectionPreperation = new DoSelectionPreperation();
+                                                        MapsPlanner.tracesHandler = new TracesHandler();
 
                                                         if (!creatingTracesAfterSolutionWasFound)
                                                         {
@@ -1011,6 +1013,7 @@ namespace Planning
                                                         AAdvancedProjectionActionPublisher publisher = GetAdvancedProjectionPublisher();
 
                                                         Planner.PrepareDependenciesSelection(agents, publisher);
+                                                        Planner.PublishStartStatesForTraces();
 
                                                         StartGrounding = DateTime.Now;
 
@@ -1685,7 +1688,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*/"logistics_3_problems"/*"Logistics_Test_example"*/ };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");

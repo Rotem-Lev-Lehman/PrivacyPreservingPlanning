@@ -26,7 +26,7 @@ namespace Planning
         private Domain domain;
         private Problem problem;
 
-        public State startState = null;
+        public MapsVertex startState = null;
         Dictionary<State, int> privateStateToIndex = null;
         Dictionary<int, State> indexToPrivateState = null;
         public List<GroundedPredicate> allGoal = null;
@@ -55,6 +55,14 @@ namespace Planning
         Dictionary<string, List<Predicate>> actionName_to_preconditionsDependenciesList;
         List<Predicate> dependenciesAtStartState;
 
+        public MapsVertex startVertexForTrace;
+        public Agent regularAgent;
+
+        public int GetID()
+        {
+            return Agent.getID(name);
+        }
+
         public static void InitMutex()
         {
             heursticCalcultionMutex = new Mutex();
@@ -62,6 +70,7 @@ namespace Planning
         }
         public MapsAgent(MapsVertex start, Agent a, List<GroundedPredicate> m_allGoal, Dictionary<string, int> m_landmarksCount, Dictionary<string, HashSet<MapsVertex>> m_openLists, Dictionary<string, HashSet<MapsVertex>> m_receivedStates, Dictionary<string, Mutex> m_globalMutex, Dictionary<string, int> countOfReasonableOrdering, List<GroundedPredicate> fullState)
         {
+            startVertexForTrace = start;
             firstIt = true;
             domain = a.domain;
             problem = a.problem;
@@ -1072,6 +1081,11 @@ namespace Planning
         bool firstIt;
         public static bool thereIsPrivate;
 
+        public bool openIsEmpty()
+        {
+            return openLists[name].Count == 0 && myPreferableOpenList.Count == 0 && myOpenList.Count == 0;
+        }
+
         public List<string> BeginPreferablePlanning()
         {
             try
@@ -1090,12 +1104,14 @@ namespace Planning
                     {
                         publicVertex.fromOthers = true;
                         publicVertex.changingAgent = true;
+                        /*
                         MacroAction newAct = new MacroAction(publicVertex.publicParent, publicVertex);
                         if (!macroActions.Contains(newAct))
                         {
                             macroActions.Add(newAct);
                             //m_actions.Add(newAct);
                         }
+                        */
                         if (publicVertex.isPreferable)
                         {
                             myPreferableOpenList.Add(publicVertex);
@@ -1323,11 +1339,12 @@ namespace Planning
                             if (flag)
                             {
                                 flag = MapsPlanner.MAFSPublisher.CanPublish(this, courentVertex);
-                                //TODO: Deny the expantion of this state by the current Agent too.
-                                //(it will be redundent to expand this node if we don't send it because of the dependencies denial...)
+                                if (flag)
+                                {
+                                    MapsPlanner.tracesHandler.publishState(courentVertex, this);
+                                }
                             }
-
-                            if (!flag)
+                            else
                             {
                                 // not sending...
                                 Program.notSendedStates++;
@@ -1380,8 +1397,18 @@ namespace Planning
                             Program.countActions.Add(courentVertex.lplan.Count);
                             Program.actionSum += courentVertex.lplan.Count;
                             List<string> lplan = new List<string>();
+                            List<string> highLevelPlan = new List<string>();
                             foreach (Action act in allActions)
+                            {
                                 lplan.Add(act.Name);
+                                if (act.isPublic)
+                                {
+                                    highLevelPlan.Add(act.Name);
+                                }
+                            }
+                            MapsPlanner.highLevelPlan = highLevelPlan;
+                            MapsPlanner.tracesHandler.PublishGoalState(courentVertex, this);
+
                             return lplan;
                         }
                         else
@@ -2314,6 +2341,8 @@ namespace Planning
                             MapsPlanner.nextGlobalOpenList[index].Add(mapsVertex);
                             ++Program.messages;
                         }
+
+                        MapsPlanner.tracesHandler.RecieveState(mapsVertex, MapsPlanner.name2mapsAgent[index], mv, this);
                     }
                 }
             }

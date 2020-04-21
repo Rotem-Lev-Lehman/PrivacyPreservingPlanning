@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 
 using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
+using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
 
 namespace Planning
 {
@@ -31,6 +32,9 @@ namespace Planning
 
         public static IMAFSPublisher MAFSPublisher = null;
         public static IDependenciesSelectionPreperation dependenciesSelectionPreperation = null;
+        public static AHandleTraces tracesHandler = null;
+        public static List<string> highLevelPlan = null;
+        public static Dictionary<string, MapsAgent> name2mapsAgent = null;
 
         public MapsPlanner(List<Agent> agents,List<Domain> lDomains, List<Problem> lProblems)
         {
@@ -137,6 +141,7 @@ namespace Planning
             List<MapsVertex> lVertexes = new List<MapsVertex>();
             Dictionary<string, MapsAgent> MapsAgents = new Dictionary<string, MapsAgent>();
             this.MapsAgents = new List<MapsAgent>();
+            name2mapsAgent = new Dictionary<string, MapsAgent>();
             foreach (Agent a in agents)
             {
                 MapsVertex agentStartVertex = new MapsVertex(publicStartState, agPriv[a.name], indexStates, countOfLandmarks, countOfLandmarks.Keys.ToArray(), a.name, a.allGoals.Count, countOfReasenOrders);
@@ -146,6 +151,9 @@ namespace Planning
                 MapsAgents.Add(mAgent.name, mAgent);
                 this.MapsAgents.Add(mAgent);
                 lVertexes.Add(agentStartVertex);
+
+                mAgent.regularAgent = a;
+                name2mapsAgent.Add(mAgent.name, mAgent);
             }
             MapsVertex.UpDateAgents(MapsAgents);
             foreach (MapsVertex v in lVertexes)
@@ -247,8 +255,18 @@ namespace Planning
         public void PrepareDependenciesSelection(List<Agent> agents, AAdvancedProjectionActionPublisher publisher)
         {
             Console.WriteLine("Preparing dependencies selection");
-            dependenciesSelectionPreperation.PrepareSelection(publisher, this.MapsAgents, agents);
+            dependenciesSelectionPreperation.PrepareSelection(publisher, this.MapsAgents, agents, tracesHandler);
             Console.WriteLine("Done preparing dependencies selection");
+        }
+
+        public void PublishStartStatesForTraces()
+        {
+            int startStateID = TraceState.GetNextStateID();
+            Dictionary<string, int> iparents = new Dictionary<string, int>();
+            foreach (MapsAgent agent in MapsAgents)
+            {
+                tracesHandler.publishStartState(agent, agent.startVertexForTrace, startStateID, iparents);
+            }
         }
 
         public List<string> Plan()
@@ -298,6 +316,7 @@ namespace Planning
 
         public List<string> PreferablePlan_NotdirectMessage()
         {
+            highLevelPlan = new List<string>();
             //List<Thread> threads = new List<Thread>();
             //begin = DateTime.Now;
             //return null;
@@ -330,8 +349,6 @@ namespace Planning
                     nextGlobalOpenList.Add(agent.name, new HashSet<MapsVertex>());
                 }
                 iterationTimes = new List<double>();
-              
-                
                
                 foreach (MapsAgent agent in MapsAgents)
                 {
@@ -341,6 +358,8 @@ namespace Planning
                     if (lplan != null)
                         break;
                 }
+
+                
               /*  bool chacking = false;
                 foreach (MapsAgent agent in MapsAgents)
                 {
@@ -375,7 +394,25 @@ namespace Planning
                         agent.SetPublicOpenLists(nextGlobalOpenList);
                     }
                 }
+
+                //Check if all the agents haven't found any plan, and don't have any node in their open list.
+                //If so, end the program - we couldn't find any valid plan.
+                bool allDone = true;
+                foreach (MapsAgent agent in MapsAgents)
+                {
+                    if (!agent.openIsEmpty())
+                        allDone = false;
+                }
+
+                if (allDone)
+                {
+                    MapsPlanner.stop = true;
+                    break;
+                }
             }
+
+            tracesHandler.FinishPlanning(highLevelPlan);
+
             return lplan;
 
         }
