@@ -1331,10 +1331,17 @@ namespace Planning
                             //SendVertexToAll(courentVertex);
                             bool flag = true;
 
+                            /*
+                             * This is for sending only states that are different in their public reflection.
+                             * If there is a state that we already sent that has the same public reflection as this state,
+                             * don't send this state. We will remove this for now and return to it later if we see it is needed.
+                             * We can come to this later by saying as if this vertex has the "vertex.traceStateForPublicRevealedState"
+                             * of his father, this way it will make it's childern to put their iparent as their grandfather's iparent.
                             if (closeList.Contains(courentVertex, vc))
                             {
                                 flag = false;
                             }
+                            */
 
                             if (flag)
                             {

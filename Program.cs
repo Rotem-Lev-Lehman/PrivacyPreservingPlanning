@@ -1498,12 +1498,12 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
         {
             List<double> percentages = new List<double>();
-            /*
+            
             for (double i = 0; i <= 1; i += 0.05)
             {
                 percentages.Add(i);
             }
-            */
+            
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1687,8 +1687,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*/"elevators08"/*"elevators_debugging"*/ };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2123,7 +2123,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
-            /*
+            
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -2160,7 +2160,7 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
-            */
+            
             /*
             // how to use trace and json:
             Dictionary<int, string> vals = new Dictionary<int, string>();
@@ -2173,14 +2173,14 @@ namespace Planning
             Console.WriteLine("Json object:");
             Console.WriteLine(jsonTrace);
             */
-            
+            /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] { 0 });
             return dict;
-            
+            */
         }
     }
 }
