@@ -1351,11 +1351,14 @@ namespace Planning
                                     MapsPlanner.tracesHandler.publishState(courentVertex, this);
                                 }
                             }
-                            else
+                            
+                            if(!flag)
                             {
+                                courentVertex.agent2iparent = courentVertex.publicParent.agent2iparent;
+                                courentVertex.traceStateForPublicRevealedState = courentVertex.publicParent.traceStateForPublicRevealedState;
                                 // not sending...
                                 Program.notSendedStates++;
-                                notSended.Add(courentVertex);
+                                //notSended.Add(courentVertex);
                             }
 
                             if (flag && !MapsPlanner.directMessage)

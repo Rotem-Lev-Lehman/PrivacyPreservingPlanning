@@ -1498,12 +1498,10 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
         {
             List<double> percentages = new List<double>();
-            
             for (double i = 0; i <= 1; i += 0.05)
             {
                 percentages.Add(i);
             }
-            
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1688,7 +1686,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*/"elevators08"/*"elevators_debugging"*/ };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*/"blocksdebug" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
