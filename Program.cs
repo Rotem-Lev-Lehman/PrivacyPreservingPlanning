@@ -97,6 +97,8 @@ namespace Planning
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
 
+        public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout.
+
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
             dJoint = lDomains[0].Clone();
@@ -1292,7 +1294,7 @@ namespace Planning
 
                 t.Name = "ReadAgentFiles " + di.Name;
                 t.Start();
-                if (t.Join(5 * 60 * 1000))
+                if (t.Join(maxTimeInMinutes * 60 * 1000))
                 {
                 }
                 else
@@ -1300,6 +1302,7 @@ namespace Planning
                     t.Abort();
                     // Program.timeResults.WriteLine("*");
                     //Program.timeResults.Flush();
+                    End = DateTime.Now; //write the total time it took until the failure...
                     Thread.Sleep(1000);
                     //writing an empty plan file
                     if (!creatingTracesAfterSolutionWasFound)

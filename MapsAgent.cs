@@ -1467,14 +1467,18 @@ namespace Planning
                 }
                 return null;
             }
+            catch(System.Threading.ThreadAbortException taex)
+            {
+                //Don't print stack trace, because it just makes it look bad...
+                Console.WriteLine(); //Go one line down so the heuristics will not disturb the "failed" printout
+                return null;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return null;
             }
-
         }
-        
 
         public List<string> BeginPreferableFFPlanning()
         {
