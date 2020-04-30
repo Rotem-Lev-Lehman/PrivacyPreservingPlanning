@@ -1292,7 +1292,7 @@ namespace Planning
 
                 t.Name = "ReadAgentFiles " + di.Name;
                 t.Start();
-                if (t.Join(10 * 60 * 1000))
+                if (t.Join(5 * 60 * 1000))
                 {
                 }
                 else
