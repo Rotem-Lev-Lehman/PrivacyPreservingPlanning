@@ -24,8 +24,22 @@ namespace Planning
             if (Program.internalPlaner == Program.PlanerType.ff_directPlan || Program.internalPlaner == Program.PlanerType.ff_tryCoordinate)
                 return "";
             else
+            {
+                if (Constants.Count == 0)
+                    return GetStringNoConstants();
                 return base.GetString();
+            }
+                
         }
+
+        private string GetStringNoConstants()
+        {
+            string s = "(" + Name + ")";
+            if (Negation)
+                s = "(not " + s + ")";
+            return s;
+        }
+
         public void AddFunction(FunctionConstant f)
         {
             AddConstant(f);

@@ -392,6 +392,8 @@ namespace Planning
             sw.WriteLine();
             WritePredicates(sw);
             sw.WriteLine();
+            WriteFunctions(sw);
+            sw.WriteLine();
             WriteActions(sw, false);
             sw.WriteLine(")");
             sw.Flush();

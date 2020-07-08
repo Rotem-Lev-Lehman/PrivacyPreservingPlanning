@@ -126,6 +126,9 @@
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\PublishEverything.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\PublishOnlyRevealedDependencies.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\TracesHandler.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\Dependency.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\OptimalDependenciesPlanner.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\PddlBuilderForOptimalDependenciesPlanning.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\LeakageTrace.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\TraceOperator.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\TraceState.cs" />

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using Newtonsoft.Json;
 using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
+using Planning.AdvandcedProjectionActionSelection.OptimalPlanner;
 
 
 namespace Planning
@@ -27,10 +28,11 @@ namespace Planning
         static string pdbPath;
         static string domainFolderPath;
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
-        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs };
+        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner};
         
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         static public bool testingProjectionWithLessDependenciesRevealed = true;
 
         static public bool directMessage = false;
@@ -465,7 +467,13 @@ namespace Planning
             }
             List<string> lPlan = null;
 
-            if (highLevelPlanerType == HighLevelPlanerType.Projection)
+            if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+            {
+                Console.WriteLine("Planning");
+                OptimalDependenciesPlanner optimalDependenciesPlanner = new OptimalDependenciesPlanner();
+                lPlan = optimalDependenciesPlanner.Plan(agents);
+            }
+            else if (highLevelPlanerType == HighLevelPlanerType.Projection)
             {
                 Console.WriteLine("Planning");
                 bool stop = false;
@@ -1501,10 +1509,10 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
         {
             List<double> percentages = new List<double>();
-            for (double i = 0; i <= 1; i += 0.05)
+            /*for (double i = 0; i <= 1; i += 0.05)
             {
                 percentages.Add(i);
-            }
+            }*/
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1688,8 +1696,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*/"blocksdebug" };
+            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example"/*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*/ };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1869,7 +1877,7 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                bool runningMAFSExperiment = true;
+                bool runningMAFSExperiment = false;
                 if (runningMAFSExperiment)
                 {
                     RunMAFSProjectionExperiment(selectorsAndDomains);
@@ -2124,7 +2132,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
-            
+            /*
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -2161,27 +2169,15 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
-            
-            /*
-            // how to use trace and json:
-            Dictionary<int, string> vals = new Dictionary<int, string>();
-            vals.Add(0, "mission-complete()");
-            vals.Add(1, "(N)mission-complete()");
-            AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace trace = new AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace();
-            trace.variables.Add(new AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.TraceVariable(vals));
-            string jsonTrace = JsonConvert.SerializeObject(trace);
-
-            Console.WriteLine("Json object:");
-            Console.WriteLine(jsonTrace);
             */
-            /*
+            
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] { 0 });
             return dict;
-            */
+            
         }
     }
 }

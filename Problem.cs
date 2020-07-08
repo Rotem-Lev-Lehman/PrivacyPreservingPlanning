@@ -985,6 +985,8 @@ namespace Planning
                 if (!gp.Negation)
                 {
                     bool bNonPrivatePredicate = false;
+                    if (gp is GroundedFunctionPredicate)
+                        bNonPrivatePredicate = true;
                     foreach (Predicate p in Domain.Predicates)
                         if (p.Name == gp.Name)
                             bNonPrivatePredicate = true;
@@ -996,11 +998,22 @@ namespace Planning
 
             sw.WriteLine("(:goal " + Goal + ")");
 
+            WriteMetrics(sw);
+
             sw.WriteLine(")");
             sw.Flush();
             ms.Flush();
             return new MemoryStream(ms.ToArray());
         }
+
+        private void WriteMetrics(StreamWriter sw)
+        {
+            if (MetricStatement != null)
+            {
+                sw.WriteLine(MetricStatement);
+            }
+        }
+
         public void RemoveUniversalQuantifiers()
         {
             Goal = Goal.RemoveUniversalQuantifiers(Domain.Constants, null, null);

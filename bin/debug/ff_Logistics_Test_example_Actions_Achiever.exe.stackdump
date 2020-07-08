@@ -1,0 +1,11 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=0040B972
+eax=00000000 ebx=00000022 ecx=00000000 edx=00000000 esi=00000002 edi=0000000B
+ebp=039BA8F8 esp=039BA8B0 program=C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\bin\Debug\ff_Logistics_Test_example_Actions_Achiever.exe, pid 24216, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+039BA8F8  0040B972 (2008F2C0, 039BAB98, 039BA928, 0040A469)
+039BA928  0040BD7C (00423910, 00989680, 004230C0, 00000098)
+039BABD8  00401B88 (00000001, 039BABFC, 200282D0, 61007F58)
+039BACD8  61007FB5 (00000000, 039BCD64, 61007120, 00000000)
+End of stack trace
