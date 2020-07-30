@@ -104,14 +104,17 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             {
                 foreach(Action action in agent.m_actions)
                 {
-                    CompoundFormula editedEffects = new CompoundFormula("and");
+                    List<Dependency> dependenciesForAction = new List<Dependency>();
+                    List<Predicate> regularEffects = new List<Predicate>();
                     
                     foreach(Predicate p in action.HashEffects)
                     {
                         Dependency dependency = new Dependency(action, p);
                         if (mapDependencyToConstant.ContainsKey(dependency))
                         {
-                            //Then we must edit this effect to be an effect with the "when" attribute
+                            //Then this is a dependency dependent action, which means we need to duplicate it several times so that we have the action with the dependency revealed and without it
+                            dependenciesForAction.Add(dependency);
+                            /*
                             Constant d = mapDependencyToConstant[dependency];
                             GroundedPredicate revealedD = new GroundedPredicate("revealed");
                             revealedD.AddConstant(d);
@@ -121,17 +124,55 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                             cfCondition.AddOperand(p); //result = the predicate we want to reveal.
                             
                             editedEffects.AddOperand(cfCondition);
+                            */
                         }
                         else
                         {
-                            editedEffects.AddOperand(p); //it is not a dependency, so just reveal it regularly...
+                            regularEffects.Add(p);
+                            //editedEffects.AddOperand(p); //it is not a dependency, so just reveal it regularly...
                         }
                     }
-                    editedEffects.AddOperand(GetIncreaseTotalCostFunction(totalCostFunctionPredicate, regularActionCost));
 
-                    Action editedAction = action.Clone();
-                    editedAction.SetEffects(editedEffects);
-                    allActions.Add(editedAction);
+                    List<List<Dependency>> allPermutations = GetAllCombos(dependenciesForAction);
+                    foreach(List<Dependency> currentPermutation in allPermutations)
+                    {
+                        //foreach permutation, create a corresponding action
+                        string name = action.Name;
+                        CompoundFormula editedEffects = new CompoundFormula("and");
+                        CompoundFormula editedPreconditions = new CompoundFormula("and");
+                        foreach(Predicate p in action.HashPrecondition)
+                        {
+                            editedPreconditions.AddOperand(p);
+                        }
+
+                        foreach(Predicate p in regularEffects)
+                        {
+                            editedEffects.AddOperand(p);
+                        }
+
+                        if(currentPermutation.Count > 0)
+                        {
+                            name += "_with_dependencies";
+                        }
+                        foreach(Dependency dependency in currentPermutation)
+                        {
+                            Constant d = mapDependencyToConstant[dependency];
+                            GroundedPredicate revealedD = new GroundedPredicate("revealed");
+                            revealedD.AddConstant(d);
+
+                            name += "_" + d.Name;
+                            editedPreconditions.AddOperand(revealedD);
+                            editedEffects.AddOperand(dependency.predicate);
+                        }
+
+                        editedEffects.AddOperand(GetIncreaseTotalCostFunction(totalCostFunctionPredicate, regularActionCost));
+
+                        Action editedAction = action.Clone();
+                        editedAction.Name = name;
+                        editedAction.Preconditions = editedPreconditions;
+                        editedAction.SetEffects(editedEffects);
+                        allActions.Add(editedAction);
+                    }
                 }
             }
 
@@ -237,6 +278,23 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             joinedDomain = dJoined;
             joinedProblem = pJoined;
             joinedStartState = publicStartState;
+        }
+
+        public static List<List<T>> GetAllCombos<T>(List<T> list)
+        {
+            int comboCount = (int)Math.Pow(2, list.Count) - 1;
+            List<List<T>> result = new List<List<T>>();
+            for (int i = 0; i < comboCount + 1; i++)
+            {
+                // make each combo here
+                result.Add(new List<T>());
+                for (int j = 0; j < list.Count; j++)
+                {
+                    if ((i >> j) % 2 != 0)
+                        result.Last().Add(list[j]);
+                }
+            }
+            return result;
         }
 
         private GroundedFunctionPredicate GetInitTotalCostToZeroPredicate(GroundedFunctionPredicate totalCostFunctionPredicate)

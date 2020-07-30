@@ -13,9 +13,11 @@ namespace Planning
     {
 
         public static string ffPath = @"ff.exe";
-        public static string fdPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
+        public static string fdPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\src\garbage\";
         public static string cygwinPath = @"C:\cygwin\";
         public static string fdOutputPath = @"C:\cygwin\home\shlomi\";
+
+        public static TimeSpan PlannerTimeout = new TimeSpan(0, 5, 0);
         public ExternalPlanners()
         {
             // Console.WriteLine(" * ");
@@ -23,7 +25,7 @@ namespace Planning
 
         public List<string> Plan(bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
         {
-            bUseFD = false;
+            //bUseFD = false;
             //Program.KillPlanners();
             List<string> lPlan = null;
 
@@ -38,7 +40,11 @@ namespace Planning
             if (bUseFF)
                 pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
             if (bUseFD)
-                pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+            {
+                //pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                pFD = RunFDPlannerWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+            }
+                
             bUnsolvable = false;
             bool bFFDone = false, bFDDone = false;
 
@@ -351,6 +357,120 @@ namespace Planning
             // string sr = pFD.StandardOutput.ReadLine();
             return pFD;
         }
+
+        public Process RunFDPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem)
+        {
+
+            File.Delete(fdPath + "plan.txt");
+            File.Delete(fdPath + "mipsSolution.soln");
+            File.Delete(fdPath + "output.sas");
+            File.Delete(fdPath + "output");
+            File.Delete(fdPath + "sas_plan");
+
+            msProblem.Position = 0;
+            msDomain.Position = 0;
+
+            StreamWriter swDomainFile = new StreamWriter(fdPath + "dFD.pddl");
+            StreamReader srDomain = new StreamReader(msDomain);
+            swDomainFile.Write(srDomain.ReadToEnd());
+            swDomainFile.Close();
+
+            StreamWriter swProblemFile = new StreamWriter(fdPath + "pFD.pddl");
+            StreamReader srProblem = new StreamReader(msProblem);
+            swProblemFile.Write(srProblem.ReadToEnd());
+            swProblemFile.Close();
+
+
+            Process pFD = new Process();
+            //MFFProcesses[Thread.CurrentThread] = pFD;
+            pFD.StartInfo.WorkingDirectory = fdPath;
+            //this.pythonPath = @"C:\Users\OWNER\AppData\Local\Programs\Python\Python37-32\python.exe";
+            //this.FDpath = @"D:\cygwin\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
+            pFD.StartInfo.FileName = @"C:\Users\User\AppData\Local\Programs\Python\Python38-32\python.exe";
+
+            pFD.StartInfo.Arguments += @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
+           
+
+            pFD.StartInfo.Arguments += " dSupervisor.pddl pSupervisor.pddl ";
+            
+            pFD.StartInfo.Arguments += " --search astar(lmcut())";
+            pFD.StartInfo.UseShellExecute = false;
+            pFD.StartInfo.RedirectStandardOutput = true;
+
+
+            pFD.StartInfo.RedirectStandardInput = true;
+            FDOutput = "";
+            pFD.OutputDataReceived += new DataReceivedEventHandler(FDOutputHandler);
+
+            FDProcesses = new HashSet<Process>();
+            pFD.Start();
+            pFD.BeginOutputReadLine();
+
+
+            MemoryStream msModels = new MemoryStream();
+            msModels.Position = 0;
+            BinaryReader srModels = new BinaryReader(msModels);
+
+            while (srModels.PeekChar() >= 0)
+                pFD.StandardInput.BaseStream.WriteByte(srModels.ReadByte());
+
+            pFD.StandardInput.Close();
+            return pFD;
+
+            /*
+            if (!pFD.WaitForExit((int)PlannerTimeout.TotalMilliseconds))//5 minutes max
+            {
+                pFD.Kill();
+                return null;
+            }
+            pFD.WaitForExit();
+            List<string> lPlan = null;
+            if (FDOutput.Contains("goal can be simplified to TRUE"))
+            {
+                return new List<string>();
+            }
+            if (FDOutput.Contains("Solution found"))
+            {
+                lPlan = readFDplan(sPath);
+            }
+            else
+            {
+                lPlan = null;
+            }
+            //MFFProcesses[Thread.CurrentThread] = null;
+            return lPlan;
+            */
+
+        }
+
+        private List<string> readFDplan(string sPath)
+        {
+            List<string> lPlan = new List<string>();
+            if (File.Exists(sPath + "sas_plan"))
+            {
+                StreamReader sr = new StreamReader(sPath + "sas_plan");
+                while (!sr.EndOfStream)
+                {
+                    string sLine = sr.ReadLine().Trim().ToLower();
+                    sLine = sLine.Replace("(", "");
+                    sLine = sLine.Replace(")", "");
+                    if (sLine.Count() > 0 && !sLine.StartsWith(";"))
+                    {
+                        int iStart = sLine.IndexOf("(");
+                        sLine = sLine.Substring(iStart + 1).Trim();
+                        lPlan.Add(sLine);
+                    }
+                    //else if (sLine.Count() > 0 && sLine.StartsWith(";"))
+                    //{
+                    //	lPlan.Add(sLine);
+                    //}
+                }
+                sr.Close();
+            }
+            return lPlan;
+        }
+
+
         public Process RunFD(string name, string sFDPath, MemoryStream msDomain, MemoryStream msProblem)
         {
             try
@@ -783,7 +903,6 @@ namespace Planning
                 FDOutput += outLine.Data + Environment.NewLine;
             }
         }
-
 
 
         public static List<Process> GetPlanningProcesses()

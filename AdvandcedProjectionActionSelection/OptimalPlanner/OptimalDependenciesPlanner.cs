@@ -32,7 +32,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Console.WriteLine("Sending the pddl files to the external planners");
             bool ans;
             ExternalPlanners externalPlanners = new ExternalPlanners();
-            List<string> plan = externalPlanners.Plan(true, true, pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), null, null, 10 * 60000, out ans);
+            List<string> plan = externalPlanners.Plan(false, true, pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), null, null, 10 * 60000, out ans);
 
             Console.WriteLine("Finished planning");
             return plan;
