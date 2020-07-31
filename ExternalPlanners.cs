@@ -71,7 +71,7 @@ namespace Planning
                 {
                     Console.WriteLine("Plan found by FD");
                     Thread.Sleep(100);
-                    lPlan = ReadPlan(fdOutputPath);
+                    lPlan = ReadPlan(fdPath);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                 }
@@ -386,14 +386,14 @@ namespace Planning
             pFD.StartInfo.WorkingDirectory = fdPath;
             //this.pythonPath = @"C:\Users\OWNER\AppData\Local\Programs\Python\Python37-32\python.exe";
             //this.FDpath = @"D:\cygwin\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
-            pFD.StartInfo.FileName = @"C:\Users\User\AppData\Local\Programs\Python\Python38-32\python.exe";
+            pFD.StartInfo.FileName = @"C:\cygwin64\bin\python2.7.exe";
 
             pFD.StartInfo.Arguments += @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
            
 
-            pFD.StartInfo.Arguments += " dSupervisor.pddl pSupervisor.pddl ";
+            pFD.StartInfo.Arguments += " dFD.pddl pFD.pddl ";
             
-            pFD.StartInfo.Arguments += " --search astar(lmcut())";
+            pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff()], preferred =[ff()])\"";
             pFD.StartInfo.UseShellExecute = false;
             pFD.StartInfo.RedirectStandardOutput = true;
 
