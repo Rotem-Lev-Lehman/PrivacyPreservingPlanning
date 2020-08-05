@@ -182,6 +182,23 @@ namespace Planning
                 pdbPath += "/" + dir.Name + ".pdb";
                 List<Agent> agents = null;
                 List<string> lPlan = SolveFactored(lDomains, lProblems, ref agents, dJoint);
+
+                if(highLevelPlanerType is HighLevelPlanerType.OptimalDependenciesPlanner)
+                {
+                    if(lPlan != null)
+                    {
+                        amountOfDependenciesUsed = CalculateDependenciesNum(lPlan);
+                        WritePlanToFile(lPlan, sOutputFile);
+                        WriteResults(GetWantedName(dir.FullName), " success");
+                    }
+                    else
+                    {
+                        WritePlanToFile(new List<string>(), sOutputFile);
+                        WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                    }
+                    Console.WriteLine();
+                    return;
+                }
                 if (creatingTracesAfterSolutionWasFound)
                 {
                     return; //don't need to write results...
@@ -221,6 +238,18 @@ namespace Planning
             }
         }
 
+        private static int CalculateDependenciesNum(List<string> lPlan)
+        {
+            int dependenciesAmount = 0;
+            foreach(string action in lPlan)
+            {
+                if (action.Equals(PddlBuilderForOptimalDependenciesPlanning.resetDependenciesActionName))
+                {
+                    dependenciesAmount++;
+                }
+            }
+            return dependenciesAmount;
+        }
 
         public static string GetWantedName(string path)
         {
@@ -1185,7 +1214,11 @@ namespace Planning
             {
                 for (int i = 0; i < lPlan.Count; i++)
                 {
-                    string sOutputName = Domain.MapGroundedActionNamesToOutputNames[lPlan[i]];
+                    string sOutputName;
+                    if (Domain.MapGroundedActionNamesToOutputNames.Keys.Contains(lPlan[i]))
+                        sOutputName = Domain.MapGroundedActionNamesToOutputNames[lPlan[i]];
+                    else
+                        sOutputName = lPlan[i];
                     swOutput.WriteLine(i + " : " + sOutputName);
                     Console.WriteLine(i + " : " + sOutputName);
                 }
@@ -1506,13 +1539,16 @@ namespace Planning
             return false;
         }
 
-        static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath)
+        static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment)
         {
             List<double> percentages = new List<double>();
-            /*for (double i = 0; i <= 1; i += 0.05)
+            if (!regularExperiment)
             {
-                percentages.Add(i);
-            }*/
+                for (double i = 0; i <= 1; i += 0.05)
+                {
+                    percentages.Add(i);
+                }
+            }
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1733,10 +1769,53 @@ namespace Planning
             //now run the non collaborations:
             collaborationUsed = false;
             dependencyUsed = true;
-            RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesNonCollaborativePath, "Non_Collaborative", "Dependencies");
+            RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesNonCollaborativePath, "Non_Collaborative", "Dependencies", false);
         }
 
-        static void RunSpecificExperiment(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString)
+        static void RunRegularExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType)
+        {
+            int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
+            int[] domainIndexesToUse = selectorsAndDomains["domains"];
+
+            string[] allPossibleDependenciesSelectors = { "Optimal" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example"/*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*/ };
+
+            string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
+            Console.WriteLine("Selectors that we will run:");
+            for (int i = 0; i < selectorIndexesToUse.Length; i++)
+            {
+                dependenciesSelectors[i] = allPossibleDependenciesSelectors[selectorIndexesToUse[i]];
+                Console.WriteLine(dependenciesSelectors[i]);
+            }
+
+            string[] dependenciesDomains = new string[domainIndexesToUse.Length];
+            Console.WriteLine("Domains that we will run the selectors on:");
+            for (int i = 0; i < domainIndexesToUse.Length; i++)
+            {
+                dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
+                Console.WriteLine(dependenciesDomains[i]);
+            }
+            Console.WriteLine("Lets start running them :)");
+
+            string experimentPath = baseFolderName + @"\Experiment\" + plannerType + @"\";
+
+            //goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
+            //System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
+
+            string dependenciesPath = experimentPath + @"Dependecies\";
+
+            //first run the collaborations:
+            //collaborationUsed = true;
+            //RunSpecificExperiment(collaborationSelectors, collaborationDomains, collaborationPath, "Collaborative");
+
+            //now run the non collaborations:
+            collaborationUsed = false;
+            dependencyUsed = true;
+            RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesPath, "Non_Collaborative", "Dependencies", true);
+        }
+
+        static void RunSpecificExperiment(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString, bool regularExperiment)
         {
             string domainsPath = baseFolderName + @"\factored\";
             string resultName = @"\experiment_results";
@@ -1787,7 +1866,7 @@ namespace Planning
                     string recordingFolder = currPath + recordingsDirectoryName;
                     System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
 
-                    Experiment(problemsPath, resultsPath, recordingFolder);
+                    Experiment(problemsPath, resultsPath, recordingFolder, regularExperiment);
                     fixExperimentsResults(resultsPath, outputFilePath);
                 }
             }
@@ -1859,6 +1938,11 @@ namespace Planning
             RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection");
         }
 
+        static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies");
+        }
+
         static StreamWriter swResults;
 
         static void Main(string[] args)
@@ -1877,36 +1961,44 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                bool runningMAFSExperiment = false;
-                if (runningMAFSExperiment)
+                bool runningOptimalDependenciesSolver = true;
+                if (runningOptimalDependenciesSolver)
                 {
-                    RunMAFSProjectionExperiment(selectorsAndDomains);
+                    RunOptimalDependenciesSolverExperiment(selectorsAndDomains);
                 }
                 else
                 {
-                    RunProjectionOnlyExperiment(selectorsAndDomains);
+                    bool runningMAFSExperiment = false;
+                    if (runningMAFSExperiment)
+                    {
+                        RunMAFSProjectionExperiment(selectorsAndDomains);
+                    }
+                    else
+                    {
+                        RunProjectionOnlyExperiment(selectorsAndDomains);
 
-                    /*
-                    Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                    //Dictionary<string, string> first = GetFirstSolvedPercentageForEachProblem(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper\Actions_Achiever\blocksworld\Experiment_Output_File\output.csv");
-                    RunAndCreateTracesForeachProblemsMinAndMaxSolved(selectorsAndDomains);
-                    */
-                    /*
-                    //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
-                    Console.WriteLine("*****************************************************************************");
-                    Console.WriteLine("*****************************************************************************");
-                    Console.WriteLine("Done");
-                    Console.WriteLine("Max amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.maxAmountOfDependenciesToReveal);
-                    Console.WriteLine("Min amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.minAmountOfDependenciesToReveal);
-                    Console.WriteLine("*****************************************************************************");
-                    Console.WriteLine("*****************************************************************************");
-                    Console.WriteLine("Press any key to finish the program...");
-                    Console.ReadLine();
-                    */
-                    /*
-                    string blocksPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored\new_domain_blocks";
-                    CreateMABlocksWorld(blocksPath, 2, 3, 2, 3, 2, 3, 1);
-                    */
+                        /*
+                        Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
+                        //Dictionary<string, string> first = GetFirstSolvedPercentageForEachProblem(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\results_paper\Actions_Achiever\blocksworld\Experiment_Output_File\output.csv");
+                        RunAndCreateTracesForeachProblemsMinAndMaxSolved(selectorsAndDomains);
+                        */
+                        /*
+                        //SummarizeHighLevelPlanWithTheirPublishedEffects(@"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\Experiment\Projection_Only\Dependecies\No_Collaboration\Random\logistics00\Recordings\percentage_1\probLOGISTICS-10-0\Round_0");
+                        Console.WriteLine("*****************************************************************************");
+                        Console.WriteLine("*****************************************************************************");
+                        Console.WriteLine("Done");
+                        Console.WriteLine("Max amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.maxAmountOfDependenciesToReveal);
+                        Console.WriteLine("Min amount of dependencies to reveal is: " + AdvancedProjectionDependeciesPublisher.minAmountOfDependenciesToReveal);
+                        Console.WriteLine("*****************************************************************************");
+                        Console.WriteLine("*****************************************************************************");
+                        Console.WriteLine("Press any key to finish the program...");
+                        Console.ReadLine();
+                        */
+                        /*
+                        string blocksPath = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\factored\new_domain_blocks";
+                        CreateMABlocksWorld(blocksPath, 2, 3, 2, 3, 2, 3, 1);
+                        */
+                    }
                 }
             }
             else
@@ -2175,7 +2267,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 4 });
             return dict;
             
         }

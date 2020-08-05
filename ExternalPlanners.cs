@@ -358,6 +358,18 @@ namespace Planning
             return pFD;
         }
 
+        /*public Process RunFDUsingUbuntoSubSystemForWindows(MemoryStream msDomain, MemoryStream msProblem)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C copy /b Image1.jpg + Archive.rar Image2.jpg";
+            todo change the arguments to be the command of running bash command of the ubunto
+            process.StartInfo = startInfo;
+            process.Start();
+        }*/
+
         public Process RunFDPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem)
         {
 
@@ -392,8 +404,27 @@ namespace Planning
            
 
             pFD.StartInfo.Arguments += " dFD.pddl pFD.pddl ";
-            
-            pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff()], preferred =[ff()])\"";
+
+            //pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff()], preferred =[ff()])\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hlm,hff=lm_ff_syn(lm_rhw(reasonable_orders=true,lm_cost_type=ONE,cost_type=ONE))\" " +
+            //                        " --search \"lazy_greedy([hff,hlm],preferred=[hff,hlm],cost_type=ONE)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hdiv_pot=diverse_potentials(num_samples=1000, max_num_heuristics=infinity, max_potential=1e8, lpsolver=CPLEX, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
+            //    " --search \"astar(hdiv_pot)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hzo_pdb=zopdbs(patterns=systematic(1), transform=no_transform(), cache_estimates=true)\"" +
+            //    " --search \"astar(hzo_pdb)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+            //    " --search \"astar(hipdb)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hc=cegar(subtasks=[landmarks(),goals()], max_states=infinity, max_transitions=1M, max_time=infinity, pick=MAX_REFINED, use_general_costs=true, debug=false, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
+            //    " --search \"astar(hc)\"";
+
+
+            //pFD.StartInfo.Arguments += " --search \"lazy_wastar(evals, preferred=[], reopen_closed=true, boost=1000, w=1, randomize_successors=false, preferred_successors_first=false, random_seed=-1, cost_type=NORMAL, bound=infinity, max_time=infinity, verbosity=normal)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+            //      " --search \"lazy_wastar(hipdb, w=2)\"";
+            pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
+            //pFD.StartInfo.Arguments += " --search \"astar(ff())\"";
+
+
             pFD.StartInfo.UseShellExecute = false;
             pFD.StartInfo.RedirectStandardOutput = true;
 
