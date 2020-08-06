@@ -175,7 +175,7 @@ namespace Planning
             return dependenciesAtStartState;
         }
 
-        public void SetPublicOpenLists(Dictionary<string,HashSet<MapsVertex>> newGlobalOpenList)
+        public void SetPublicOpenLists(Dictionary<string, HashSet<MapsVertex>> newGlobalOpenList)
         {
             openLists = newGlobalOpenList;
         }
@@ -878,7 +878,7 @@ namespace Planning
         VertexComparer vc = new VertexComparer();
         HashSet<MapsVertex> notSended = new HashSet<MapsVertex>();
         HashSet<MacroAction> macroActions = new HashSet<MacroAction>();
-       // HashSet<MacroAction> localMacro = new HashSet<MacroAction>();
+        // HashSet<MacroAction> localMacro = new HashSet<MacroAction>();
         public List<string> BeginPlanning()
         {
             try
@@ -1073,7 +1073,7 @@ namespace Planning
         HashSet<MapsVertex> myPreferableOpenList = null;
         public int GetCountOfPreferableList()
         {
-           return  myPreferableOpenList.Count;
+            return myPreferableOpenList.Count;
         }
         int PreferableCounter = 1;
 
@@ -1090,7 +1090,7 @@ namespace Planning
         {
             try
             {
-                
+
                 courentVertex = null;
                 foreach (MapsVertex publicVertex in openLists[name])
                 {
@@ -1179,7 +1179,7 @@ namespace Planning
                     }
                 }
 
-               
+
                 int old_h = 0;
                 PreferableCounter = 1000;
                 if (myOpenList.Count > 0 || myPreferableOpenList.Count > 0)
@@ -1187,10 +1187,10 @@ namespace Planning
                     if ((myOpenList.Count == 0 || PreferableCounter > 0) && myPreferableOpenList.Count > 0)
                     {
                         courentVertex = FindMinByLandmak(myPreferableOpenList);
-                       // old_h = courentVertex.ComputeFF_h();
+                        // old_h = courentVertex.ComputeFF_h();
                         if (Program.projectionVersion == Program.ProjectionVersion.fullGlobal)
                         {
-                              //  courentVertex.GetProjection_h();
+                            //  courentVertex.GetProjection_h();
                         }
 
                         if (Program.projectionVersion == Program.ProjectionVersion.ProjectionFF)
@@ -1202,15 +1202,15 @@ namespace Planning
                             }
                             else
                             {
-                               // if(thereIsPrivate)
+                                // if(thereIsPrivate)
                                 {
-                                    courentVertex.GetProjection_h();                                  
+                                    courentVertex.GetProjection_h();
                                 }
                             }
-                         //   if (courentVertex.h != old_h)
-                         //       Console.WriteLine("ddd");
+                            //   if (courentVertex.h != old_h)
+                            //       Console.WriteLine("ddd");
                         }
-                        
+
                         if (Program.projectionVersion == Program.ProjectionVersion.Global)
                         {
                             PreferableCounter = 10000;
@@ -1227,15 +1227,15 @@ namespace Planning
                         {
                             PreferableCounter += 1000;
                             minh = courentVertex.h;
-                           // if (minh==0)
-                                Console.Write(minh + "  ");
+                            // if (minh==0)
+                            Console.Write(minh + "  ");
                         }
                         PreferableCounter--;
                     }
                     else
                     {
                         // if (Program.projectionVersion != Program.ProjectionVersion.ProjectionFF)
-                        if(true) // global prefer operator
+                        if (true) // global prefer operator
                         {
                             if (Program.projectionVersion == Program.ProjectionVersion.Global)
                             {
@@ -1272,16 +1272,16 @@ namespace Planning
                         if (courentVertex.h < minh)
                         {
                             minh = courentVertex.h;
-                          //  if (minh == 0)
-                                Console.Write(minh + "  ");
+                            //  if (minh == 0)
+                            Console.Write(minh + "  ");
                         }
                         PreferableCounter++;
                     }
 
-                   /* if (courentVertex.h >= int.MaxValue / 2)
-                    {
-                        return null;
-                    }*/
+                    /* if (courentVertex.h >= int.MaxValue / 2)
+                     {
+                         return null;
+                     }*/
 
 
                     //if (courentVertex.h < old_h-1&& old_h!=1000)
@@ -1351,14 +1351,18 @@ namespace Planning
                                     MapsPlanner.tracesHandler.publishState(courentVertex, this);
                                 }
                             }
-                            
-                            if(!flag)
+
+                            if (!flag)
                             {
                                 courentVertex.agent2iparent = courentVertex.publicParent.agent2iparent;
                                 courentVertex.traceStateForPublicRevealedState = courentVertex.publicParent.traceStateForPublicRevealedState;
                                 // not sending...
                                 Program.notSendedStates++;
                                 //notSended.Add(courentVertex);
+                                
+                                //Skip the expansion of this vertex:
+                                closeList.Add(courentVertex);
+                                goto done_outer_if;
                             }
 
                             if (flag && !MapsPlanner.directMessage)
@@ -1381,7 +1385,7 @@ namespace Planning
                         //courentVertex.GetProjection_h();
                         //Console.Write("dd");
                     }
-                       if (courentVertex.h == 0)
+                    if (courentVertex.h == 0)
                     {
                         if (courentVertex.IsGoal(allGoal))
                         {
@@ -1427,8 +1431,8 @@ namespace Planning
                         }
                     }
 
-                  //  List<Action> addMacroActions = new List<Action>();
-                   // bool chack = false;
+                    //  List<Action> addMacroActions = new List<Action>();
+                    // bool chack = false;
                     foreach (Action action in m_actions)
                     {
                         MapsVertex newVertex = courentVertex.Aplly(action);
@@ -1444,7 +1448,7 @@ namespace Planning
                             {
                                 if (newVertex.isPreferable)// && newVertex.relaxPlan.Count>0)
                                 {
-                                   // newVertex.GetProjection_h();
+                                    // newVertex.GetProjection_h();
                                     myPreferableOpenList.Add(newVertex);
                                 }
                                 else
@@ -1454,11 +1458,14 @@ namespace Planning
                             }
                         }
                     }
-                   // if (!chack)
+                    // if (!chack)
                     //    Console.Write("DD");
-                   // m_actions.AddRange(addMacroActions);
+                    // m_actions.AddRange(addMacroActions);
                 }
-                
+
+                //This is for skipping the expansion of states that shouldn't be expanded or revieled to the other agents:
+                done_outer_if:
+
                 if (myPreferableOpenList.Count > 0)
                     MapsAgent.preferFlags[name] = true;
                 else
@@ -1467,7 +1474,7 @@ namespace Planning
                 }
                 return null;
             }
-            catch(System.Threading.ThreadAbortException taex)
+            catch (System.Threading.ThreadAbortException taex)
             {
                 //Don't print stack trace, because it just makes it look bad...
                 Console.WriteLine(); //Go one line down so the heuristics will not disturb the "failed" printout
@@ -2282,7 +2289,7 @@ namespace Planning
                         ++Program.sendedStateCounter;
                         MapsVertex mapsVertex = new MapsVertex(mv);
                         mapsVertex.fullCopy(mv);
-                       
+
                         if (Program.projectionVersion == Program.ProjectionVersion.Global || Program.projectionVersion == Program.ProjectionVersion.GlobalV2)
                         {
                             if (mv.isPreferable && (mv.relaxPlan.Count != 0 || mv.afterMe == null || !mv.afterMe.Equals(index)))
@@ -2327,11 +2334,11 @@ namespace Planning
 
                         if (Program.projectionVersion == Program.ProjectionVersion.Global || Program.projectionVersion == Program.ProjectionVersion.GlobalV2)
                         {
-                            if (mv.isPreferable && (mv.relaxPlan.Count!=0|| mv.afterMe == null || !mv.afterMe.Equals(index)))
+                            if (mv.isPreferable && (mv.relaxPlan.Count != 0 || mv.afterMe == null || !mv.afterMe.Equals(index)))
                                 mapsVertex.isPreferable = false;
                             else
                                 if (mv.isPreferable)
-                                    MapsAgent.preferFlags[index] = true;
+                                MapsAgent.preferFlags[index] = true;
                         }
                         else
                         {
@@ -2341,7 +2348,7 @@ namespace Planning
                                     mapsVertex.isPreferable = false;
                                 else
                                     if (mv.isPreferable)
-                                        MapsAgent.preferFlags[index] = true;
+                                    MapsAgent.preferFlags[index] = true;
                             }
                             else
                             {
@@ -2452,9 +2459,9 @@ namespace Planning
             foreach (MapsVertex v in lvertex)
             {
                 int res = MapsVertex.ComparerByLandmark(v, minVertex);
-               // int res = 0;
-               // if (v.h < minVertex.h)
-               //     res = -1;
+                // int res = 0;
+                // if (v.h < minVertex.h)
+                //     res = -1;
                 if (res == -1)
                 {
                     minVertex = v;
@@ -2995,7 +3002,7 @@ namespace Planning
             int prevAllActionCount = 0;
             bool twoPublic = false;
             int countAction = 0;
-            for ( int i=0;i< list1.Count;i++)
+            for (int i = 0; i < list1.Count; i++)
             {
                 dellList.Add(new List<Action>());
                 KeyValuePair<string, CompoundFormula> keyValuePair = list1[i];
@@ -3020,20 +3027,20 @@ namespace Planning
                                 privateAndMore.Add(pubAct);
                         }
                     }
-                    foreach(Action dellAct in dellList[i])
+                    foreach (Action dellAct in dellList[i])
                     {
                         privateAndMore.Remove(dellAct);
                     }
                     bool isPublic = false;
-                    foreach(Action act in privateAndMore)
+                    foreach (Action act in privateAndMore)
                     {
-                        if(publicActions.Contains(act))
+                        if (publicActions.Contains(act))
                         {
                             isPublic = true;
                             break;
                         }
                     }
-                    if(!isPublic)
+                    if (!isPublic)
                     {
                         return null;
                     }
@@ -3052,13 +3059,13 @@ namespace Planning
                     else
                     {
                         //    return GroundingByActions(agentIndex, orginalState, highLevelplan, out actionCount, out allActionCount, out groupPlan);
-                        if (prev !=null)
+                        if (prev != null)
                         {
                             // try to force other path for the last planning iteration (i-1)
                             dellList[i - 1].Add(prevAction);
                             courrentState = prev;
-                             actionCount = prevActionCount;
-                             allActionCount = prevAllActionCount;
+                            actionCount = prevActionCount;
+                            allActionCount = prevAllActionCount;
                             i--;
                             i--;
                             index1--;
@@ -3086,8 +3093,8 @@ namespace Planning
                             list3.Add(domain.mapActionNameToAction[index2]);
                         }
                     }
-                   // else
-                     //   Program.KillPlanners();
+                    // else
+                    //   Program.KillPlanners();
                 }
                 else
                 {
@@ -3095,7 +3102,7 @@ namespace Planning
                     courrentState = courrentState.ApplyEffect((Formula)compoundFormula, publicFacts);
                 }
             }
-            
+
             groupPlan[highLevelplan.Count + agentIndex] = new List<string>();
             return list3;
 
@@ -3138,8 +3145,8 @@ namespace Planning
                 bool flag = false;
                 foreach (GroundedPredicate groundedPredicate in action.HashPrecondition)
                 {
-                        compoundFormula.AddOperand((Predicate)groundedPredicate);
-                        flag = true;
+                    compoundFormula.AddOperand((Predicate)groundedPredicate);
+                    flag = true;
                 }
                 if (flag)
                     list1.Add(new KeyValuePair<string, CompoundFormula>(action.agent, compoundFormula));
