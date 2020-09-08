@@ -1733,7 +1733,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example"/*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*/ };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*/"uav" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1778,8 +1778,8 @@ namespace Planning
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
 
             string[] allPossibleDependenciesSelectors = { "Optimal" };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"Logistics_Test_example"/*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*/ };
+            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"logistics_3_problems_easy"/*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*/ };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1961,19 +1961,17 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                bool runningOptimalDependenciesSolver = false;
-                if (runningOptimalDependenciesSolver)
+                if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
                 {
                     RunOptimalDependenciesSolverExperiment(selectorsAndDomains);
                 }
                 else
                 {
-                    bool runningMAFSExperiment = true;
-                    if (runningMAFSExperiment)
+                    if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
                     {
                         RunMAFSProjectionExperiment(selectorsAndDomains);
                     }
-                    else
+                    else // if (highLevelPlanerType == HighLevelPlanerType.Projection)
                     {
                         RunProjectionOnlyExperiment(selectorsAndDomains);
 
@@ -2224,7 +2222,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         {
-            /*
+            
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -2261,15 +2259,15 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
-            */
             
+            /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
-            dict.Add("selectors", new int[] { 0, 2 });
+            dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 4, 0 });
+            dict.Add("domains", new int[] { 0 });
             return dict;
-            
+            */
         }
     }
 }

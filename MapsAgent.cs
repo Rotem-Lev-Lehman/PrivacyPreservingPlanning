@@ -1361,8 +1361,8 @@ namespace Planning
                                 //notSended.Add(courentVertex);
                                 
                                 //Skip the expansion of this vertex:
-                                closeList.Add(courentVertex);
-                                goto done_outer_if;
+                                //closeList.Add(courentVertex);
+                                //goto done_outer_if;
                             }
 
                             if (flag && !MapsPlanner.directMessage)
@@ -1464,7 +1464,7 @@ namespace Planning
                 }
 
                 //This is for skipping the expansion of states that shouldn't be expanded or revieled to the other agents:
-                done_outer_if:
+                //done_outer_if:
 
                 if (myPreferableOpenList.Count > 0)
                     MapsAgent.preferFlags[name] = true;

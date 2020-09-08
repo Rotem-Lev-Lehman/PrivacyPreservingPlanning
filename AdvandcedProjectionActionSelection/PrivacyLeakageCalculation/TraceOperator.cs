@@ -60,7 +60,8 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
             int ownerID = Agent.getID(action.agent);
             bool myOperation = ownerID == agentID;
 
-            string opName = action.Name;
+            //string opName = action.Name;
+            string opName = action.Name.Replace("_", " ");
             int cost = 1;
             Dictionary<int, int> pre = new Dictionary<int, int>();
             initializeDict(agentID, pre, action.HashPrecondition, myOperation, agent);
@@ -94,8 +95,13 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
                     if (artificial)
                     {
                         currP = agent.ArtificialToPrivate[(GroundedPredicate)p];
+                        if (currP.Negation)
+                        {
+                            currP = currP.Negate();
+                            val = 1;
+                            goto mistake_with_negation_jump;
+                        }
                     }
-                    var = TraceVariable.GetVariable(agentID, currP);
                     val = 0; //regular
                 }
                 else
@@ -105,14 +111,29 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
                     if (artificial)
                     {
                         currP = agent.ArtificialToPrivate[(GroundedPredicate)negation];
+                        if (currP.Negation)
+                        {
+                            currP = currP.Negate();
+                            val = 0;
+                            goto mistake_with_negation_jump;
+                        }
                     }
-                    var = TraceVariable.GetVariable(agentID, currP);
                     val = 1; //negation
                 }
-                if (var == null)
-                    continue;
+                mistake_with_negation_jump:
+                var = TraceVariable.GetVariable(agentID, currP);
                 int varID = var.varID;
-                dict.Add(varID, val);
+                if (dict.ContainsKey(varID))
+                {
+                    if (dict[varID] != val)
+                    {
+                        throw new Exception("The two keys must go to the same value!");
+                    }
+                }
+                else
+                {
+                    dict.Add(varID, val);
+                }
             }
         }
     }

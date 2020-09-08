@@ -13,7 +13,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public const string dependencySymbol = "rotemDependency";
         public const string agentType = "rotemAgent";
         public const string agentSymbol = "rotemAgent";
-        public const int revealedDependencyCost = 10000;
+        public const int revealedDependencyCost = 1000;
         public const int regularActionCost = 1;
         public const string objectType = "object";
         public const string resetDependenciesActionName = "reset-dependencies-revealed";

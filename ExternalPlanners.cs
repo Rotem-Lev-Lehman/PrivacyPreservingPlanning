@@ -411,7 +411,7 @@ namespace Planning
             //pFD.StartInfo.Arguments += " --heuristic \"hdiv_pot=diverse_potentials(num_samples=1000, max_num_heuristics=infinity, max_potential=1e8, lpsolver=CPLEX, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
             //    " --search \"astar(hdiv_pot)\"";
             //pFD.StartInfo.Arguments += " --heuristic \"hzo_pdb=zopdbs(patterns=systematic(1), transform=no_transform(), cache_estimates=true)\"" +
-            //    " --search \"astar(hzo_pdb)\"";
+            //    " --search \"lazy_greedy([hzo_pdb])\"";
             //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
             //    " --search \"astar(hipdb)\"";
             //pFD.StartInfo.Arguments += " --heuristic \"hc=cegar(subtasks=[landmarks(),goals()], max_states=infinity, max_transitions=1M, max_time=infinity, pick=MAX_REFINED, use_general_costs=true, debug=false, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
@@ -419,9 +419,10 @@ namespace Planning
 
 
             //pFD.StartInfo.Arguments += " --search \"lazy_wastar(evals, preferred=[], reopen_closed=true, boost=1000, w=1, randomize_successors=false, preferred_successors_first=false, random_seed=-1, cost_type=NORMAL, bound=infinity, max_time=infinity, verbosity=normal)\"";
-            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
-            //      " --search \"lazy_wastar(hipdb, w=2)\"";
-            pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
+            pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+                  " --search \"lazy_greedy([hipdb])\"";
+            //      " --search \"astar(hipdb)\"";
+            //pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
             //pFD.StartInfo.Arguments += " --search \"astar(ff())\"";
 
 

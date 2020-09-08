@@ -11,31 +11,48 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
     {
         public override void FinishPlanning(List<string> highLevelPlan)
         {
-            //TODO: publish goal state to trace
+            List<string> edittedPlan = EditPlan(highLevelPlan);
             foreach (Agent agent in agents)
             {
-                traces[agent].plan = highLevelPlan;
+                //traces[agent].plan = highLevelPlan;
+                traces[agent].plan = edittedPlan;
                 AdvancedLandmarkProjectionPlaner.writeStatesToFile(agent, traces[agent]); //write the leftovers
                 AdvancedLandmarkProjectionPlaner.writeSecondHalfOfJsonToFile(agent, traces[agent]);
             }
         }
 
+        private List<string> EditPlan(List<string> highLevelPlan)
+        {
+            List<string> editted = new List<string>();
+            foreach(string action in highLevelPlan)
+            {
+                editted.Add(action.Replace("_", " "));
+            }
+            return editted;
+        }
+
         public override void PublishGoalState(MapsVertex goalVertex, MapsAgent goalFinder)
         {
-            int senderID = goalFinder.GetID();
+            //int senderID = goalFinder.GetID();
             int stateID = TraceState.GetNextStateID();
             Dictionary<string, int> newIParents = new Dictionary<string, int>(goalVertex.publicParent.agent2iparent);
 
             TraceState parentState = goalVertex.publicParent.traceStateForPublicRevealedState;
-            int parentID = parentState.stateID;
+            //int parentID = parentState.stateID;
             int cost = goalVertex.g;
             int heuristic = goalVertex.h;
             string context = TraceState.GoalVerifiedMessage;
 
             foreach (MapsAgent agent in MapsPlanner.name2mapsAgent.Values)
             {
+                int parentID = -1;
+                if (agent.Equals(goalFinder))
+                    parentID = parentState.stateID; //In the json, only the goal finder needs to have a value of the parent of the last state
+                int senderID = agent.GetID();
                 int iparent = GetIParent(goalVertex, agent);
                 newIParents[agent.name] = iparent;
+
+                iparent = -1; //The json of goal state needs to be with iparent of -1...
                 WriteStateToTrace(goalVertex, agent, context, parentID, iparent, stateID, senderID, cost, heuristic, newIParents);
             }
         }
@@ -48,14 +65,15 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             int cost = 0;
             int heuristic = -1;
             string context = TraceState.InitMessage;
-            iparents[agent.name] = iparentID;
+            iparents[agent.name] = 0;
 
             WriteStateToTrace(startState, agent, context, parentID, iparentID, stateID, senderID, cost, heuristic, iparents);
         }
 
         public override void publishState(MapsVertex vertex, MapsAgent senderAgent)
         {
-            int senderID = senderAgent.GetID();
+            //int senderID = senderAgent.GetID();
+            int senderID = -1; //The json of sent state needs to be with senderID of -1...
             int stateID = TraceState.GetNextStateID();
             TraceState parentState = vertex.publicParent.traceStateForPublicRevealedState;
             int iparent = GetIParent(vertex, senderAgent);
@@ -66,6 +84,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             int parentID = parentState.stateID;
             int cost = vertex.g;
             int heuristic = vertex.h;
+
+            iparent = -1; //The json of sent state needs to be with iparent of -1...
 
             WriteStateToTrace(vertex, senderAgent, context, parentID, iparent, stateID, senderID, cost, heuristic, newIParents);
         }
@@ -80,7 +100,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             newIParents[recievedAgent.name] = iparent;
 
             string context = TraceState.ReceivedMessage;
-            int parentID = parentState.stateID;
+            //int parentID = parentState.stateID;
+            int parentID = -1; //The json of recieved state needs to be with parentID of -1...
             int cost = recievedVertex.g;
             int heuristic = recievedVertex.h;
 
@@ -138,19 +159,29 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
         {
             Dictionary<Predicate, TraceVariable> agentsVars = TraceVariable.GetVariablesDict(agent.GetID());
             List<int> values = new List<int>();
-            HashSet<Predicate> predicates = vertex.state.m_lPredicates;
+            HashSet<Predicate> predicates = GetCorrespondingAgentState(vertex, agent).m_lPredicates;
             foreach (Predicate p in agentsVars.Keys)
             {
                 if (predicates.Contains(p))
                 {
-                    values.Add(1);
+                    values.Add(0); //0 == true
                 }
                 else
                 {
-                    values.Add(0);
+                    values.Add(1); //1 == false
                 }
             }
             return values;
+        }
+
+        private State GetCorrespondingAgentState(MapsVertex vertex, MapsAgent agent)
+        {
+            State state = new State(agent.GetPrivateState(vertex.stateIndexes[agent.name]));
+            foreach (GroundedPredicate gp in vertex.publicFacts)
+            {
+                state.AddPredicate(gp);
+            }
+            return state;
         }
     }
 }
