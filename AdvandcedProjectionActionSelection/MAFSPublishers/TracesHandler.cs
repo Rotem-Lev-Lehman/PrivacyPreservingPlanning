@@ -65,7 +65,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             int cost = 0;
             int heuristic = -1;
             string context = TraceState.InitMessage;
-            iparents[agent.name] = 0;
+            //iparents[agent.name] = 0;
+            iparents[agent.name] = iparentID;
 
             WriteStateToTrace(startState, agent, context, parentID, iparentID, stateID, senderID, cost, heuristic, iparents);
         }
@@ -78,7 +79,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             TraceState parentState = vertex.publicParent.traceStateForPublicRevealedState;
             int iparent = GetIParent(vertex, senderAgent);
             Dictionary<string, int> newIParents = new Dictionary<string, int>(vertex.publicParent.agent2iparent); //as a sender, I will change the iParents dictionary to be a new dictionary.
-            newIParents[senderAgent.name] = iparent;
+            //newIParents[senderAgent.name] = iparent;
+            newIParents[senderAgent.name] = stateID;
 
             string context = TraceState.SendingMessage;
             int parentID = parentState.stateID;
