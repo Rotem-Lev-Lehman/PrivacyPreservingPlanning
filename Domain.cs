@@ -386,7 +386,7 @@ namespace Planning
 
             StreamWriter sw = new StreamWriter(ms);
             sw.WriteLine("(define (domain " + Name + ")");
-            sw.WriteLine("(:requirements :strips :typing)");
+            sw.WriteLine("(:requirements :strips :typing :equality)");
             WriteTypes(sw, false);
             WriteConstants(sw);
             sw.WriteLine();

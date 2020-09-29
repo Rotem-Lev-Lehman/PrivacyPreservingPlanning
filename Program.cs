@@ -30,9 +30,9 @@ namespace Planning
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
         public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner};
         
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         static public bool testingProjectionWithLessDependenciesRevealed = true;
 
         static public bool directMessage = false;
@@ -96,10 +96,14 @@ namespace Planning
         public static string tracesFolderForSavingTraces = null;
         public static bool creatingTracesAfterSolutionWasFound = false; //don't need to change this value, it is changed in the specific code who controls it...
 
+        public static int optimalAmountOfDependenciesForCurrentProblem;
+        public static List<string> planForOptimalAmountOfDependenciesForCurrentProblem;
+
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
 
-        public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout.
+        //public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
+        public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -187,7 +191,7 @@ namespace Planning
                 {
                     if(lPlan != null)
                     {
-                        amountOfDependenciesUsed = CalculateDependenciesNum(lPlan);
+                        amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
                         WritePlanToFile(lPlan, sOutputFile);
                         WriteResults(GetWantedName(dir.FullName), " success");
                     }
@@ -1269,7 +1273,8 @@ namespace Planning
                 if (di.ToString().Contains("PdbFiles"))
                     return;
 
-                if (testingProjectionWithLessDependenciesRevealed) {
+                if (testingProjectionWithLessDependenciesRevealed)
+                {
                     if (creatingTracesAfterSolutionWasFound)
                     {
                         tracesFolder = tracesFolderForSavingTraces;
@@ -1310,7 +1315,7 @@ namespace Planning
                     //clear traces anyways...
                     AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace.ClearTraces();
                 }
-                
+
                 /* previous...
                 if (sOutputPlanFile == "")
                     sOutputPlanFile = "Plan.txt";
@@ -1348,9 +1353,18 @@ namespace Planning
                     //writing an empty plan file
                     if (!creatingTracesAfterSolutionWasFound)
                     {
-                        StreamWriter sw = new StreamWriter(sOutputPlanFile + "plan.txt");
-                        sw.Close();
-                        WriteResults(GetWantedName(di.FullName), " failed - timeout");
+                        if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner && planForOptimalAmountOfDependenciesForCurrentProblem != null)
+                        {
+                            amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
+                            WritePlanToFile(planForOptimalAmountOfDependenciesForCurrentProblem, sOutputPlanFile);
+                            WriteResults(GetWantedName(di.FullName), " partial success - timeout while improving the dependencies amount");
+                        }
+                        else
+                        {
+                            StreamWriter sw = new StreamWriter(sOutputPlanFile + "plan.txt");
+                            sw.Close();
+                            WriteResults(GetWantedName(di.FullName), " failed - timeout");
+                        }
                     }
                 }
 
@@ -1778,8 +1792,8 @@ namespace Planning
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
 
             string[] allPossibleDependenciesSelectors = { "Optimal" };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*/"logistics_3_problems_easy"/*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*/ };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*/"blocks_first_problem" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");

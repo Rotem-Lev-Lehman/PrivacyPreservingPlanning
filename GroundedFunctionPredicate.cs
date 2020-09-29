@@ -45,5 +45,16 @@ namespace Planning
             AddConstant(f);
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is GroundedFunctionPredicate predicate &&
+                   base.Equals(obj) &&
+                   Negation == predicate.Negation &&
+                   m_iName == predicate.m_iName &&
+                   Name == predicate.Name &&
+                   m_sCachedToString == predicate.m_sCachedToString &&
+                   isPublic == predicate.isPublic &&
+                   EqualityComparer<List<Constant>>.Default.Equals(Constants, predicate.Constants);
+        }
     }
 }

@@ -13,9 +13,12 @@ namespace Planning
     {
 
         public static string ffPath = @"ff.exe";
-        public static string fdPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\src\garbage\";
         public static string cygwinPath = @"C:\cygwin\";
         public static string fdOutputPath = @"C:\cygwin\home\shlomi\";
+
+        public static string fdPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\src\garbage\"; //change this to your FD pddl files folder path
+        public static string fdPython27Path = @"C:\cygwin64\bin\python2.7.exe"; //change this to your FD python path
+        public static string fdRunningPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py"; //change this to your FD running path
 
         public static TimeSpan PlannerTimeout = new TimeSpan(0, 5, 0);
         public ExternalPlanners()
@@ -69,8 +72,11 @@ namespace Planning
                 }
                 else if (bFDDone)
                 {
-                    Console.WriteLine("Plan found by FD");
+                    //Console.WriteLine("Plan found by FD");
                     Thread.Sleep(100);
+                    int exitCode = process[0].ExitCode;
+                    if (exitCode == 22)
+                        Console.WriteLine("The search was terminated due to memory limitation");
                     lPlan = ReadPlan(fdPath);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
@@ -372,7 +378,6 @@ namespace Planning
 
         public Process RunFDPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem)
         {
-
             File.Delete(fdPath + "plan.txt");
             File.Delete(fdPath + "mipsSolution.soln");
             File.Delete(fdPath + "output.sas");
@@ -392,15 +397,14 @@ namespace Planning
             swProblemFile.Write(srProblem.ReadToEnd());
             swProblemFile.Close();
 
-
             Process pFD = new Process();
             //MFFProcesses[Thread.CurrentThread] = pFD;
             pFD.StartInfo.WorkingDirectory = fdPath;
             //this.pythonPath = @"C:\Users\OWNER\AppData\Local\Programs\Python\Python37-32\python.exe";
             //this.FDpath = @"D:\cygwin\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
-            pFD.StartInfo.FileName = @"C:\cygwin64\bin\python2.7.exe";
+            pFD.StartInfo.FileName = fdPython27Path;
 
-            pFD.StartInfo.Arguments += @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
+            pFD.StartInfo.Arguments += fdRunningPath;
            
 
             pFD.StartInfo.Arguments += " dFD.pddl pFD.pddl ";
@@ -425,7 +429,7 @@ namespace Planning
             //pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
             //pFD.StartInfo.Arguments += " --search \"astar(ff())\"";
 
-
+            //pFD.StartInfo.Arguments += " --overall-memory-limit \"3584M\"";
             pFD.StartInfo.UseShellExecute = false;
             pFD.StartInfo.RedirectStandardOutput = true;
 

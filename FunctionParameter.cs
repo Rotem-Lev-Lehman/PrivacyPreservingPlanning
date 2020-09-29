@@ -14,5 +14,10 @@ namespace Planning
             Function = f;
         }
 
-     }
+        public override string ToString()
+        {
+            return Function.ToString();
+        }
+
+    }
 }
