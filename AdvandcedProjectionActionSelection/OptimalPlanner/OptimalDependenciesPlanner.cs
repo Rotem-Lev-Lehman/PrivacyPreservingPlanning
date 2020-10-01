@@ -8,12 +8,30 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 {
     class OptimalDependenciesPlanner
     {
-        public static bool version1 = false;
+        public bool usingFF;
+        public bool usingFD;
+        public bool version1 = false;
+        //As seems now, we should prefer using version3...
 
         public List<string> Plan(List<Agent> m_agents)
         {
             Program.optimalAmountOfDependenciesForCurrentProblem = -1;
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
+            if(Program.typeOfSelector == "Optimal_FF_and_FD")
+            {
+                usingFF = true;
+                usingFD = true;
+            }
+            else if(Program.typeOfSelector == "Optimal_FD")
+            { 
+                usingFF = false;
+                usingFD = true;
+            }
+            else //Program.typeOfSelector == "Optimal_FF"
+            {
+                usingFF = true;
+                usingFD = false;
+            }
 
             Console.WriteLine("Starting optimal dependencies planning");
 
@@ -38,16 +56,16 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             }
             else
             {
-                plan = RunVersion2PddlBuilder(m_agents, agentsDependencies);
+                plan = RunVersion2Or3PddlBuilder(m_agents, agentsDependencies);
             }
             
             Console.WriteLine("Finished planning");
             return plan;
         }
 
-        private List<string> RunVersion2PddlBuilder(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies)
+        private List<string> RunVersion2Or3PddlBuilder(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies)
         {
-            PddlBuilderForOptimalDependenciesPlanningVer2 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer2();
+            PddlBuilderForOptimalDependenciesPlanningVer3 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer3();
             pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies);
 
             Console.WriteLine("Solving without limitation to establish the maximum amount of dependencies we can publish");
@@ -67,7 +85,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             for(int i = amountOfDependencies - 1; i >= 0; i--)
             {
                 Console.WriteLine("Trying to publish maximum " + i + " dependencies for each agent");
-                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer2();
+                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer3();
                 pddlBuilder.UpdateMaxDependenciesRevealed(i);
                 pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies);
 
@@ -138,7 +156,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         {
             bool ans;
             ExternalPlanners externalPlanners = new ExternalPlanners();
-            List<string> plan = externalPlanners.Plan(false, true, domain, problem, startState, null, null, 10 * 60000, out ans);
+            List<string> plan = externalPlanners.Plan(usingFF, usingFD, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans);
             return plan;
         }
 

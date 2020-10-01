@@ -20,6 +20,8 @@ namespace Planning
         public static string fdPython27Path = @"C:\cygwin64\bin\python2.7.exe"; //change this to your FD python path
         public static string fdRunningPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py"; //change this to your FD running path
 
+        public static bool unsolvableProblem = false;
+
         public static TimeSpan PlannerTimeout = new TimeSpan(0, 5, 0);
         public ExternalPlanners()
         {
@@ -31,6 +33,7 @@ namespace Planning
             //bUseFD = false;
             //Program.KillPlanners();
             List<string> lPlan = null;
+            unsolvableProblem = false;
 
 
             if (privateActions != null)
@@ -74,9 +77,20 @@ namespace Planning
                 {
                     //Console.WriteLine("Plan found by FD");
                     Thread.Sleep(100);
-                    int exitCode = process[0].ExitCode;
+                    int pFD_id = 0;
+                    if (bUseFF)
+                        pFD_id = 1;
+                    int exitCode = process[pFD_id].ExitCode;
                     if (exitCode == 22)
+                    {
                         Console.WriteLine("The search was terminated due to memory limitation");
+                    }
+                    if(exitCode == 12)
+                    {
+                        Console.WriteLine("There is no solution for this problem (exusted all possabilities)");
+                        unsolvableProblem = true;
+                    }
+                       
                     lPlan = ReadPlan(fdPath);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
@@ -159,6 +173,11 @@ namespace Planning
             }
             else
             {
+                if (sOutput.Contains("best first search space empty! problem proven unsolvable."))
+                {
+                    Console.WriteLine("FF found that the problem is unsolvable");
+                    unsolvableProblem = true;
+                }
                 if (sOutput.Contains("goal can be simplified to TRUE"))
                 {
                     bUnsolvable = false;
@@ -190,28 +209,42 @@ namespace Planning
             bool bDone = false;
             bFFDone = false;
             bFDDone = false;
+            Process[] workingProcesses = new Process[a.Length];
+            for(int i = 0; i < a.Length; i++)
+            {
+                workingProcesses[i] = a[i];
+            }
 
             while (!bDone)
             {
                 bDone = false;
-                a[0].WaitForExit(200);
+                workingProcesses[0].WaitForExit(200);
                 //List<Process> l = GetPlanningProcesses();
-                foreach (Process p in a)
+                foreach (Process p in workingProcesses)
                 {
-                    
-                    if (p.HasExited)
+                    if (p != null)
                     {
-                        if (p.StartInfo.FileName == ffPath)
+                        if (p.HasExited)
                         {
-                            bFFDone = true;
-                            bFDDone = false;
+                            if (p.StartInfo.FileName == ffPath)
+                            {
+                                bFFDone = true;
+                                bFDDone = false;
+                            }
+                            else
+                            {
+                                int exitCode = p.ExitCode;
+                                if (exitCode == 22 && a.Length > 1) //if it is not the only process (we are running FF too), than try to wait for FF
+                                {
+                                    Console.WriteLine("The FD search was terminated due to memory limitation, continuing with FF and trying to find a valid plan with it.");
+                                    workingProcesses[1] = null;
+                                    continue;
+                                }
+                                bFFDone = false;
+                                bFDDone = true;
+                            }
+                            bDone = true;
                         }
-                        else
-                        {
-                            bFFDone = false;
-                            bFDDone = true;
-                        }
-                        bDone = true;
                     }
                 }
 

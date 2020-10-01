@@ -193,7 +193,16 @@ namespace Planning
                     {
                         amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
                         WritePlanToFile(lPlan, sOutputFile);
-                        WriteResults(GetWantedName(dir.FullName), " success");
+                        if (ExternalPlanners.unsolvableProblem)
+                        {
+                            //This means that we have proved the optimality of our solution.
+                            WriteResults(GetWantedName(dir.FullName), " success");
+                        }
+                        else
+                        {
+                            //This means that we did not proved the optimality of our solution, but we had an error (e.g. memory error)...
+                            WriteResults(GetWantedName(dir.FullName), " partial success - not proven optimality of solution");
+                        }
                     }
                     else
                     {
@@ -1791,9 +1800,9 @@ namespace Planning
             int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
 
-            string[] allPossibleDependenciesSelectors = { "Optimal" };
+            string[] allPossibleDependenciesSelectors = { "Optimal_FF_and_FD", "Optimal_FD", "Optimal_FF" };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*/"blocks_first_problem" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*//*"blocks_first_problem"*/"logistic_first_prob" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1954,7 +1963,7 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver3");
         }
 
         static StreamWriter swResults;
