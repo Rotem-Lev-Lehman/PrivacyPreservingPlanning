@@ -456,13 +456,15 @@ namespace Planning
 
 
             //pFD.StartInfo.Arguments += " --search \"lazy_wastar(evals, preferred=[], reopen_closed=true, boost=1000, w=1, randomize_successors=false, preferred_successors_first=false, random_seed=-1, cost_type=NORMAL, bound=infinity, max_time=infinity, verbosity=normal)\"";
-            pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
-                  " --search \"lazy_greedy([hipdb])\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+            //      " --search \"lazy_greedy([hipdb])\"";
             //      " --search \"astar(hipdb)\"";
             //pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
             //pFD.StartInfo.Arguments += " --search \"astar(ff())\"";
 
             //pFD.StartInfo.Arguments += " --overall-memory-limit \"3584M\"";
+            pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff(), lmcut()])\"";
+
             pFD.StartInfo.UseShellExecute = false;
             pFD.StartInfo.RedirectStandardOutput = true;
 
