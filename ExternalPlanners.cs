@@ -173,7 +173,7 @@ namespace Planning
             }
             else
             {
-                if (sOutput.Contains("best first search space empty! problem proven unsolvable."))
+                if (sOutput.Contains("best first search space empty! problem proven unsolvable.") || sOutput.Contains("ff: goal can be simplified to FALSE. No plan will solve it"))
                 {
                     Console.WriteLine("FF found that the problem is unsolvable");
                     unsolvableProblem = true;
@@ -215,10 +215,11 @@ namespace Planning
                 workingProcesses[i] = a[i];
             }
 
+            int indexOfWorkingProcess = 0;
             while (!bDone)
             {
                 bDone = false;
-                workingProcesses[0].WaitForExit(200);
+                workingProcesses[indexOfWorkingProcess].WaitForExit(200);
                 //List<Process> l = GetPlanningProcesses();
                 foreach (Process p in workingProcesses)
                 {
@@ -228,13 +229,21 @@ namespace Planning
                         {
                             if (p.StartInfo.FileName == ffPath)
                             {
+                                string sOutput = FFOutput[p.Id];
+                                if (sOutput.Contains("too many consts in type ARTFICIAL-ALL-OBJECTS! increase MAX_TYPE (currently 2000)") && a.Length > 1 && a[1] != null)
+                                {
+                                    Console.WriteLine("The FF search was terminated due to const limitation, continuing with FD and trying to find a valid plan with it.");
+                                    workingProcesses[0] = null;
+                                    indexOfWorkingProcess = 1;
+                                    continue;
+                                }
                                 bFFDone = true;
                                 bFDDone = false;
                             }
                             else
                             {
                                 int exitCode = p.ExitCode;
-                                if (exitCode == 22 && a.Length > 1) //if it is not the only process (we are running FF too), than try to wait for FF
+                                if (exitCode == 22 && a.Length > 1 && a[0] != null) //if it is not the only process (we are running FF too), than try to wait for FF
                                 {
                                     Console.WriteLine("The FD search was terminated due to memory limitation, continuing with FF and trying to find a valid plan with it.");
                                     workingProcesses[1] = null;
@@ -1290,7 +1299,7 @@ namespace Planning
             sCurrent = sStart;
             while (!p.IsGoalState(sCurrent))
             {
-                List<Action> lActions = new List<Action>(d.GroundAllActions(sCurrent.Predicates, false));
+                List<Action> lActions = new List<Action>(d.GroundAllActions(sCurrent.Predicates, true));
                 Console.WriteLine("Available actions:");
                 for (int i = 0; i < lActions.Count; i++)
                 {

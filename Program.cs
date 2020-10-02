@@ -96,8 +96,12 @@ namespace Planning
         public static string tracesFolderForSavingTraces = null;
         public static bool creatingTracesAfterSolutionWasFound = false; //don't need to change this value, it is changed in the specific code who controls it...
 
+        //Optimal dependencies planner stuff:
         public static int optimalAmountOfDependenciesForCurrentProblem;
         public static List<string> planForOptimalAmountOfDependenciesForCurrentProblem;
+        public static Domain currentJointDomain;
+        public static Problem currentJointProblem;
+        public static bool isValidPlan = false;
 
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
@@ -178,6 +182,10 @@ namespace Planning
                 Problem pJoint = null;
                 ReadAgentFiles(lDomainFiles, lProblemFiles, lDomains, lProblems);
                 GetJointDomain(lDomains, lProblems, out dJoint, out pJoint);
+
+                currentJointDomain = dJoint;
+                currentJointProblem = pJoint;
+
                 pdbPath = @"PdbFiles/" + dir.Parent.Name;
                 if (!Directory.Exists(pdbPath))
                 {
@@ -207,7 +215,14 @@ namespace Planning
                     else
                     {
                         WritePlanToFile(new List<string>(), sOutputFile);
-                        WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                        if (!isValidPlan)
+                        {
+                            WriteResults(GetWantedName(dir.FullName), " warning - fail, plan was found but was not valid");
+                        }
+                        else
+                        {
+                            WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                        }
                     }
                     Console.WriteLine();
                     return;
@@ -1802,7 +1817,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Optimal_FF_and_FD", "Optimal_FD", "Optimal_FF" };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*//*"blocks_first_problem"*/"logistic_first_prob" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*//*"blocks_first_problem"*//*"logistic_first_prob"*/"driverlog_debug" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
