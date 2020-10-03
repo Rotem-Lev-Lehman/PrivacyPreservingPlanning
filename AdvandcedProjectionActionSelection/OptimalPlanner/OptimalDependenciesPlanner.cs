@@ -15,8 +15,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public bool version2Or3 = false; //if version1 is False, than we will check this. This will choose from version2/3 To version4
         //As seems now, we should prefer using version3...
 
-        public static Action startStateAction;
-        public static Action privateActionDummy;
+        public static string startStateDummyActionName = "start-state-dummy-action";
         public static List<Dependency> startStateDependencies;
 
         public List<string> Plan(List<Agent> m_agents)
@@ -45,24 +44,29 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Console.WriteLine("Finding all dependencies");
             Dictionary<Agent, List<Dependency>> agentsDependencies = new Dictionary<Agent, List<Dependency>>();
             Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary = new Dictionary<Agent, Dictionary<Predicate, List<Dependency>>>();
+            Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect = new Dictionary<Agent, Dictionary<Action, List<Dependency>>>();
             List<Predicate> predicates = new List<Predicate>();
             int index = 0;
 
-            startStateAction = new Action("start-state-dummy-action");
             startStateDependencies = new List<Dependency>();
-            privateActionDummy = new Action("dummy-private-action-for-dependencies");
 
             foreach (Agent agent in m_agents)
             {
+                Action startStateAgentAction = initializeStartStateAction(agent);
+                agent.m_actions.Add(startStateAgentAction);
+                agent.publicActions.Add(startStateAgentAction);
+
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
 
-                Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>> tuple = GetAgentDependencies(agent, currentlProjAction);
+                Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>, Dictionary<Action, List<Dependency>>> tuple = GetAgentDependencies(agent, currentlProjAction);
 
                 List<Dependency> dependencies = tuple.Item1;
                 Dictionary<Predicate, List<Dependency>> predicate2DependenciesThatAcomplishIt = tuple.Item2;
+                Dictionary<Action, List<Dependency>> action2DependenciesInItsEffects = tuple.Item3;
 
                 agentsDependencies[agent] = dependencies;
                 agentsPreconditionDictionary[agent] = predicate2DependenciesThatAcomplishIt;
+                agentsActions2DependenciesInEffect[agent] = action2DependenciesInItsEffects;
 
                 index += 1000;
             }
@@ -79,17 +83,36 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             }
             else
             {
-                plan = RunVersion4PddlBuilder(m_agents, agentsDependencies, agentsPreconditionDictionary);
+                plan = RunVersion4Or5PddlBuilder(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
             }
             
             Console.WriteLine("Finished planning");
             return plan;
         }
 
-        private List<string> RunVersion4PddlBuilder(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies, Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary)
+        private Action initializeStartStateAction(Agent agent)
         {
-            PddlBuilderForOptimalDependenciesPlanningVer4 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
-            pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary);
+            Action startStateAgentAction = new Action(startStateDummyActionName);
+            startStateAgentAction.agent = agent.name;
+            startStateAgentAction.isPublic = true;
+            CompoundFormula preconditions = new CompoundFormula("and");
+            CompoundFormula effects = new CompoundFormula("and");
+
+            foreach (Predicate p in agent.GetPrivateStartState())
+            {
+                effects.AddOperand(p);
+            }
+            startStateAgentAction.SetEffects(effects);
+            startStateAgentAction.Preconditions = preconditions;
+            startStateAgentAction.LoadPrecondition();
+
+            return startStateAgentAction;
+        }
+
+        private List<string> RunVersion4Or5PddlBuilder(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies, Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary, Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect)
+        {
+            PddlBuilderForOptimalDependenciesPlanningVer5 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
+            pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
             Console.WriteLine("Solving without limitation to establish the maximum amount of dependencies we can publish");
             List<string> plan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState());
@@ -109,13 +132,20 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = plan;
             Console.WriteLine("The amount of used dependencies in the plan that was made is: " + amountOfDependencies);
 
-            Console.WriteLine("Starting to loop over possible amounts of dependencies from maximum of: " + (amountOfDependencies - 1) + " to see when is it impossible to solve the problem");
+            if(amountOfDependencies == 0)
+            {
+                Console.WriteLine("0 is the minimal number of dependencies, which means that we have finished this planning process :)");
+            }
+            else
+            {
+                Console.WriteLine("Starting to loop over possible amounts of dependencies from maximum of: " + (amountOfDependencies - 1) + " to see when is it impossible to solve the problem");
+            }
             for (int i = amountOfDependencies - 1; i >= 0; i--)
             {
                 Console.WriteLine("Trying to publish maximum " + i + " dependencies for each agent");
-                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
+                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
                 pddlBuilder.UpdateMaxDependenciesRevealed(i);
-                pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary);
+                pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
                 Console.WriteLine("Sending the pddl files to the external planners");
                 List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState());
@@ -219,7 +249,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             List<string> currespondentPlan = new List<string>();
             foreach(string action in plan)
             {
-                if (action.Contains("reveal-dependency"))
+                if (action.Contains("reveal-dependency") || action.Contains("start-going-solo"))
                 {
                     continue;
                 }
@@ -285,16 +315,16 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             return plan;
         }
 
-        private Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>> GetAgentDependencies(Agent agent, List<Action> possibleActions)
+        private Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>, Dictionary<Action, List<Dependency>>> GetAgentDependencies(Agent agent, List<Action> possibleActions)
         {
             List<Dependency> dependencies = new List<Dependency>();
             Dictionary<Predicate, List<Dependency>> predicate2DependenciesThatAcomplishIt = new Dictionary<Predicate, List<Dependency>>();
-
-            HashSet<Predicate> predicatesForPrivateDummyActionDependencies = new HashSet<Predicate>();
+            Dictionary<Action, List<Dependency>> action2DependenciesInItsEffects = new Dictionary<Action, List<Dependency>>();
 
             foreach (Action action in possibleActions)
             {
                 Action realAction = GetRealAction(agent, action);
+                List<Dependency> dependenciesThatThisActionAchieves = new List<Dependency>();
                 foreach (Predicate p in action.HashEffects)
                 {
                     if (p.Name.Contains(Domain.ARTIFICIAL_PREDICATE))
@@ -310,39 +340,18 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                             predicate2DependenciesThatAcomplishIt[regularP] = new List<Dependency>();
                         }
                         predicate2DependenciesThatAcomplishIt[regularP].Add(dependency);
+                        dependenciesThatThisActionAchieves.Add(dependency);
 
-                        predicatesForPrivateDummyActionDependencies.Add(regularP);
+                        if(action.Name == startStateDummyActionName)
+                        {
+                            startStateDependencies.Add(dependency);
+                        }
                     }
                 }
+                action2DependenciesInItsEffects[realAction] = dependenciesThatThisActionAchieves;
             }
 
-            foreach(Predicate p in predicatesForPrivateDummyActionDependencies)
-            {
-                Dependency dependency = new Dependency(privateActionDummy, p);
-                dependencies.Add(dependency);
-                predicate2DependenciesThatAcomplishIt[p].Add(dependency);
-            }
-
-            //Add the start state dependencies as well:
-            int i = 0;
-            foreach (GroundedPredicate pgp in agent.startState.Predicates)
-            {
-                if(i == 45)
-                {
-                    int breakpoint = 0;
-                }
-                if (predicate2DependenciesThatAcomplishIt.ContainsKey(pgp))
-                {
-                    Dependency dependency = new Dependency(startStateAction, pgp);
-                    dependencies.Add(dependency);
-                    predicate2DependenciesThatAcomplishIt[pgp].Add(dependency);
-
-                    startStateDependencies.Add(dependency);
-                }
-                i++;
-            }
-
-            Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>> tuple = new Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>>(dependencies, predicate2DependenciesThatAcomplishIt);
+            Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>, Dictionary<Action, List<Dependency>>> tuple = new Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>, Dictionary<Action, List<Dependency>>>(dependencies, predicate2DependenciesThatAcomplishIt, action2DependenciesInItsEffects);
             return tuple;
         }
 

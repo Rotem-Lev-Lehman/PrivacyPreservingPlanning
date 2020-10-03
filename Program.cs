@@ -201,7 +201,7 @@ namespace Planning
                     {
                         amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
                         WritePlanToFile(lPlan, sOutputFile);
-                        if (ExternalPlanners.unsolvableProblem)
+                        if (ExternalPlanners.unsolvableProblem || optimalAmountOfDependenciesForCurrentProblem == 0)
                         {
                             //This means that we have proved the optimality of our solution.
                             WriteResults(GetWantedName(dir.FullName), " success");
@@ -1978,7 +1978,7 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver3");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver5");
         }
 
         static StreamWriter swResults;
@@ -2303,7 +2303,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 2 });
             return dict;
             */
         }

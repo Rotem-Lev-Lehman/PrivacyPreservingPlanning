@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 {
-    class PddlBuilderForOptimalDependenciesPlanningVer4
+    class PddlBuilderForOptimalDependenciesPlanningVer5
     {
         public const string dependencyType = "rotemDependency";
         public const string dependencySymbol = "rotemDependency";
@@ -17,6 +17,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public const string nextPredicateName = "rotemNext";
         public const string revealedNumberOfDependenciesPredicateName = "revealed-number-of-dependencies";
         public const string usedDependencyPredicateName = "used-dependency";
+        public const string goingSoloPredicateName = "going-solo";
+        public const string joinedStagePredicateName = "in-joined-stage";
         //public const int revealedDependencyCost = 1000;
         //public const int regularActionCost = 1;
         public const string objectType = "object";
@@ -24,7 +26,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public int maxAmountOfDependencies; //Change this to be the new allowed maximal amount of dependencies at each iteration.
         private bool limitingTheNumberOfDependenciesToBeRevealed;
 
-        public PddlBuilderForOptimalDependenciesPlanningVer4()
+        public PddlBuilderForOptimalDependenciesPlanningVer5()
         {
             maxAmountOfDependencies = 1;
             limitingTheNumberOfDependenciesToBeRevealed = false;
@@ -180,6 +182,11 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 Dictionary<Predicate, List<Dependency>> predicate2DependenciesThatAcomplishIt = this.agentsPreconditionDictionary[agent];
                 Dictionary<Action, List<Dependency>> action2DependenciesInItsEffects = this.agentsActions2DependenciesInEffect[agent];
 
+                Tuple<GroundedPredicate, List<Predicate>> tuple = GetGoingSoloPredicatesForAgent(agent, m_agents);
+
+                GroundedPredicate agentGoingSolo = tuple.Item1;
+                List<Predicate> otherAgentsNotGoingSolo = tuple.Item2;
+
                 foreach (Action action in agent.m_actions)
                 {
                     //List<Dependency> dependenciesForAction = new List<Dependency>();
@@ -190,17 +197,39 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                         continue;
                     }
 
+                    CompoundFormula editedEffects = new CompoundFormula("and");
+                    CompoundFormula editedPreconditions = new CompoundFormula("and");
+
                     if (!action.isPublic)
                     {
                         //if it is a private action, just use it as is...
-                        allActions.Add(action);
+                        Action editedPrivateAction = action.Clone();
+
+                        foreach (Predicate p in action.HashPrecondition)
+                        {
+                            editedPreconditions.AddOperand(p); //anyways, add this precondition to the preconditions list...
+                        }
+
+                        foreach (Predicate notGoingSolo in otherAgentsNotGoingSolo)
+                        {
+                            editedPreconditions.AddOperand(notGoingSolo);
+                        }
+
+                        editedPrivateAction.Preconditions = editedPreconditions;
+                        editedPrivateAction.SetEffects(action.Effects);
+
+                        allActions.Add(editedPrivateAction);
                         continue;
                     }
 
                     List<Dependency> dependenciesInEffect = action2DependenciesInItsEffects[action];
 
-                    CompoundFormula editedEffects = new CompoundFormula("and");
-                    CompoundFormula editedPreconditions = new CompoundFormula("and");
+                    
+
+                    foreach(Predicate notGoingSolo in otherAgentsNotGoingSolo)
+                    {
+                        editedPreconditions.AddOperand(notGoingSolo);
+                    }
 
                     foreach (Predicate p in action.HashPrecondition)
                     {
@@ -211,6 +240,10 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                             //Than this is a precondition that comes from a dependency...
                             //We should now go over all the possible dependencies that achive this predicate and add them to the following formula:
                             CompoundFormula cfOr = new CompoundFormula("or");
+
+                            //Add the going-solo predicate as a precondition in the "or" so we will capture it as well:
+                            cfOr.AddOperand(agentGoingSolo);
+
                             List<Dependency> dependenciesThatAcomplish = predicate2DependenciesThatAcomplishIt[p];
 
                             Predicate negationP = p.Negate();
@@ -288,6 +321,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             //List<GroundedPredicate> revealedSomethingPredicates = GetRevealedSomethingGroundedPredicates();
             //List<GroundedFunctionPredicate> amountOfDepRevPredicates = GetInitAmountOfDependenciesRevealedToZeroPredicates(m_agents);
             //GroundedFunctionPredicate initTotalCostToZeroPredicate = GetInitTotalCostToZeroPredicate(totalCostFunctionPredicate);
+            GroundedPredicate inJoinedStageGrounded = GetGroundedInJoinedStagePredicate();
 
             List<Action> dependenciesActions = GetDependenciesActions();
             allActions.AddRange(dependenciesActions);
@@ -406,6 +440,11 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                     throw new Exception("The revealed-number-of-dependencies predicates must be unique, and cannot be in another domain.");
                 publicStartState.AddPredicate(gp);
             }
+
+            if (dJoined.Predicates.Contains(inJoinedStageGrounded))
+                throw new Exception("The in-joined-stage predicate must be unique, and cannot be in another domain.");
+            publicStartState.AddPredicate(inJoinedStageGrounded);
+            
             /*
             if (dJoined.Predicates.Contains(initTotalCostToZeroPredicate))
                 throw new Exception("The initialization of total cost predicate must be unique, and cannot be in another domain.");
@@ -427,6 +466,23 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             joinedDomain = dJoined;
             joinedProblem = pJoined;
             joinedStartState = publicStartState;
+        }
+
+        private Tuple<GroundedPredicate, List<Predicate>> GetGoingSoloPredicatesForAgent(Agent agent, List<Agent> m_agents)
+        {
+            GroundedPredicate agentGoingSolo = GetGroundedGoingSoloPredicate(agent);
+            List<Predicate> otherAgentsNotGoingSolo = new List<Predicate>();
+            foreach(Agent otherAgent in m_agents)
+            {
+                if(agent != otherAgent)
+                {
+                    GroundedPredicate otherAgentGoingSolo = GetGroundedGoingSoloPredicate(otherAgent);
+                    Predicate negationOtherAgentGoingSolo = otherAgentGoingSolo.Negate();
+                    otherAgentsNotGoingSolo.Add(negationOtherAgentGoingSolo);
+                }
+            }
+            Tuple<GroundedPredicate, List<Predicate>> tuple = new Tuple<GroundedPredicate, List<Predicate>>(agentGoingSolo, otherAgentsNotGoingSolo);
+            return tuple;
         }
 
         private GroundedPredicate GetRevealedGrounded(Constant d)
@@ -540,88 +596,32 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         {
             List<Action> dependenciesActions = new List<Action>();
             dependenciesActions.Add(GetRevealedDependencyParameterizedAction());
-            //dependenciesActions.AddRange(GetRevealedDummyDependencyActions(m_agents));
-            //dependenciesActions.Add(GetResetDependenciesRevealedAction(totalCostFunctionPredicate));
+            dependenciesActions.Add(GetStartGoingSoloParameterizedAction());
+            
             return dependenciesActions;
         }
 
-        /*
-        private List<Action> GetRevealedDummyDependencyActions(List<Agent> m_agents)
+        private Action GetStartGoingSoloParameterizedAction()
         {
-            List<Action> actions = new List<Action>();
-            foreach(Agent agent in m_agents)
-            {
-                int amountOfDependencies = amountOfAgentDependencies[agent];
-                if (amountOfDependencies < maxDependenciesOfAgent) //only do this dummy action for agents which don't have the max dependencies amount, so they will not stuck the other agents who want to reveal a dependency...
-                    actions.Add(GetRevealedDummyDependencyAction(agent));
-            }
+            ParametrizedAction startGoingSoloParameterized = new ParametrizedAction("start-going-solo");
+            Parameter agentParameter = GetAgentParameter();
+            startGoingSoloParameterized.AddParameter(agentParameter);
+            ParametrizedPredicate inJoinedStage = GetParameterizedInJoinedStagePredicate();
+            ParametrizedPredicate goingSolo = GetParameterizedGoingSoloPredicate();
 
-            return actions;
-        }
-        */
-        /*
-        private Action GetRevealedDummyDependencyAction(Agent agent)
-        {
-            Constant a = mapAgentToConstant[agent];
-            Action dummyAction = new Action("reveal-dummy-dependency_" + a.Name);
+            Predicate notInJoinedStage = inJoinedStage.Negate();
 
-            CompoundFormula preconditions = new CompoundFormula("and");
-
-            GroundedFunctionPredicate amountOfDepRevGrounded = GetAmountOfDependenciesRevealedGrounded(a);
-            GroundedFunctionPredicate equalsToMax = GetEqualsToMaxGrounded(amountOfDepRevGrounded);
-            Predicate notEqualsToMax = equalsToMax.Negate();
-
-            GroundedFunctionPredicate increaseAmountOfDepRev = GetIncreaseAmountOfDependenciesRevealedGrounded(amountOfDepRevGrounded);
-            //GroundedPredicate revealedSomething = new GroundedPredicate("revealed-something");
-            //revealedSomething.AddConstant(a);
-
-            //Predicate notRevealedSomething = revealedSomething.Negate();
-
-            preconditions.AddOperand(notEqualsToMax);
-            PredicateFormula effects = new PredicateFormula(increaseAmountOfDepRev);
-
-            foreach (Dependency dependency in agentsDependencies[agent])
-            {
-                GroundedPredicate revealedDependency = new GroundedPredicate("revealed");
-                Constant d = mapDependencyToConstant[dependency];
-                revealedDependency.AddConstant(d);
-
-                preconditions.AddOperand(revealedDependency);
-            }
-
-            dummyAction.Preconditions = preconditions;
-            dummyAction.SetEffects(effects);
-
-            return dummyAction;
-        }
-        */
-        /*
-        private Action GetResetDependenciesRevealedAction(GroundedFunctionPredicate totalCostFunctionPredicate)
-        {
-            Action resetDependenciesRevealed = new Action(resetDependenciesActionName);
-
-            CompoundFormula preconditions = new CompoundFormula("and");
+            PredicateFormula preconditions = new PredicateFormula(inJoinedStage);
             CompoundFormula effects = new CompoundFormula("and");
+            effects.AddOperand(goingSolo);
+            effects.AddOperand(notInJoinedStage);
 
-            foreach(Constant agent in agentsConstants)
-            {
-                GroundedPredicate revealedSomething = new GroundedPredicate("revealed-something");
-                revealedSomething.AddConstant(agent);
+            startGoingSoloParameterized.Preconditions = preconditions;
+            startGoingSoloParameterized.SetEffects(effects);
 
-                Predicate notRevealedSomething = revealedSomething.Negate();
-
-                preconditions.AddOperand(revealedSomething);
-                effects.AddOperand(notRevealedSomething);
-            }
-
-            effects.AddOperand(GetIncreaseTotalCostFunction(totalCostFunctionPredicate, revealedDependencyCost));
-
-            resetDependenciesRevealed.Preconditions = preconditions;
-            resetDependenciesRevealed.SetEffects(effects);
-
-            return resetDependenciesRevealed;
+            return startGoingSoloParameterized;
         }
-        */
+
         private Action GetRevealedDependencyParameterizedAction()
         {
             ParametrizedAction revealDependencyParameterized = new ParametrizedAction("reveal-dependency");
@@ -692,6 +692,36 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             groundedRevealedNumberOfDependencies.AddConstant(a);
             groundedRevealedNumberOfDependencies.AddConstant(numConstant);
             return groundedRevealedNumberOfDependencies;
+        }
+
+        private ParametrizedPredicate GetParameterizedGoingSoloPredicate()
+        {
+            ParametrizedPredicate parameterizedGoingSolo = new ParametrizedPredicate(goingSoloPredicateName);
+            Parameter agent = GetAgentParameter();
+            parameterizedGoingSolo.AddParameter(agent);
+            return parameterizedGoingSolo;
+        }
+
+        private GroundedPredicate GetGroundedGoingSoloPredicate(Agent agent)
+        {
+            GroundedPredicate groundedGoingSolo = new GroundedPredicate(goingSoloPredicateName);
+            Constant a = mapAgentToConstant[agent];
+            groundedGoingSolo.AddConstant(a);
+            return groundedGoingSolo;
+        }
+
+        private ParametrizedPredicate GetParameterizedInJoinedStagePredicate()
+        {
+            ParametrizedPredicate parameterizedInJoinedStage = new ParametrizedPredicate(joinedStagePredicateName);
+            
+            return parameterizedInJoinedStage;
+        }
+
+        private GroundedPredicate GetGroundedInJoinedStagePredicate()
+        {
+            GroundedPredicate groundedInJoinedStage = new GroundedPredicate(joinedStagePredicateName);
+
+            return groundedInJoinedStage;
         }
 
         private ParametrizedPredicate GetParameterizedNext()
@@ -819,6 +849,9 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             parametrizedPredicates.Add(GetParameterizedRevealedNumberOfDependencies());
 
             parametrizedPredicates.Add(GetParameterizedUsedDependency());
+
+            parametrizedPredicates.Add(GetParameterizedGoingSoloPredicate());
+            parametrizedPredicates.Add(GetParameterizedInJoinedStagePredicate());
 
             return parametrizedPredicates;
         }
