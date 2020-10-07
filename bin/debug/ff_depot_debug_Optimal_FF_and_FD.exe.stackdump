@@ -1,0 +1,10 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=004136B0
+eax=00000000 ebx=3C2B5000 ecx=00000000 edx=00000000 esi=22AA5FB8 edi=00000002
+ebp=039BA928 esp=039BA8E0 program=C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\bin\Debug\ff_depot_debug_Optimal_FF_and_FD.exe, pid 2076, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+039BA928  004136B0 (00423910, 0001431D, 004230C0, 00000098)
+039BABD8  00401BAF (00000001, 039BABFC, 200282D0, 61007F58)
+039BACD8  61007FB5 (00000000, 039BCD64, 61007120, 00000000)
+End of stack trace

@@ -1817,7 +1817,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Optimal_FF_and_FD", "Optimal_FD", "Optimal_FF" };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*//*"blocks_first_problem"*//*"logistic_first_prob"*/"driverlog_debug" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"logistics_3_problems_easy"*//*"Logistics_Test_example"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"Logistics_Test_example_simple"*//*"blocks_first_problem"*//*"logistic_first_prob"*//*"driverlog_debug"*//*"depot_debug"*//*"logistics_debug"*//*"driverlog_subset"*/"rovers_subset" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1978,7 +1978,7 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver5");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver5_exp2");
         }
 
         static StreamWriter swResults;
@@ -2303,7 +2303,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 2 });
+            dict.Add("domains", new int[] { 0 });
             return dict;
             */
         }

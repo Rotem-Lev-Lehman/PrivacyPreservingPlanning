@@ -322,6 +322,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             //List<GroundedFunctionPredicate> amountOfDepRevPredicates = GetInitAmountOfDependenciesRevealedToZeroPredicates(m_agents);
             //GroundedFunctionPredicate initTotalCostToZeroPredicate = GetInitTotalCostToZeroPredicate(totalCostFunctionPredicate);
             GroundedPredicate inJoinedStageGrounded = GetGroundedInJoinedStagePredicate();
+            List<Predicate> notGoingSolos = GetNotGoingSoloForStartState(m_agents);
 
             List<Action> dependenciesActions = GetDependenciesActions();
             allActions.AddRange(dependenciesActions);
@@ -444,6 +445,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             if (dJoined.Predicates.Contains(inJoinedStageGrounded))
                 throw new Exception("The in-joined-stage predicate must be unique, and cannot be in another domain.");
             publicStartState.AddPredicate(inJoinedStageGrounded);
+
+            foreach(Predicate p in notGoingSolos)
+            {
+                if (dJoined.Predicates.Contains(p))
+                    throw new Exception("The not(going-solo agent) predicates must be unique, and cannot be in another domain.");
+                publicStartState.AddPredicate(p);
+            }
             
             /*
             if (dJoined.Predicates.Contains(initTotalCostToZeroPredicate))
@@ -471,18 +479,32 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         private Tuple<GroundedPredicate, List<Predicate>> GetGoingSoloPredicatesForAgent(Agent agent, List<Agent> m_agents)
         {
             GroundedPredicate agentGoingSolo = GetGroundedGoingSoloPredicate(agent);
+            List<Predicate> otherAgentsNotGoingSolo = GetNotGoingSoloAgents(agent, m_agents, false);
+           
+            Tuple<GroundedPredicate, List<Predicate>> tuple = new Tuple<GroundedPredicate, List<Predicate>>(agentGoingSolo, otherAgentsNotGoingSolo);
+            return tuple;
+        }
+
+        private List<Predicate> GetNotGoingSoloForStartState(List<Agent> m_agents)
+        {
+            return GetNotGoingSoloAgents(null, m_agents, true);
+        }
+
+        private List<Predicate> GetNotGoingSoloAgents(Agent agent, List<Agent> m_agents, bool allAgents)
+        {
+            //allAgents = True --> returns notGoingSolo for all agents in m_agents
+            //allAgents = False --> returns notGoingSolo for all agents in m_agents but the specified agent
             List<Predicate> otherAgentsNotGoingSolo = new List<Predicate>();
-            foreach(Agent otherAgent in m_agents)
+            foreach (Agent otherAgent in m_agents)
             {
-                if(agent != otherAgent)
+                if (allAgents || agent != otherAgent)
                 {
                     GroundedPredicate otherAgentGoingSolo = GetGroundedGoingSoloPredicate(otherAgent);
                     Predicate negationOtherAgentGoingSolo = otherAgentGoingSolo.Negate();
                     otherAgentsNotGoingSolo.Add(negationOtherAgentGoingSolo);
                 }
             }
-            Tuple<GroundedPredicate, List<Predicate>> tuple = new Tuple<GroundedPredicate, List<Predicate>>(agentGoingSolo, otherAgentsNotGoingSolo);
-            return tuple;
+            return otherAgentsNotGoingSolo;
         }
 
         private GroundedPredicate GetRevealedGrounded(Constant d)

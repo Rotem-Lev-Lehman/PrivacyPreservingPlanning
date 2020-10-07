@@ -739,6 +739,7 @@ namespace Planning
         {
             dept = 0;
             string gpName = goalFact.Name + " " + goalFact.Constants[0];
+            string objGPName = "" + goalFact.Constants[0];
             List<Landmark> lowLayerLandmarks = new List<Landmark>();
             if (courentAgent.PublicPredicates.Contains(goalFact))
                 throw new Exception();
@@ -776,8 +777,9 @@ namespace Planning
                     Landmark newLand = new Landmark(l.type, l.GoalLandmark);
                     foreach(var itemFact in l.facts)
                     {
-                        string factName = itemFact.Key.Name + " " + itemFact.Key.Constants[0];
-                        if(factName.Equals(gpName))
+                        //string factName = itemFact.Key.Name + " " + itemFact.Key.Constants[0];
+                        string factName = "" + itemFact.Key.Constants[0];
+                        if(factName.Equals(objGPName))
                         {
                             newLand.AddFact(itemFact.Key, itemFact.Value);
                         }
