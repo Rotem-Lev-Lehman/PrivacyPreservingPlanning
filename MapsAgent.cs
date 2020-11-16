@@ -46,6 +46,7 @@ namespace Planning
 
         Dictionary<string, int> landmarksCount = null;
         Dictionary<string, HashSet<MapsVertex>> openLists = null;
+
         Dictionary<string, HashSet<MapsVertex>> receivedStates = null;
         //Dictionary<string, Mutex> globalMutex;
         List<string> agentsNames = null;
@@ -54,6 +55,7 @@ namespace Planning
         Dictionary<string, List<Predicate>> actionName_to_revealedDependenciesList;
         Dictionary<string, List<Predicate>> actionName_to_preconditionsDependenciesList;
         List<Predicate> dependenciesAtStartState;
+        HashSet<Tuple<string, Predicate>> dependenciesUsed;
 
         public MapsVertex startVertexForTrace;
         public Agent regularAgent;
@@ -143,6 +145,7 @@ namespace Planning
             actionName_to_revealedDependenciesList = new Dictionary<string, List<Predicate>>();
             actionName_to_preconditionsDependenciesList = new Dictionary<string, List<Predicate>>();
             dependenciesAtStartState = new List<Predicate>();
+            dependenciesUsed = new HashSet<Tuple<string, Predicate>>();
         }
 
         public void AddToEffectsActionsAndDependencies(string actionName, List<Predicate> predicates)
@@ -153,6 +156,16 @@ namespace Planning
         public void AddToPreconditionActionsAndDependencies(string actionName, List<Predicate> predicates)
         {
             actionName_to_preconditionsDependenciesList.Add(actionName, predicates);
+        }
+
+        public void AddToUsedDependencies(string action, Predicate effect)
+        {
+            dependenciesUsed.Add(new Tuple<string, Predicate>(action, effect));
+        }
+
+        public int GetAmountOfUsedDependencies()
+        {
+            return dependenciesUsed.Count;
         }
 
         public void SetDependenciesAtStartState(List<Predicate> predicates)
@@ -1361,8 +1374,8 @@ namespace Planning
                                 //notSended.Add(courentVertex);
                                 
                                 //Skip the expansion of this vertex:
-                                //closeList.Add(courentVertex);
-                                //goto done_outer_if;
+                                closeList.Add(courentVertex);
+                                goto done_outer_if;
                             }
 
                             if (flag && !MapsPlanner.directMessage)
@@ -1464,7 +1477,7 @@ namespace Planning
                 }
 
                 //This is for skipping the expansion of states that shouldn't be expanded or revieled to the other agents:
-                //done_outer_if:
+                done_outer_if:
 
                 if (myPreferableOpenList.Count > 0)
                     MapsAgent.preferFlags[name] = true;

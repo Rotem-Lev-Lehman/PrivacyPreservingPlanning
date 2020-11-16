@@ -411,6 +411,16 @@ namespace Planning
                 }
             }
 
+            int maxAmountOfUsedDependencies = 0;
+            foreach (MapsAgent agent in MapsAgents)
+            {
+                int amountOfUsedDependencies = agent.GetAmountOfUsedDependencies();
+                if (maxAmountOfUsedDependencies < amountOfUsedDependencies)
+                {
+                    maxAmountOfUsedDependencies = amountOfUsedDependencies;
+                }
+            }
+            Program.amountOfDependenciesUsed = maxAmountOfUsedDependencies;
             tracesHandler.FinishPlanning(highLevelPlan);
 
             return lplan;

@@ -223,7 +223,7 @@ namespace Planning
 
             bool ans;
             ExternalPlanners externalPlanners = new ExternalPlanners();
-            highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10 * 60000, out ans);
+            highLevelplan = externalPlanners.Plan(true, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10 * 60000, out ans);
 
             if (highLevelplan == null)
             {

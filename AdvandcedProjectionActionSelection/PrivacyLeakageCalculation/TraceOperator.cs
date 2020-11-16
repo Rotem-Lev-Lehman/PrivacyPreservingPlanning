@@ -42,6 +42,7 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
                 AddOperator(operators, agentID, agent, opID, action, isPrivate);
                 
                 opID++;
+                //Console.WriteLine(opID);
             }
             foreach (Action action in privateActions)
             {
@@ -127,7 +128,10 @@ namespace Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation
                 {
                     if (dict[varID] != val)
                     {
-                        throw new Exception("The two keys must go to the same value!");
+                        //throw new Exception("The two keys must go to the same value!");
+                        //this happens because we use some action like move block b1 from s3 to s4, to be on itself, which makes this not work well.
+                        //we can just ignore stupid actions like this, and we will just keep it as it is a "true" predicate (with the value of 0)
+                        dict[varID] = 0;
                     }
                 }
                 else

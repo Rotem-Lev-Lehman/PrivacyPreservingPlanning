@@ -28,6 +28,120 @@ namespace Planning
             // Console.WriteLine(" * ");
         }
 
+        public List<string> PlanFiles(bool bUseFF, bool bUseFD, string domainPath, string problemPath, int cMaxMilliseconds, out bool bUnsolvable)
+        {
+            List<string> lPlan = null;
+            unsolvableProblem = false;
+
+            //  string sFDPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
+            string domainStr = MakeDomainCompatible(File.ReadAllText(domainPath));
+            string problemStr = MakeProblemCompatible(File.ReadAllText(problemPath));
+            Process pFF = null, pFD = null;
+            if (bUseFF)
+                pFF = RunFF(domainStr, problemStr);
+            if (bUseFD)
+            {
+                //pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                pFD = RunFDPlannerWithFiles(domainStr, problemStr);
+            }
+
+            bUnsolvable = false;
+            bool bFFDone = false, bFDDone = false;
+
+            Process[] process;
+            if (bUseFF && !bUseFD)
+                process = new Process[] { pFF };
+            else
+                if (!bUseFF && bUseFD)
+                process = new Process[] { pFD };
+            else
+                process = new Process[] { pFF, pFD };
+
+            if (WaitForProcesses(process, cMaxMilliseconds, out bFFDone, out bFDDone))
+            {
+                if (bFFDone)
+                {
+                    //Console.WriteLine("Plan found by FF");
+                    Thread.Sleep(150);
+                    lPlan = ReadFFPlan(process[0].Id, out bUnsolvable);
+                    KillAll(process.ToList());
+                    Thread.Sleep(50);
+                }
+                else if (bFDDone)
+                {
+                    //Console.WriteLine("Plan found by FD");
+                    Thread.Sleep(100);
+                    int pFD_id = 0;
+                    if (bUseFF)
+                        pFD_id = 1;
+                    int exitCode = process[pFD_id].ExitCode;
+                    if (exitCode == 22)
+                    {
+                        Console.WriteLine("The search was terminated due to memory limitation");
+                    }
+                    if (exitCode == 12)
+                    {
+                        Console.WriteLine("There is no solution for this problem (exusted all possabilities)");
+                        unsolvableProblem = true;
+                    }
+
+                    lPlan = ReadPlan(fdPath);
+                    KillAll(process.ToList());
+                    Thread.Sleep(50);
+                }
+                return lPlan;
+            }
+            return null;
+        }
+
+        private string MakeProblemCompatible(string problemStr)
+        {
+            return RemovePrivateStuff(problemStr);
+        }
+
+        private string MakeDomainCompatible(string domainStr)
+        {
+            domainStr = domainStr.Replace(" :factored-privacy", "");
+            domainStr = RemovePrivateStuff(domainStr);
+            return domainStr;
+        }
+
+        private string RemovePrivateStuff(string pddlFile)
+        {
+            string res = pddlFile;
+            if (pddlFile.Contains("(:private")) {
+                string[] split = pddlFile.Split(new string[] { "(:private" }, StringSplitOptions.None);
+                string afterPrivate = split[1];
+                int openNum = 0;
+                int endPrivateIndex = -1;
+                for (int i = 0; i < afterPrivate.Length; i++)
+                {
+                    char curr = afterPrivate[i];
+                    if(curr == ')')
+                    {
+                        if(openNum == 0)
+                        {
+                            endPrivateIndex = i;
+                            break;
+                        }
+                        openNum--;
+                    }
+                    else if(curr == '(')
+                    {
+                        openNum++;
+                    }
+                }
+                if(endPrivateIndex == -1)
+                {
+                    throw new Exception("The private block does not end...");
+                }
+                string privateStuff = afterPrivate.Substring(0, endPrivateIndex);
+                string afterWithoutPrivateStuff = afterPrivate.Substring(endPrivateIndex + 1);
+                res = split[0] + privateStuff + afterWithoutPrivateStuff;
+            }
+            return res;
+        }
+
         public List<string> Plan(bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
         {
             //bUseFD = false;
@@ -418,6 +532,106 @@ namespace Planning
             process.Start();
         }*/
 
+        private Process RunFDPlannerWithFiles(string domainStr, string problemStr)
+        {
+            File.Delete(fdPath + "plan.txt");
+            File.Delete(fdPath + "mipsSolution.soln");
+            File.Delete(fdPath + "output.sas");
+            File.Delete(fdPath + "output");
+            File.Delete(fdPath + "sas_plan");
+
+            StreamWriter swDomainFile = new StreamWriter(fdPath + "dFD.pddl");
+            swDomainFile.Write(domainStr);
+            swDomainFile.Close();
+
+            StreamWriter swProblemFile = new StreamWriter(fdPath + "pFD.pddl");
+            swProblemFile.Write(problemStr);
+            swProblemFile.Close();
+
+            Process pFD = new Process();
+            //MFFProcesses[Thread.CurrentThread] = pFD;
+            pFD.StartInfo.WorkingDirectory = fdPath;
+            //this.pythonPath = @"C:\Users\OWNER\AppData\Local\Programs\Python\Python37-32\python.exe";
+            //this.FDpath = @"D:\cygwin\home\Fast-Downward-af6295c3dc9b\fast-downward.py";
+            pFD.StartInfo.FileName = fdPython27Path;
+
+            pFD.StartInfo.Arguments += fdRunningPath;
+
+
+            pFD.StartInfo.Arguments += " dFD.pddl pFD.pddl ";
+
+            //pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff()], preferred =[ff()])\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hlm,hff=lm_ff_syn(lm_rhw(reasonable_orders=true,lm_cost_type=ONE,cost_type=ONE))\" " +
+            //                        " --search \"lazy_greedy([hff,hlm],preferred=[hff,hlm],cost_type=ONE)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hdiv_pot=diverse_potentials(num_samples=1000, max_num_heuristics=infinity, max_potential=1e8, lpsolver=CPLEX, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
+            //    " --search \"astar(hdiv_pot)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hzo_pdb=zopdbs(patterns=systematic(1), transform=no_transform(), cache_estimates=true)\"" +
+            //    " --search \"lazy_greedy([hzo_pdb])\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+            //    " --search \"astar(hipdb)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hc=cegar(subtasks=[landmarks(),goals()], max_states=infinity, max_transitions=1M, max_time=infinity, pick=MAX_REFINED, use_general_costs=true, debug=false, transform=no_transform(), cache_estimates=true, random_seed=-1)\"" +
+            //    " --search \"astar(hc)\"";
+
+
+            //pFD.StartInfo.Arguments += " --search \"lazy_wastar(evals, preferred=[], reopen_closed=true, boost=1000, w=1, randomize_successors=false, preferred_successors_first=false, random_seed=-1, cost_type=NORMAL, bound=infinity, max_time=infinity, verbosity=normal)\"";
+            //pFD.StartInfo.Arguments += " --heuristic \"hipdb=ipdb(pdb_max_size=2000000, collection_max_size=20000000, num_samples=1000, min_improvement=10, max_time=infinity, random_seed=-1, max_time_dominance_pruning=infinity, transform=no_transform(), cache_estimates=true)\"" +
+            //      " --search \"lazy_greedy([hipdb])\"";
+            //      " --search \"astar(hipdb)\"";
+            //pFD.StartInfo.Arguments += " --search \"lazy_wastar([ipdb()], w=2)\"";
+            //pFD.StartInfo.Arguments += " --search \"astar(ff())\"";
+
+            //pFD.StartInfo.Arguments += " --overall-memory-limit \"3584M\"";
+            pFD.StartInfo.Arguments += " --search \"lazy_greedy([ff(), lmcut()])\"";
+
+            pFD.StartInfo.UseShellExecute = false;
+            pFD.StartInfo.RedirectStandardOutput = true;
+
+
+            pFD.StartInfo.RedirectStandardInput = true;
+            FDOutput = "";
+            pFD.OutputDataReceived += new DataReceivedEventHandler(FDOutputHandler);
+
+            FDProcesses = new HashSet<Process>();
+            pFD.Start();
+            pFD.BeginOutputReadLine();
+
+
+            MemoryStream msModels = new MemoryStream();
+            msModels.Position = 0;
+            BinaryReader srModels = new BinaryReader(msModels);
+
+            while (srModels.PeekChar() >= 0)
+                pFD.StandardInput.BaseStream.WriteByte(srModels.ReadByte());
+
+            pFD.StandardInput.Close();
+            return pFD;
+
+            /*
+            if (!pFD.WaitForExit((int)PlannerTimeout.TotalMilliseconds))//5 minutes max
+            {
+                pFD.Kill();
+                return null;
+            }
+            pFD.WaitForExit();
+            List<string> lPlan = null;
+            if (FDOutput.Contains("goal can be simplified to TRUE"))
+            {
+                return new List<string>();
+            }
+            if (FDOutput.Contains("Solution found"))
+            {
+                lPlan = readFDplan(sPath);
+            }
+            else
+            {
+                lPlan = null;
+            }
+            //MFFProcesses[Thread.CurrentThread] = null;
+            return lPlan;
+            */
+        }
+
+
         public Process RunFDPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem)
         {
             File.Delete(fdPath + "plan.txt");
@@ -630,6 +844,40 @@ namespace Planning
             return null;
         }
         static Mutex m = new Mutex();
+
+        private Process RunFF(string domainStr, string problemStr)
+        {
+            m.WaitOne();
+            Process pFF = new Process();
+
+            pFF.StartInfo.FileName = ffPath;
+
+
+            pFF.StartInfo.UseShellExecute = false;
+            pFF.StartInfo.RedirectStandardInput = true;
+            pFF.StartInfo.RedirectStandardOutput = true;
+            pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+            pFF.Start();
+            FFOutput[pFF.Id] = "";
+            pFF.BeginOutputReadLine();
+            m.ReleaseMutex();
+
+            string domain = domainStr;
+
+            pFF.StandardInput.Write(domain);
+            BinaryWriter b = new BinaryWriter(pFF.StandardInput.BaseStream);
+            b.Write('\0');
+
+            string problem = problemStr;
+            pFF.StandardInput.Write(problem);
+
+            b.Write('\0');
+
+            pFF.StandardInput.Close();
+
+            return pFF;
+        }
+
         public Process RunFF(MemoryStream msDomain, MemoryStream msProblem)
         {
             msProblem.Position = 0;

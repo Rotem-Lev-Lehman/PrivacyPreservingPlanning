@@ -2607,7 +2607,19 @@ namespace Planning
                     }
                     else
                     {
-
+                        foreach (GroundedPredicate gp in a.Effects.GetAllPredicates())
+                        {
+                            if (!gp.Negation)
+                            {
+                                if (!dNewPredicates.ContainsKey(gp.Name))
+                                    dNewPredicates[gp.Name] = new HashSet<GroundedPredicate>();
+                                dNewPredicates[gp.Name].Add(gp);
+                            }
+                        }
+                        string sName = a.Name;
+                        string sOutputName = "(" + sName;
+                        sOutputName += ")";
+                        MapGroundedActionNamesToOutputNames[sName] = sOutputName;
                         lGrounded.Add(a);
                     }
                 }

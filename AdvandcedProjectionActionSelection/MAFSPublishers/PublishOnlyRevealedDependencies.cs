@@ -10,9 +10,12 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
     {
         public bool CanPublish(MapsAgent agent, MapsVertex vertex)
         {
+            //remember which effects were revealed:
             HashSet<Predicate> effectsRevealed = new HashSet<Predicate>();
+            //remember which action revealed this effect:
+            Dictionary<Predicate, string> whoRevealed = new Dictionary<Predicate, string>();
             //init with the start state:
-            foreach(Predicate p in agent.GetDependenciesAtStartState())
+            foreach (Predicate p in agent.GetDependenciesAtStartState())
             {
                 effectsRevealed.Add(p);
             }
@@ -28,18 +31,24 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                         {
                             if (!effectsRevealed.Contains(preCond))
                             {
-                                //This is not a revealed effect, so it is a forbiden plan. don't publish this state.
+                                //This is not a revealed effect, so it is a forbidden plan. don't publish this state.
                                 return false;
+                            }
+                            else
+                            {
+                                //It is a used dependency.
+                                string previousAction = whoRevealed[preCond];
+                                agent.AddToUsedDependencies(previousAction, preCond);
                             }
                         }
                         //Reveal:
-                        RevealEffects(effectsRevealed, agent.GetPredicatesRevealedByAction(action.Name));
+                        RevealEffects(effectsRevealed, agent.GetPredicatesRevealedByAction(action.Name), action, whoRevealed);
                     }
                     else
                     {
                         //private actions will update the effects revealed, but will not check preconditions...
                         //Reveal:
-                        RevealEffects(effectsRevealed, action.HashEffects);
+                        RevealEffects(effectsRevealed, action.HashEffects, action, whoRevealed);
                     }
                 }
             }
@@ -47,7 +56,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             return true;
         }
 
-        private void RevealEffects(HashSet<Predicate> effectsRevealed, List<Predicate> effects)
+        private void RevealEffects(HashSet<Predicate> effectsRevealed, List<Predicate> effects, Action action, Dictionary<Predicate, string> whoRevealed)
         {
             foreach (Predicate p in effects)
             {
@@ -57,6 +66,11 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                     Predicate negation = p.Negate();
                     effectsRevealed.Remove(negation);
                     effectsRevealed.Add(p);
+                }
+                if (action.isPublic)
+                {
+                    //The dependencies are only between public actions.
+                    whoRevealed[p] = action.Name;
                 }
             }
         }

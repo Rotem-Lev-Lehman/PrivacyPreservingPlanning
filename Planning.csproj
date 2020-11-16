@@ -155,6 +155,7 @@
     <Compile Include="MapsPlanner.cs" />
     <Compile Include="MapsVertex.cs" />
     <Compile Include="PlanerWeightedLandmarkAndHsp.cs" />
+    <Compile Include="SingleAgentSolver.cs" />
     <Compile Include="VertexComparer.cs" />
     <Compile Include="VertexWeightedLandmarkAndHsp.cs" />
     <Compile Include="PlanerHspAndLandmarks.cs" />
