@@ -154,6 +154,7 @@
     <Compile Include="MapsAgent.cs" />
     <Compile Include="MapsPlanner.cs" />
     <Compile Include="MapsVertex.cs" />
+    <Compile Include="PddlAddDummyInitAction.cs" />
     <Compile Include="PlanerWeightedLandmarkAndHsp.cs" />
     <Compile Include="SingleAgentSolver.cs" />
     <Compile Include="VertexComparer.cs" />

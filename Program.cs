@@ -107,9 +107,8 @@ namespace Planning
         //Single agent solver stuff:
         public static List<Tuple<string, string>> domainsAndProblems;
 
-        //Add an init-action, it is for the ability to decide on not revealing some dependencies which are known in the start-state.
-        //It will be true for experiments which are using my (Rotem's) experiment, and false otherwise (Controlled in the Main function):
-        public static bool addDummyInitAction;
+        //Run with a dummy init action:
+        public static bool runWithDummyInitAction; //This shall be true if the user is using Rotem's experiment settings (with the partial discloser of private dependencies)
 
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
@@ -1804,8 +1803,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*/"logistics_with_init_test"/*"Logistics_first_prob_debug"*/ };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*/"logistics_with_init_test"/*"Logistics_first_prob_debug"*/ };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1890,6 +1889,10 @@ namespace Planning
         static void RunSpecificExperiment(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString, bool regularExperiment)
         {
             string domainsPath = baseFolderName + @"\factored\";
+            if (runWithDummyInitAction)
+            {
+                domainsPath += @"domains_with_init_action\";
+            }
             string resultName = @"\experiment_results";
             string outputFileDirectory = @"\Experiment_Output_File";
             string outputFileName = @"\output.csv";
@@ -2036,8 +2039,9 @@ namespace Planning
             Console.WriteLine("Running configuration " + highLevelPlanerType);
             bool runningMyExperiment = true;
             bool creatingNewBenchmarks = false;
+            bool addDummyInitAction = false;
 
-            addDummyInitAction = runningMyExperiment; //true if we use Rotem's experiment, and false otherwise.
+            runWithDummyInitAction = runningMyExperiment; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
 
             if (runningMyExperiment)
             {
@@ -2089,6 +2093,12 @@ namespace Planning
                 //CreateMALogistics(savePath, 3, 7, 2, 5, 5, 25, 5);
                 //CreateMABlocksWorld(savePath, 3, 7, 2, 5, 5, 25, 5);
                 CreateMABlocksWorld(savePath, 6, 7, 5, 6, 7, 8, 1);
+            }
+            else if (addDummyInitAction)
+            {
+                //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+                string[] allPossibleDependenciesDomains = { "taxi", "wireless", "woodworking08" }; // need to look at these domains, they have constants in them...
+                AddADummyInitActionToDomains(allPossibleDependenciesDomains);
             }
             else
             {
@@ -2150,6 +2160,41 @@ namespace Planning
 
             Console.WriteLine("Press any key to end the program...");
             Console.ReadKey();
+        }
+
+        private static void AddADummyInitActionToDomains(string[] domains)
+        {
+            Console.WriteLine("Adding dummy init action to all the following domains:");
+            foreach(string domain in domains)
+            {
+                Console.WriteLine(domain);
+            }
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("Starting now");
+            string sourcePath = baseFolderName + @"\factored";
+            string destPath = baseFolderName + @"\factored\domains_with_init_action";
+            foreach(string domain in domains)
+            {
+                Console.WriteLine("*********************************************************");
+                Console.WriteLine("Now adding dummy init action to the domain: " + domain);
+                string domainSourcePath = sourcePath + @"\" + domain;
+                string domainDestPath = destPath + @"\" + domain;
+                string[] problems = Directory.GetDirectories(domainSourcePath);
+                foreach(string problemPath in problems)
+                {
+                    string problem = problemPath.Remove(0, domainSourcePath.Length + 1); //get only the name of the last subdirectory. Remove the \ too
+                    Console.WriteLine("Problem: " + problem);
+                    string problemSourcePath = domainSourcePath + @"\" + problem;
+                    string problemDestPath = domainDestPath + @"\" + problem;
+                    PddlAddDummyInitAction.AddDummyInitAction(problemSourcePath, problemDestPath);
+                }
+            }
+            //string sourceFolderPath = baseFolderName + @"\factored\Logistics_first_prob_debug\probLOGISTICS-4-0";
+            //string destFolderPath = baseFolderName + @"\factored\Logistics_first_prob_debug_with_init\probLOGISTICS-4-0";
+            
+
+            Console.WriteLine("*********************************************************");
+            Console.WriteLine("Done!");
         }
 
         private static void RunAndCreateTracesForeachProblemsMinAndMaxSolved(Dictionary<string, int[]> selectorsAndDomains)
