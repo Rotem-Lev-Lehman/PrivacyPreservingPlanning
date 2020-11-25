@@ -16,9 +16,17 @@ namespace Planning
         public static string cygwinPath = @"C:\cygwin\";
         public static string fdOutputPath = @"C:\cygwin\home\shlomi\";
 
-        public static string fdPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\src\garbage\"; //change this to your FD pddl files folder path
-        public static string fdPython27Path = @"C:\cygwin64\bin\python2.7.exe"; //change this to your FD python path
-        public static string fdRunningPath = @"C:\cygwin64\home\Fast-Downward-af6295c3dc9b\fast-downward.py"; //change this to your FD running path
+        //******************************************************************************************************************************************************
+
+        public static string rotemCygwinPath = @"C:\cygwin64"; //My computer path
+        //public static string rotemCygwinPath = @"D:\Rotem\Cygwin"; //Left server path
+        //public static string rotemCygwinPath = @"D:\rotem\Cygwin"; //Right server path
+
+        public static string fdPath = rotemCygwinPath + @"\home\Fast-Downward-af6295c3dc9b\src\garbage\"; //change this to your FD pddl files folder path
+        public static string fdPython27Path = rotemCygwinPath + @"\bin\python2.7.exe"; //change this to your FD python path
+        public static string fdRunningPath = rotemCygwinPath + @"\home\Fast-Downward-af6295c3dc9b\fast-downward.py"; //change this to your FD running path
+
+        //******************************************************************************************************************************************************
 
         public static bool unsolvableProblem = false;
 

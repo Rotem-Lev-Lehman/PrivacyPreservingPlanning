@@ -30,8 +30,8 @@ namespace Planning
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
         public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner};
         
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.SingleAgentPlanner; //Plan using the single agent pddl file only (go over all agents until a single agent plan is found).
         static public bool testingProjectionWithLessDependenciesRevealed = true;
@@ -78,6 +78,7 @@ namespace Planning
         public static string currentProblemName = null;
         //golden standard calculation:
         public static int amountOfDependenciesUsed = 0;
+        public static int amountOfDependenciesUsedInPlanningProcess = 0; //Using in MAFS only...
         public static string goldenStandardRootDirectory = null;
         public static string goldenStandardDomainDirectory = null;
         public static string goldenStandardCurrentDirectory = null;
@@ -1356,6 +1357,7 @@ namespace Planning
 
                         //golden standard calculation:
                         amountOfDependenciesUsed = 0;
+                        amountOfDependenciesUsedInPlanningProcess = 0;
                         goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
                         System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
                         if (!alreadySolved.ContainsKey(di.Name))
@@ -1550,6 +1552,7 @@ namespace Planning
                  + "," + MapsPlanner.generateCounter
                  + "," + amountOfDependenciesUsed
                  + "," + amountOfDependenciesPublished
+                 + "," + amountOfDependenciesUsedInPlanningProcess
                //  + "," + ffMessageCounter
                //  + "," + countMacro
                // + "," + countAvgPerMacro
@@ -1613,13 +1616,13 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment)
         {
             List<double> percentages = new List<double>();
-            /*if (!regularExperiment)
+            if (!regularExperiment)
             {
                 for (double i = 0; i <= 1; i += 0.05)
                 {
                     percentages.Add(i);
                 }
-            }*/
+            }
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1692,7 +1695,7 @@ namespace Planning
 
             using (System.IO.StreamWriter outFile = new System.IO.StreamWriter(outputFile))
             {
-                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used, amount of dependecies published";
+                string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used, amount of dependecies published, amount of dependencies used in planning process (MAFS)";
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
@@ -1825,7 +1828,7 @@ namespace Planning
 
             string experimentPath = baseFolderName + @"\Experiment\" + plannerType + @"\";
 
-            goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
+            goldenStandardRootDirectory = baseFolderName + @"\hindsight"; //changed it's name to hindsight as it is in the paper...
             System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
             string collaborationPath = experimentPath + @"Collaboration\Order_Of_Agents\";
@@ -2005,12 +2008,12 @@ namespace Planning
 
         static void RunProjectionOnlyExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only_ICAPS");
         }
 
         static void RunMAFSProjectionExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_ICAPS");
         }
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)

@@ -88,6 +88,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 List<Predicate> preconditions = GetTransformedArtificialPredicates(agent, action.HashPrecondition);
                 mafsAgent.AddToPreconditionActionsAndDependencies(action.Name, preconditions);
             }
+            MapsPlanner.allProjectionActions = allProjectionAction;
         }
 
         private List<Predicate> GetTransformedArtificialPredicates(Agent agent, List<Predicate> predicates)

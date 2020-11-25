@@ -35,9 +35,13 @@ namespace Planning
         public static AHandleTraces tracesHandler = null;
         public static List<string> highLevelPlan = null;
         public static Dictionary<string, MapsAgent> name2mapsAgent = null;
+        public static List<Action> allProjectionActions = null;
+        public List<Agent> agents = null;
 
         public MapsPlanner(List<Agent> agents,List<Domain> lDomains, List<Problem> lProblems)
         {
+            this.agents = agents;
+
             agentsPublicPreconditions = new Dictionary<Agent, HashSet<GroundedPredicate>>();
             agentsPublicEffects = new Dictionary<Agent, HashSet<GroundedPredicate>>();
             recoverActionEffect = new Dictionary<string, Dictionary<string, HashSet<string>>>();
@@ -420,7 +424,12 @@ namespace Planning
                     maxAmountOfUsedDependencies = amountOfUsedDependencies;
                 }
             }
-            Program.amountOfDependenciesUsed = maxAmountOfUsedDependencies;
+            Program.amountOfDependenciesUsedInPlanningProcess = maxAmountOfUsedDependencies;
+            if (lplan != null)
+            {
+                //calculate amount of dependencies used:
+                Program.amountOfDependenciesUsed = AdvancedLandmarkProjectionPlaner.CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelPlan, allProjectionActions, agents, null, false);
+            }
             tracesHandler.FinishPlanning(highLevelPlan);
 
             return lplan;

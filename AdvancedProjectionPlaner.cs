@@ -286,7 +286,7 @@ namespace Planning
                 }
                 */
                 //calculate amount of dependencies used:
-                Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces);
+                Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces, true);
 
             }
 
@@ -349,7 +349,7 @@ namespace Planning
             File.WriteAllText(filename, content);
         }
 
-        private int CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(List<string> highLevelplan, List<Action> allProjectionAction, List<Agent> agents, Dictionary<Agent, LeakageTrace> traces)
+        public static int CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(List<string> highLevelplan, List<Action> allProjectionAction, List<Agent> agents, Dictionary<Agent, LeakageTrace> traces, bool saveTracesForGoldenStandard)
         {
             Dictionary<string, int> amount = new Dictionary<string, int>();
             HashSet<Predicate> effectsTold = new HashSet<Predicate>();
@@ -424,26 +424,33 @@ namespace Planning
             }
             */
             int currGoldenStandard = GetCurrGoldenStandard();
-            if(currGoldenStandard == -1 || maxPublished < currGoldenStandard)
+            if (currGoldenStandard == -1 || maxPublished < currGoldenStandard)
             {
                 //we have a new golden standard!
                 currGoldenStandard = maxPublished;
-                CreateTracesAndSaveGoldenStandard(traces, agentActionPredicate, currGoldenStandard);
+                if (saveTracesForGoldenStandard)
+                {
+                    CreateTracesAndSaveGoldenStandard(traces, agentActionPredicate, currGoldenStandard, agents);
+                }
+
+                //anyways, replace the golden standard even if you do not save it's made-up traces...
+                ReplaceGoldenStandardFile(currGoldenStandard);
             }
 
             return maxPublished;
         }
 
-        private void CreateTracesAndSaveGoldenStandard(Dictionary<Agent, LeakageTrace> traces, List<Tuple<string, Action, Predicate>> agentActionPredicate, int goldenStandard)
+        private static void CreateTracesAndSaveGoldenStandard(Dictionary<Agent, LeakageTrace> traces, List<Tuple<string, Action, Predicate>> agentActionPredicate, int goldenStandard, List<Agent> agents)
         {
+
             Dictionary<int, LeakageTrace> goldenTraces = new Dictionary<int, LeakageTrace>();
-            foreach(Agent agent in traces.Keys)
+            foreach (Agent agent in traces.Keys)
             {
                 goldenTraces.Add(agent.getID(), LeakageTrace.CopyTraceWithoutStates(traces[agent]));
             }
-            foreach(Tuple<string, Action, Predicate> tuple in agentActionPredicate)
+            foreach (Tuple<string, Action, Predicate> tuple in agentActionPredicate)
             {
-                GenerateStates(goldenTraces, tuple);
+                GenerateStates(goldenTraces, tuple, agents);
             }
             string tracesFolder = Program.goldenStandardCurrentDirectory + @"\traces";
             DeleteGoldenTraceFolder(tracesFolder);
@@ -452,10 +459,9 @@ namespace Planning
             {
                 WriteGoldenTraceToFile(agent, goldenTraces[agent], tracesFolder);
             }
-            ReplaceGoldenStandardFile(goldenStandard);
         }
 
-        private void DeleteGoldenTraceFolder(string tracesFolder)
+        private static void DeleteGoldenTraceFolder(string tracesFolder)
         {
             if (Directory.Exists(tracesFolder))
             {
@@ -464,7 +470,7 @@ namespace Planning
             }
         }
 
-        private void ReplaceGoldenStandardFile(int goldenStandard)
+        private static void ReplaceGoldenStandardFile(int goldenStandard)
         {
             DirectoryInfo d = new DirectoryInfo(Program.goldenStandardCurrentDirectory);
             FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
@@ -481,14 +487,14 @@ namespace Planning
             File.Create(filename).Dispose();
         }
 
-        private void WriteGoldenTraceToFile(int agent, LeakageTrace leakageTrace, string tracesFolder)
+        private static void WriteGoldenTraceToFile(int agent, LeakageTrace leakageTrace, string tracesFolder)
         {
             string filename = tracesFolder + @"\agent" + agent + ".json";
             string content = JsonConvert.SerializeObject(leakageTrace);
             File.WriteAllText(filename, content);
         }
 
-        private void GenerateStates(Dictionary<int, LeakageTrace> goldenTraces, Tuple<string, Action, Predicate> tuple)
+        private static void GenerateStates(Dictionary<int, LeakageTrace> goldenTraces, Tuple<string, Action, Predicate> tuple, List<Agent> agents)
         {
             Predicate revealed = tuple.Item3;
             int agentID = Agent.getID(tuple.Item1);
@@ -497,14 +503,14 @@ namespace Planning
                 if(agent.getID() == agentID)
                 {
                     List<Action> affected = actionsAffectedForAgent[agent][revealed];
-                    EnterDependenciesToTrace(agent, new Tuple<Action, Predicate>(tuple.Item2, revealed), affected, goldenTraces);
+                    EnterDependenciesToTrace(agent, new Tuple<Action, Predicate>(tuple.Item2, revealed), affected, goldenTraces, agents);
                     break;
                 }
             }
         }
 
 
-        public void EnterDependenciesToTrace(Agent agent, Tuple<Action, Predicate> chosen, List<Action> actionsAffected, Dictionary<int, LeakageTrace> traces)
+        public static void EnterDependenciesToTrace(Agent agent, Tuple<Action, Predicate> chosen, List<Action> actionsAffected, Dictionary<int, LeakageTrace> traces, List<Agent> agents)
         {
             if (actionsAffected.Count == 0)
                 return;
@@ -527,9 +533,9 @@ namespace Planning
             Dictionary<Predicate, int> publicEffectsOfChosen = getPublicEffects(chosen.Item1.HashEffects);
             int recievedStateID = TraceState.GetNextStateID();
 
-            TraceState recievedState = getRevealerRecievedState(agent, privatePredicate, val, publicEffectsOfChosen, recievedStateID);
+            TraceState recievedState = getRevealerRecievedState(agent, privatePredicate, val, publicEffectsOfChosen, recievedStateID, agents);
 
-            List<TraceState> sentStates = getRevealerSentStates(agent, actionsAffected, val, recievedStateID);
+            List<TraceState> sentStates = getRevealerSentStates(agent, actionsAffected, val, recievedStateID, agents);
 
             traces[agent.getID()].AddStates(recievedState, sentStates);
 
@@ -537,7 +543,7 @@ namespace Planning
 
         }
 
-        private void CopyTraceStatesForAllAgents(List<Agent> agents, Agent agent, TraceState recievedState, List<TraceState> sentStates, int val, Dictionary<int, LeakageTrace> traces)
+        private static void CopyTraceStatesForAllAgents(List<Agent> agents, Agent agent, TraceState recievedState, List<TraceState> sentStates, int val, Dictionary<int, LeakageTrace> traces)
         {
             bool found = false;
             foreach (Agent other in agents)
@@ -565,7 +571,7 @@ namespace Planning
                 throw new Exception("Agent not found");
         }
 
-        private TraceState AlterState(TraceState state, Agent other, bool first, bool imTheSender, int val, Dictionary<int, LeakageTrace> traces)
+        private static TraceState AlterState(TraceState state, Agent other, bool first, bool imTheSender, int val, Dictionary<int, LeakageTrace> traces)
         {
             string context = "received";
             int iParentID = -1;
@@ -588,7 +594,7 @@ namespace Planning
             return altered;
         }
 
-        private List<int> AlterVals(List<int> values, Agent other, int val, Dictionary<int, LeakageTrace> traces)
+        private static List<int> AlterVals(List<int> values, Agent other, int val, Dictionary<int, LeakageTrace> traces)
         {
             int privateVal = 1;
             if (val == 1)
@@ -612,7 +618,7 @@ namespace Planning
             return altered;
         }
 
-        private TraceState getRevealerRecievedState(Agent agent, Predicate predicateBeforeNegation, int val, Dictionary<Predicate, int> publicEffectsOfChosen, int stateID)
+        private static TraceState getRevealerRecievedState(Agent agent, Predicate predicateBeforeNegation, int val, Dictionary<Predicate, int> publicEffectsOfChosen, int stateID, List<Agent> agents)
         {
             List<int> receivedStateVals = GetVals(predicateBeforeNegation, agent, val, publicEffectsOfChosen);
             Agent sender = LeakageTrace.getNextAgentAndMoveToTheNextInLine(agent);
@@ -628,7 +634,7 @@ namespace Planning
             return receivedState;
         }
 
-        private List<TraceState> getRevealerSentStates(Agent agent, List<Action> actionsAffected, int val, int recievedStateID)
+        private static List<TraceState> getRevealerSentStates(Agent agent, List<Action> actionsAffected, int val, int recievedStateID, List<Agent> agents)
         {
             int diff = 1;
             List<TraceState> sentStates = new List<TraceState>();
@@ -654,7 +660,7 @@ namespace Planning
             return sentStates;
         }
 
-        private Dictionary<Predicate, int> getPublicEffects(List<Predicate> hashEffects)
+        private static Dictionary<Predicate, int> getPublicEffects(List<Predicate> hashEffects)
         {
             Dictionary<Predicate, int> publicEffects = new Dictionary<Predicate, int>();
             foreach (Predicate p in hashEffects)
@@ -675,7 +681,7 @@ namespace Planning
             return publicEffects;
         }
 
-        private List<int> GetIDs(int stateID, List<Agent> agents, Agent agent, int diff)
+        private static List<int> GetIDs(int stateID, List<Agent> agents, Agent agent, int diff)
         {
             List<int> IDs = new List<int>();
             bool found = false;
@@ -697,7 +703,7 @@ namespace Planning
             return IDs;
         }
 
-        private List<int> GetVals(Predicate predicate, Agent agent, int value, Dictionary<Predicate, int> publicEffects)
+        private static List<int> GetVals(Predicate predicate, Agent agent, int value, Dictionary<Predicate, int> publicEffects)
         {
             int oppositeVal = 1;
             if (value == 1)
@@ -734,7 +740,7 @@ namespace Planning
         }
 
 
-        private int GetCurrGoldenStandard()
+        private static int GetCurrGoldenStandard()
         {
             DirectoryInfo d = new DirectoryInfo(Program.goldenStandardCurrentDirectory);
             FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
@@ -769,7 +775,7 @@ namespace Planning
             return 0;
         }
 
-        private void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent, Dictionary<Predicate, Action> whichActionThisBelongsTo, Action action)
+        private static void insertToEffectsSet(HashSet<Predicate> effectsActive, HashSet<Predicate> effectsTold, Dictionary<Predicate, string> whoToldThis, Predicate p, string agent, Dictionary<Predicate, Action> whichActionThisBelongsTo, Action action)
         {
             Predicate negation = p.Negate();
             if (effectsActive.Contains(negation))
