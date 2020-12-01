@@ -15,7 +15,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             //remember which action revealed this effect:
             Dictionary<Predicate, string> whoRevealed = new Dictionary<Predicate, string>();
             //init with the start state:
-            foreach (Predicate p in agent.GetDependenciesAtStartState())
+            List<Predicate> dependenciesFromStartState = agent.GetDependenciesAtStartState();
+            foreach (Predicate p in dependenciesFromStartState)
             {
                 effectsRevealed.Add(p);
             }
@@ -43,12 +44,6 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                         }
                         //Reveal:
                         RevealEffects(effectsRevealed, agent.GetPredicatesRevealedByAction(action.Name), action, whoRevealed);
-                    }
-                    else
-                    {
-                        //private actions will update the effects revealed, but will not check preconditions...
-                        //Reveal:
-                        RevealEffects(effectsRevealed, action.HashEffects, action, whoRevealed);
                     }
                 }
             }

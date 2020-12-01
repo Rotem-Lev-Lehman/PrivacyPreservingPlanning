@@ -30,8 +30,8 @@ namespace Planning
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
         public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner};
         
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.SingleAgentPlanner; //Plan using the single agent pddl file only (go over all agents until a single agent plan is found).
         static public bool testingProjectionWithLessDependenciesRevealed = true;
@@ -1807,7 +1807,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*/"logistics_with_init_test"/*"Logistics_first_prob_debug"*/ };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*/"logistics_problems" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2404,7 +2404,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 4 });
             return dict;
             */
         }

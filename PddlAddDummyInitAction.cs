@@ -69,15 +69,21 @@ namespace Planning
             domain = FixConstants(domain, objects, agents);
             domain = FixPredicates(domain);
             string placeHolderGP = GetPlaceHolderGP();
-            domain = FixRegularActions(domain, placeHolderGP);
-            domain = AddNewActions(domain, prevInit, agentNum, agents);
+            string sectionBeforeActions = "(:predicates";
+            if (domain.Contains("(:functions"))
+            {
+                //If there are functions in this domain (if it is the Elevators domain), then put the actions after the "functions" section:
+                sectionBeforeActions = "(:functions";
+            }
+            domain = FixRegularActions(domain, placeHolderGP, sectionBeforeActions);
+            domain = AddNewActions(domain, prevInit, agentNum, agents, sectionBeforeActions);
             return domain;
         }
 
-        private static string AddNewActions(string domain, string prevInit, int agentNum, List<int> agents)
+        private static string AddNewActions(string domain, string prevInit, int agentNum, List<int> agents, string sectionBeforeActions)
         {
             string newActions = GetNewActions(prevInit, agentNum, agents);
-            string updatedDomain = InsertNewSectionAfterSection(domain, newActions, "(:predicates");
+            string updatedDomain = InsertNewSectionAfterSection(domain, newActions, sectionBeforeActions);
             return updatedDomain;
         }
 
@@ -171,7 +177,7 @@ namespace Planning
             return canUseInit;
         }
 
-        private static string FixRegularActions(string domain, string placeHolderGP)
+        private static string FixRegularActions(string domain, string placeHolderGP, string sectionBeforeActions)
         {
             List<string> actions = GetAllActions(domain);
             List<string> fixedActions = new List<string>();
@@ -181,12 +187,12 @@ namespace Planning
                 fixedActions.Add(fixedAction);
             }
 
-            string updatedDomain = SwitchActions(domain, fixedActions);
+            string updatedDomain = SwitchActions(domain, fixedActions, sectionBeforeActions);
 
             return updatedDomain;
         }
 
-        private static string SwitchActions(string domain, List<string> fixedActions)
+        private static string SwitchActions(string domain, List<string> fixedActions, string sectionBeforeActions)
         {
             string updatedDomain = RemoveActions(domain);
             string allActions = "";
@@ -194,7 +200,7 @@ namespace Planning
             {
                 allActions += "\n\n" + action;
             }
-            updatedDomain = InsertNewSectionAfterSection(updatedDomain, allActions, "(:predicates");
+            updatedDomain = InsertNewSectionAfterSection(updatedDomain, allActions, sectionBeforeActions);
             return updatedDomain;
         }
 
@@ -353,20 +359,21 @@ namespace Planning
             string newProblemText = null;
             string allText = File.ReadAllText(problem);
             objects = GetObjectsSection(allText);
-            prevInit = GetInitSection(allText);
-            newProblemText = GetNewProblemText(allText, newInit);
+            Tuple<string, string> prevInit_functionsInit = GetInitSection(allText);
+            prevInit = prevInit_functionsInit.Item1;
+            newProblemText = GetNewProblemText(allText, newInit, prevInit_functionsInit.Item2);
 
             return new Tuple<string, string, string>(objects, prevInit, newProblemText);
         }
 
-        private static string GetNewProblemText(string allText, List<string> newInit)
+        private static string GetNewProblemText(string allText, List<string> newInit, string functionsInit)
         {
             string withoutObjectsAndInit = ClearObjectsAndInitSections(allText);
-            string newProblemText = InsertNewInit(withoutObjectsAndInit, newInit);
+            string newProblemText = InsertNewInit(withoutObjectsAndInit, newInit, functionsInit);
             return newProblemText;
         }
 
-        private static string InsertNewInit(string withoutObjectsAndInit, List<string> newInit)
+        private static string InsertNewInit(string withoutObjectsAndInit, List<string> newInit, string functionsInit)
         {
             string newInitStr = "";
             foreach(string gp in newInit)
@@ -374,7 +381,12 @@ namespace Planning
                 newInitStr += "\n\t" + gp;
             }
             string[] split = withoutObjectsAndInit.Split(new string[] { "(:init" }, StringSplitOptions.None);
-            string newText = split[0] + "(:init" + newInitStr + split[1];
+            string newText = split[0] + "(:init" + newInitStr;
+            if (functionsInit != null)
+            {
+                newText += "\n" + functionsInit;
+            }
+            newText += split[1];
             return newText;
         }
 
@@ -406,10 +418,22 @@ namespace Planning
             return clearedSection;
         }
 
-        private static string GetInitSection(string allText)
+        private static Tuple<string, string> GetInitSection(string allText)
         {
-            string objects = GetSection(allText, "(:init");
-            return objects;
+            string init = GetSection(allText, "(:init");
+            string functions = null;
+            if (init.Contains("(="))
+            {
+                //This problem contains functions. The function's initialization must remain in the init of the problem.
+                string[] splitInit = init.Split(new string[] { "(=" }, StringSplitOptions.None);
+                init = splitInit[0];
+                functions = "\t";
+                for(int i = 1; i < splitInit.Length; i++)
+                {
+                    functions += "(=" + splitInit[i];   
+                }
+            }
+            return new Tuple<string, string>(init, functions);
         }
 
         private static string GetObjectsSection(string allText)
