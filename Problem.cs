@@ -998,7 +998,7 @@ namespace Planning
 
             sw.WriteLine("(:goal " + Goal + ")");
 
-            WriteMetrics(sw);
+            //WriteMetrics(sw);
 
             sw.WriteLine(")");
             sw.Flush();

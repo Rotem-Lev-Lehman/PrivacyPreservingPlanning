@@ -2099,8 +2099,8 @@ namespace Planning
             }
             else if (addDummyInitAction)
             {
-                //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-                string[] allPossibleDependenciesDomains = { "taxi", "wireless", "woodworking08" }; // need to look at these domains, they have constants in them...
+                string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "zenotravel" };
+                //string[] allPossibleDependenciesDomains = { "taxi", "wireless", "woodworking08" }; // need to look at these domains, they have constants in them...
                 AddADummyInitActionToDomains(allPossibleDependenciesDomains);
             }
             else
@@ -2404,7 +2404,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 4 });
+            dict.Add("domains", new int[] { 3 });
             return dict;
             */
         }
