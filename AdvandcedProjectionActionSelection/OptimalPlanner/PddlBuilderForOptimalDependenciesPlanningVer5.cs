@@ -191,11 +191,12 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 {
                     //List<Dependency> dependenciesForAction = new List<Dependency>();
                     //List<Predicate> regularEffects = new List<Predicate>();
-
+                    /*
                     if(action.Name == OptimalDependenciesPlanner.startStateDummyActionName)
                     {
                         continue;
                     }
+                    */
 
                     CompoundFormula editedEffects = new CompoundFormula("and");
                     CompoundFormula editedPreconditions = new CompoundFormula("and");
@@ -259,11 +260,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                                 cfAnd.AddOperand(usedDependency);
                                 cfAnd.AddOperand(revealedDependency);
 
+                                /*
                                 if (dependency.action.Name == OptimalDependenciesPlanner.startStateDummyActionName)
                                 {
                                     cfOr.AddOperand(usedDependency);
                                 }
                                 else
+                                */
                                 {
                                     cfOr.AddOperand(cfAnd);
                                 }
@@ -356,12 +359,14 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 }
             }
 
+            /*
             foreach (Dependency dependency in OptimalDependenciesPlanner.startStateDependencies)
             {
                 Constant dep = mapDependencyToConstant[dependency];
                 GroundedPredicate usedDependency = GetUsedDependencyGrounded(dep);
                 publicStartState.AddPredicate(usedDependency);
             }
+            */
 
             foreach (ParametrizedPredicate pp in parametrizedPredicates)
             {

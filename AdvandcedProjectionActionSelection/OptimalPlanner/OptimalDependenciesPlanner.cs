@@ -15,25 +15,25 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public bool version2Or3 = false; //if version1 is False, than we will check this. This will choose from version2/3 To version4
         //As seems now, we should prefer using version3...
 
-        public static string startStateDummyActionName = "start-state-dummy-action";
-        public static List<Dependency> startStateDependencies;
+        //public static string startStateDummyActionName = "start-state-dummy-action";
+        //public static List<Dependency> startStateDependencies;
 
         public List<string> Plan(List<Agent> m_agents)
         {
             Program.isValidPlan = true;
             Program.optimalAmountOfDependenciesForCurrentProblem = -1;
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
-            if(Program.typeOfSelector == "Optimal_FF_and_FD")
+            if(Program.typeOfSelector == "FF_and_FD")
             {
                 usingFF = true;
                 usingFD = true;
             }
-            else if(Program.typeOfSelector == "Optimal_FD")
+            else if(Program.typeOfSelector == "FD")
             { 
                 usingFF = false;
                 usingFD = true;
             }
-            else //Program.typeOfSelector == "Optimal_FF"
+            else //Program.typeOfSelector == "FF"
             {
                 usingFF = true;
                 usingFD = false;
@@ -48,13 +48,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             List<Predicate> predicates = new List<Predicate>();
             int index = 0;
 
-            startStateDependencies = new List<Dependency>();
+            //startStateDependencies = new List<Dependency>();
 
             foreach (Agent agent in m_agents)
             {
-                Action startStateAgentAction = initializeStartStateAction(agent);
-                agent.m_actions.Add(startStateAgentAction);
-                agent.publicActions.Add(startStateAgentAction);
+                //Action startStateAgentAction = initializeStartStateAction(agent);
+                //agent.m_actions.Add(startStateAgentAction);
+                //agent.publicActions.Add(startStateAgentAction);
 
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
 
@@ -90,6 +90,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             return plan;
         }
 
+        /*
         private Action initializeStartStateAction(Agent agent)
         {
             Action startStateAgentAction = new Action(startStateDummyActionName);
@@ -108,10 +109,14 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
             return startStateAgentAction;
         }
-
+        */
+        
         private List<string> RunVersion4Or5PddlBuilder(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies, Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary, Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect)
         {
-            PddlBuilderForOptimalDependenciesPlanningVer5 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
+            // We shall use the ver4 pddl builder in the ICAPS 2021 results, because we want to remove the possability to "go-solo" as MAFS used to allow, but now we do not allow it any more.
+            
+            //PddlBuilderForOptimalDependenciesPlanningVer5 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
+            PddlBuilderForOptimalDependenciesPlanningVer4 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
             pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
             Console.WriteLine("Solving without limitation to establish the maximum amount of dependencies we can publish");
@@ -143,7 +148,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             for (int i = amountOfDependencies - 1; i >= 0; i--)
             {
                 Console.WriteLine("Trying to publish maximum " + i + " dependencies for each agent");
-                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
+                //pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer5();
+                pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
                 pddlBuilder.UpdateMaxDependenciesRevealed(i);
                 pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
@@ -342,10 +348,12 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                         predicate2DependenciesThatAcomplishIt[regularP].Add(dependency);
                         dependenciesThatThisActionAchieves.Add(dependency);
 
+                        /*
                         if(action.Name == startStateDummyActionName)
                         {
                             startStateDependencies.Add(dependency);
                         }
+                        */
                     }
                 }
                 action2DependenciesInItsEffects[realAction] = dependenciesThatThisActionAchieves;

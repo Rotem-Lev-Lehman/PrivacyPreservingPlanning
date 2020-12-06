@@ -106,6 +106,7 @@
     <Compile Include="AdvancedProjectionPlaner.cs" />
     <Compile Include="AdvancedProjectionHeuristic.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\ActionsPublishing\NonCollaborative\AdvancedProjectionRandomizedActionSelector.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesGraphGeneration\DependenciesGraphGenerator.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionNewScoreBasedDependeciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AAdvancedProjectionScoreBasedDependeciesSelector.cs" />

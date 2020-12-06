@@ -8,6 +8,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
 using Planning.AdvandcedProjectionActionSelection.OptimalPlanner;
+using Planning.AdvandcedProjectionActionSelection.DependenciesGraphGeneration;
 
 
 namespace Planning
@@ -28,12 +29,13 @@ namespace Planning
         static string pdbPath;
         static string domainFolderPath;
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
-        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner};
+        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner, DependenciesGraphGenerator};
         
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.SingleAgentPlanner; //Plan using the single agent pddl file only (go over all agents until a single agent plan is found).
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.DependenciesGraphGenerator; //Do not plan, but create a dependency graph for the given problem.
         static public bool testingProjectionWithLessDependenciesRevealed = true;
 
         static public bool directMessage = false;
@@ -114,8 +116,8 @@ namespace Planning
         public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
 
-        public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
-        //public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        //public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
+        public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -248,6 +250,14 @@ namespace Planning
                         WritePlanToFile(new List<string>(), sOutputFile);
                         WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
                     }
+                    Console.WriteLine();
+                    return;
+                }
+                else if(highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+                {
+                    //The plan will always be null in this planner, so just write " success", and leave it like this...
+                    WritePlanToFile(new List<string>(), sOutputFile);
+                    WriteResults(GetWantedName(dir.FullName), " success");
                     Console.WriteLine();
                     return;
                 }
@@ -552,13 +562,19 @@ namespace Planning
             */
             List<string> lPlan = null;
 
-            if(highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
+            if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+            {
+                Console.WriteLine("Generating dependencies graph");
+                DependenciesGraphGenerator.GenerateDependenciesGraph(agents, tracesFolder);
+                lPlan = null;
+            }
+            else if (highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
             {
                 Console.WriteLine("Planning");
                 SingleAgentSolver singleAgentSolver = new SingleAgentSolver();
                 lPlan = singleAgentSolver.Plan(domainsAndProblems);
             }
-            else if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+            else if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
             {
                 Console.WriteLine("Planning");
                 OptimalDependenciesPlanner optimalDependenciesPlanner = new OptimalDependenciesPlanner();
@@ -2018,12 +2034,17 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ver5_exp2");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_ICAPS");
         }
 
         private static void RunSingleAgentSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
             RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Single_Agent_Solver");
+        }
+
+        private static void RunGenerationOfDependenciesGraphs(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Dependencies_Graphs_ICAPS");
         }
 
         static StreamWriter swResults;
@@ -2049,7 +2070,11 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                if(highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
+                if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+                {
+                    RunGenerationOfDependenciesGraphs(selectorsAndDomains);
+                }
+                else if (highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
                 {
                     RunSingleAgentSolverExperiment(selectorsAndDomains);
                 }
@@ -2404,7 +2429,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 3 });
+            dict.Add("domains", new int[] { 11 });
             return dict;
             */
         }

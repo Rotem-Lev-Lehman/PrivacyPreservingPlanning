@@ -11,8 +11,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
     {
         public const string dependencyType = "rotemDependency";
         public const string dependencySymbol = "rotemDependency";
-        public const string agentType = "rotemAgent";
-        public const string agentSymbol = "rotemAgent";
+        public const string agentType = "opDepRotemAgent";
+        public const string agentSymbol = "opDepRotemAgent";
         public const string numberParameterType = "rotemNumber";
         public const string nextPredicateName = "rotemNext";
         public const string revealedNumberOfDependenciesPredicateName = "revealed-number-of-dependencies";
@@ -184,12 +184,12 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 {
                     //List<Dependency> dependenciesForAction = new List<Dependency>();
                     //List<Predicate> regularEffects = new List<Predicate>();
-
+                    /*
                     if(action.Name == OptimalDependenciesPlanner.startStateDummyActionName)
                     {
                         continue;
                     }
-
+                    */
                     if (!action.isPublic)
                     {
                         //if it is a private action, just use it as is...
@@ -226,11 +226,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                                 cfAnd.AddOperand(usedDependency);
                                 cfAnd.AddOperand(revealedDependency);
 
+                                /*
                                 if (dependency.action.Name == OptimalDependenciesPlanner.startStateDummyActionName)
                                 {
                                     cfOr.AddOperand(usedDependency);
                                 }
                                 else
+                                */
                                 {
                                     cfOr.AddOperand(cfAnd);
                                 }
@@ -320,14 +322,14 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                     allGoals.Add(goalP);
                 }
             }
-
+            /*
             foreach (Dependency dependency in OptimalDependenciesPlanner.startStateDependencies)
             {
                 Constant dep = mapDependencyToConstant[dependency];
                 GroundedPredicate usedDependency = GetUsedDependencyGrounded(dep);
                 publicStartState.AddPredicate(usedDependency);
             }
-
+            */
             foreach (ParametrizedPredicate pp in parametrizedPredicates)
             {
                 if (dJoined.Predicates.Contains(pp))
@@ -337,7 +339,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
             foreach (string type in myNewTypes)
             {
-                if (dJoined.Types.Contains(type))
+                if (dJoined.Types.Contains(type.ToLower()))
                     throw new Exception("The dependency and agent types must be unique, and cannot be in another domain.");
                 dJoined.Types.Add(type);
                 dJoined.TypeHierarchy[type] = objectType;
