@@ -11,7 +11,7 @@ namespace Planning
     {
         const string agentType = "rotemAgent";
         const string placeHolderType = "rotemPlaceHolder";
-        const string dummyInitActionName = "dummy-init-action";
+        public const string dummyInitActionName = "dummy-init-action";
         const string turnToRegularActionsStageActionName = "turn-to-regular-actions-stage";
         const string canUseInitActionGPName = "can-use-init-action";
         const string usedInitActionGPName = "used-init-action";
@@ -28,7 +28,8 @@ namespace Planning
                 Tuple<string, string> domainAndProblem = agent2domainAndProblem[agent];
                 string domain = domainAndProblem.Item1;
                 string problem = domainAndProblem.Item2;
-                Tuple<string, string, string> objects_prevInit_newProblemText = ReadProblemFile(problem, newInit);
+                List<string> staticPredicates = FindStaticPredicates(domain);
+                Tuple<string, string, string> objects_prevInit_newProblemText = ReadProblemFile(problem, newInit, staticPredicates);
                 string objects = objects_prevInit_newProblemText.Item1;
                 string prevInit = objects_prevInit_newProblemText.Item2;
                 string newProblemText = objects_prevInit_newProblemText.Item3;
@@ -37,6 +38,93 @@ namespace Planning
                 WriteNewDomain(destFolderPath, newDomainText, agent);
                 WriteNewProblem(destFolderPath, newProblemText, agent);
             }
+        }
+
+        private static List<string> FindStaticPredicates(string domainPath)
+        {
+            string domain = File.ReadAllText(domainPath);
+            List<string> allPredicates = GetAllPredicates(domain);
+            List<string> allActions = GetAllActions(domain);
+            List<string> staticPredicates = new List<string>();
+            foreach(string predicate in allPredicates)
+            {
+                // check if this predicate is static (i.e. does not appear in any effect of any action):
+                bool isStatic = true;
+                foreach(string action in allActions)
+                {
+                    string effectsSection = GetEffectsSection(action);
+                    // now we will check if the effectsSection contains the predicate.
+                    // If so, then it is not a static predicate:
+                    if (effectsSection.Contains("(" + predicate + " ")) // check with a ( before the predicate, it marks the start of the predicate... and also add the space after it so it will not be just a part of a predicate...
+                    {
+                        isStatic = false;
+                        break;
+                    }
+                }
+                if (isStatic)
+                {
+                    staticPredicates.Add(predicate);
+                }
+            }
+            return staticPredicates;
+        }
+
+        private static string GetEffectsSection(string action)
+        {
+            string effects = action.Split(new string[] { ":effect" }, StringSplitOptions.None)[1];
+            return effects;
+        }
+
+        private static List<string> GetAllPredicates(string domain)
+        {
+            string predicatesSection = GetSection(domain, "(:predicates");
+            string allPredicates;
+            if (predicatesSection.Contains("(:private"))
+            {
+                string privatePredicates = GetSection(predicatesSection, "(:private");
+                string publicPredicates = GetWithoutSection(predicatesSection, "(:private");
+
+                allPredicates = publicPredicates + "\n" + privatePredicates;
+            }
+            else
+            {
+                allPredicates = predicatesSection;
+            }
+            // now after the private and public predicates have been united, 
+            // we need to split the "allPredicates" string by \n, and take all of the predicates' names:
+            string[] split = allPredicates.Split(new string[] { "\n" }, StringSplitOptions.None);
+            List<string> allPredicatesList = new List<string>();
+            foreach (string line in split)
+            {
+                string trimmedLine = line.Trim(new char[] { '\n', '\t' });
+                if (String.IsNullOrEmpty(trimmedLine))
+                {
+                    // If it is an empty line, then just skip it...
+                    continue;
+                }
+                //it is a line that contains a predicate.
+                string currPredicateName = GetPredicateName(trimmedLine);
+                allPredicatesList.Add(currPredicateName);
+            }
+
+            return allPredicatesList;
+        }
+
+        private static string GetPredicateName(string predicate)
+        {
+            string afterOpen = predicate.Split('(')[1];
+            string inPredicate = afterOpen.Split(')')[0];
+            string name = inPredicate.Split(' ')[0];
+            return name;
+        }
+
+        private static string GetWithoutSection(string parentSection, string sectionName)
+        {
+            string[] split = parentSection.Split(new string[] { sectionName }, StringSplitOptions.None);
+            
+            int endOfSection = findEndOfSection(split[1]);
+            string withoutSection = split[0] + split[1].Substring(endOfSection + 1);
+            return withoutSection;
         }
 
         private static void WriteNewProblem(string destFolderPath, string newProblemText, int agent)
@@ -145,8 +233,8 @@ namespace Planning
             string effect = "\t" + ":effect" + " (and";
             string notCanUseInit = Negate(canUseInit);
             string usedInitAction = GetUsedInitAction(agentNum);
-            effect += "\n\t" + notCanUseInit; 
-            effect += "\n\t" + usedInitAction;
+            effect += "\n\t\t" + notCanUseInit; 
+            effect += "\n\t\t" + usedInitAction;
             effect += prevInit;
             effect += "\t)";
             string dummyInitAction = ConstractAction(actionName, precondition, effect);
@@ -352,30 +440,34 @@ namespace Planning
             return newInit;
         }
 
-        private static Tuple<string, string, string> ReadProblemFile(string problem, List<string> newInit)
+        private static Tuple<string, string, string> ReadProblemFile(string problem, List<string> newInit, List<string> staticPredicates)
         {
             string objects = null;
-            string prevInit = null;
+            string prevNonStaticInit = null;
+            string prevStaticInit = null;
+            string functionsInit = null;
             string newProblemText = null;
             string allText = File.ReadAllText(problem);
             objects = GetObjectsSection(allText);
-            Tuple<string, string> prevInit_functionsInit = GetInitSection(allText);
-            prevInit = prevInit_functionsInit.Item1;
-            newProblemText = GetNewProblemText(allText, newInit, prevInit_functionsInit.Item2);
+            Tuple<string, string, string> prevNonStaticInit_prevStaticInit_functionsInit = GetInitSection(allText, staticPredicates);
+            prevNonStaticInit = prevNonStaticInit_prevStaticInit_functionsInit.Item1;
+            prevStaticInit = prevNonStaticInit_prevStaticInit_functionsInit.Item2;
+            functionsInit = prevNonStaticInit_prevStaticInit_functionsInit.Item3;
+            newProblemText = GetNewProblemText(allText, newInit, functionsInit, prevStaticInit);
 
-            return new Tuple<string, string, string>(objects, prevInit, newProblemText);
+            return new Tuple<string, string, string>(objects, prevNonStaticInit, newProblemText);
         }
 
-        private static string GetNewProblemText(string allText, List<string> newInit, string functionsInit)
+        private static string GetNewProblemText(string allText, List<string> newInit, string functionsInit, string prevStaticInit)
         {
             string withoutObjectsAndInit = ClearObjectsAndInitSections(allText);
-            string newProblemText = InsertNewInit(withoutObjectsAndInit, newInit, functionsInit);
+            string newProblemText = InsertNewInit(withoutObjectsAndInit, newInit, functionsInit, prevStaticInit);
             return newProblemText;
         }
 
-        private static string InsertNewInit(string withoutObjectsAndInit, List<string> newInit, string functionsInit)
+        private static string InsertNewInit(string withoutObjectsAndInit, List<string> newInit, string functionsInit, string prevStaticInit)
         {
-            string newInitStr = "";
+            string newInitStr = prevStaticInit;
             foreach(string gp in newInit)
             {
                 newInitStr += "\n\t" + gp;
@@ -418,7 +510,7 @@ namespace Planning
             return clearedSection;
         }
 
-        private static Tuple<string, string> GetInitSection(string allText)
+        private static Tuple<string, string, string> GetInitSection(string allText, List<string> staticPredicates)
         {
             string init = GetSection(allText, "(:init");
             string functions = null;
@@ -428,12 +520,43 @@ namespace Planning
                 string[] splitInit = init.Split(new string[] { "(=" }, StringSplitOptions.None);
                 init = splitInit[0];
                 functions = "\t";
-                for(int i = 1; i < splitInit.Length; i++)
+                for (int i = 1; i < splitInit.Length; i++)
                 {
-                    functions += "(=" + splitInit[i];   
+                    functions += "(=" + splitInit[i];
                 }
             }
-            return new Tuple<string, string>(init, functions);
+            string[] initLines = init.Split('\n');
+            string staticInit = "";
+            string nonStaticInit = "";
+            foreach (string line in initLines)
+            {
+                string trimmedLine = line.Trim(new char[] { '\n', '\t' });
+                if (String.IsNullOrEmpty(trimmedLine))
+                {
+                    // If it is an empty line, then just skip it...
+                    continue;
+                }
+                // it is a regular predicate. Lets see if it is a static predicate or a non-static one:
+                bool isStatic = false;
+                foreach (string staticPredicate in staticPredicates)
+                {
+                    if (trimmedLine.Contains("(" + staticPredicate + " "))
+                    {
+                        isStatic = true;
+                        break;
+                    }
+                }
+                if (isStatic)
+                {
+                    staticInit += "\n\t" + trimmedLine;
+                }
+                else
+                {
+                    nonStaticInit += "\n\t\t" + trimmedLine;
+                }
+            }
+            nonStaticInit += "\n";
+            return new Tuple<string, string, string>(nonStaticInit, staticInit, functions);
         }
 
         private static string GetObjectsSection(string allText)

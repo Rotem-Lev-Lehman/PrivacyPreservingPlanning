@@ -60,6 +60,12 @@ namespace Planning
         public MapsVertex startVertexForTrace;
         public Agent regularAgent;
 
+        public static void ResetStaticFields()
+        {
+            counter = 0;
+            preferFlags = (Dictionary<string, bool>)null;
+        }
+
         public int GetID()
         {
             return Agent.getID(name);

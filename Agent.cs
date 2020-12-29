@@ -1261,6 +1261,13 @@ namespace Planning
                             HashSet<Action> Achievers = Distributed_Landmarks_Detection.GetPublicActionsLandmarks2(gpPre, this, out depth1, true);
                             if (Achievers.Count > 0)
                             {
+                                if(Achievers.Count == 1 && Achievers.First().Name.Contains(PddlAddDummyInitAction.dummyInitActionName))
+                                {
+                                    // If this dependency is a dependency that only the start state can achieve, 
+                                    // and no other public action can achieve this dependency,
+                                    // than it is not realy a dependency, and should be removed:
+                                    continue;
+                                }
                                 if (mapActToList.ContainsKey(act.Name))
                                 {
                                     mapActToList[act.Name].Add(gpName, Achievers);
@@ -1279,6 +1286,12 @@ namespace Planning
                                     mapActToList[act.Name].Add(gpName, Achievers);
                                 }
                                 mapAGpToList.Add(gpPre, Achievers);
+                            }
+                            else
+                            {
+                                // If there is no achiever to this precondition, than just don't put it as a precondition, as it will not reflect any dependency...
+                                // TODO - Check if this is a good solution for this problem...
+                                continue;
                             }
 
                             int i = 0;

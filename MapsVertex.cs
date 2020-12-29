@@ -50,7 +50,15 @@ namespace Planning
         //public bool[] publicReasonableOrderingVector = null;
         public string agent;
         public int g = 0;
-        public int h;
+        private int m_h;
+
+        public int h   // property
+        {
+            get { return m_h; }   // get method
+            set {
+                m_h = value;
+            }  // set method
+        }
         public int h2;
         //public int gh;
         public int publicCount;
@@ -1112,7 +1120,7 @@ namespace Planning
                 return h;
             }
 
-            localPlan = RegGrounding(myState, allAproxPlan, out h);
+            localPlan = RegGrounding(myState, allAproxPlan, out m_h);
             return h;
         }
 

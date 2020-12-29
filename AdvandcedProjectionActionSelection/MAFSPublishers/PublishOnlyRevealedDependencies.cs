@@ -19,6 +19,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             foreach (Predicate p in dependenciesFromStartState)
             {
                 effectsRevealed.Add(p);
+                whoRevealed[p] = "Start-State";
             }
             //iterate through the plan:
             foreach(Action action in vertex.lplan)

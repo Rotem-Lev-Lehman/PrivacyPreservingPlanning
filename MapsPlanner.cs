@@ -38,6 +38,30 @@ namespace Planning
         public static List<Action> allProjectionActions = null;
         public List<Agent> agents = null;
 
+        public static void ResetStaticFields()
+        {
+            nextGlobalOpenList = null;
+            findGoal = false;
+            finalPlan = null;
+            generateCounter = 0;
+            stop = false;
+            massageEffCounter = 0;
+            massagePreCounter = 0;
+            allPublicFacts = null;
+            sendedToAllSign = null;
+            actionMap = null;
+            AgentToInfluActions = null;
+            influencedByAgents = null;
+            recoverActionEffect = null;
+            MAFSPublisher = null;
+            dependenciesSelectionPreperation = null;
+            tracesHandler = null;
+            highLevelPlan = null;
+            name2mapsAgent = null;
+            allProjectionActions = null;
+            MapsAgent.ResetStaticFields();
+        }
+
         public MapsPlanner(List<Agent> agents,List<Domain> lDomains, List<Problem> lProblems)
         {
             this.agents = agents;
