@@ -35,6 +35,12 @@ namespace Planning
         protected static List<string> Types = new List<string>();
         protected static List<string> Names = new List<string>();
 
+        public static void ResetStaticFields()
+        {
+            Types = new List<string>();
+            Names = new List<string>();
+        }
+
         public Argument(string sType, string sName)
         {
             SetType(sType);

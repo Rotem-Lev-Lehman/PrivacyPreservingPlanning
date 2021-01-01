@@ -66,6 +66,16 @@ namespace Planning
         public TraceState traceStateForPublicRevealedState = null;
         public Dictionary<string, int> agent2iparent = null;
 
+        public static void ResetStaticFields()
+        {
+            agentsGoals = null;
+            pdb = null;
+            agents = null;
+            mapsAgents = null;
+            isLandmark = false;
+            allGoals = null;
+        }
+
         public static HashSet<GroundedPredicate> allGoals = null;
         public static void init(List<Agent> agents)
         {

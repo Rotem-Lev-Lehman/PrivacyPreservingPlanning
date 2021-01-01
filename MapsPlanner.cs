@@ -174,7 +174,13 @@ namespace Planning
             {
                 MapsVertex agentStartVertex = new MapsVertex(publicStartState, agPriv[a.name], indexStates, countOfLandmarks, countOfLandmarks.Keys.ToArray(), a.name, a.allGoals.Count, countOfReasenOrders);
                 MapsAgent mAgent = new MapsAgent(agentStartVertex, a, a.allGoals, countOfLandmarks, openLists, receivedStates, mutexs, countOfReasenOrders, fullStart);
-                mAgent.projectionHeuristic = new AdvancedProjectionHeuristic(a, agents, lDomains, lProblems);
+
+                if (!Program.selectingDependenciesToUseInTheHueristic)
+                {
+                    //If we select which dependencies to use in the heuristic, it will use the DoSelectionPreperation class which will initialize the projectionHueristic field there...
+                    mAgent.projectionHeuristic = new AdvancedProjectionHeuristic(a, agents, lDomains, lProblems, null, null); //it is null because here we have not selected dependencies but we will use all of them...
+                }
+
                 mAgent.SetPrivateState(agPriv[a.name]);
                 MapsAgents.Add(mAgent.name, mAgent);
                 this.MapsAgents.Add(mAgent);
@@ -280,10 +286,10 @@ namespace Planning
             }
         }
 
-        public void PrepareDependenciesSelection(List<Agent> agents, AAdvancedProjectionActionPublisher publisher)
+        public void PrepareDependenciesSelection(List<Agent> agents, AAdvancedProjectionActionPublisher publisher, List<Domain> lDomains, List<Problem> lProblems)
         {
             Console.WriteLine("Preparing dependencies selection");
-            dependenciesSelectionPreperation.PrepareSelection(publisher, this.MapsAgents, agents, tracesHandler);
+            dependenciesSelectionPreperation.PrepareSelection(publisher, this.MapsAgents, agents, tracesHandler, lDomains, lProblems);
             Console.WriteLine("Done preparing dependencies selection");
         }
 

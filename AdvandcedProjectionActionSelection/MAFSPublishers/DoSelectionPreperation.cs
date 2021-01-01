@@ -13,18 +13,34 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
          * Use this class in order to limit the publishing of states that reveal a certain dependency that shouldn't be revealed.
          * This class shall pick which dependencies should we reveal and which should we not reveal.
          */
-        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler)
+        public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler, List<Domain> lDomains, List<Problem> lProblems)
         {
             //TODO: handle traces later...
 
             List<Action> allProjectionAction = new List<Action>();
+
+            GroundedPredicate newPrePredicate = null;
+            newPrePredicate = new GroundedPredicate(Domain.ARTIFICIAL_PREDICATE + "StartState");
             List<Predicate> predicates = new List<Predicate>();
+            predicates.Add(newPrePredicate);
             int index = 0;
             Dictionary<Agent, List<Action>> agentsProjections = new Dictionary<Agent, List<Action>>();
+            //Measuring the time for the dependencies generation:
+            List<DateTime> dependenciesProjectionStartTimes = new List<DateTime>();
+            List<DateTime> dependenciesProjectionEndTimes = new List<DateTime>();
             foreach (Agent agent in agents)
             {
+                agent.initLandmarksDetect();
+
                 //this returns all of the projections, we will need to take only some of them and look at how does it affect the solution
+                DateTime startDependenciesGeneration = DateTime.Now;
+                dependenciesProjectionStartTimes.Add(startDependenciesGeneration);
+
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
+
+                DateTime endDependenciesGeneration = DateTime.Now;
+                dependenciesProjectionEndTimes.Add(endDependenciesGeneration);
+                //Save the dependencies for later usage:
                 agentsProjections.Add(agent, currentlProjAction);
 
                 foreach (Action act in currentlProjAction)
@@ -33,6 +49,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 }
                 index += 1000;
             }
+
+            Program.SaveTimeMeasurmentsForCreatingDependencies(dependenciesProjectionStartTimes, dependenciesProjectionEndTimes);
 
             LeakageTrace.setAgents(agents);
             Dictionary<Agent, LeakageTrace> traces = new Dictionary<Agent, LeakageTrace>();
@@ -61,7 +79,12 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
 
+            DateTime dependenciesSelectionStartTime = DateTime.Now;
             publisher.publishActions(allProjectionAction, agentsProjections);
+            DateTime dependenciesSelectionEndTime = DateTime.Now;
+
+            Program.SaveTimeMeasurmentForSelectingDependencies(dependenciesSelectionStartTime, dependenciesSelectionEndTime);
+
             Dictionary<string, MapsAgent> name2mafsAgent = new Dictionary<string, MapsAgent>();
             foreach(MapsAgent mapsAgent in mafsAgents)
             {
@@ -69,6 +92,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             }
 
             Dictionary<string, Agent> name2agent = new Dictionary<string, Agent>();
+            Dictionary<string, List<Action>> agentName2agentProjActions = new Dictionary<string, List<Action>>();
+
             foreach (Agent agent in agents)
             {
                 name2agent.Add(agent.name, agent);
@@ -77,6 +102,8 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 List<Predicate> startStatePredicates = agent.GetPrivateStartState().Cast<Predicate>().ToList();
                 //List<Predicate> startState = GetTransformedArtificialPredicates(agent, startStatePredicates);
                 mapsAgent.SetDependenciesAtStartState(startStatePredicates);
+
+                agentName2agentProjActions[agent.name] = new List<Action>();
             }
 
             foreach (Action action in allProjectionAction)
@@ -87,8 +114,17 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 mafsAgent.AddToEffectsActionsAndDependencies(action.Name, effects);
                 List<Predicate> preconditions = GetTransformedArtificialPredicates(agent, action.HashPrecondition);
                 mafsAgent.AddToPreconditionActionsAndDependencies(action.Name, preconditions);
+
+                agentName2agentProjActions[agent.name].Add(action);
             }
             MapsPlanner.allProjectionActions = allProjectionAction;
+
+            foreach (Agent a in agents)
+            {
+                MapsAgent mAgent = name2mafsAgent[a.name];
+                //Create a new projection hueristics, based on only the selected dependencies:
+                mAgent.projectionHeuristic = new AdvancedProjectionHeuristic(a, agents, lDomains, lProblems, agentName2agentProjActions, predicates);
+            }
         }
 
         private List<Predicate> GetTransformedArtificialPredicates(Agent agent, List<Predicate> predicates)

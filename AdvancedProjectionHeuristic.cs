@@ -31,8 +31,10 @@ namespace Planning
         public List<Landmark> lGoal = null;
         enum ProjectionType { DP, LocalWiew};
         ProjectionType projectionType = ProjectionType.DP;
-        public AdvancedProjectionHeuristic(Agent fullAgent, List<Agent> m_agents, List<Domain> lDomains, List<Problem> lProblems)
+        public AdvancedProjectionHeuristic(Agent fullAgent, List<Agent> m_agents, List<Domain> lDomains, List<Problem> lProblems, Dictionary<string, List<Action>> agentName2agentProjActions, List<Predicate> previouslyCalcPredicates)
         {
+            bool usingPreviouslySelectedDependencies = agentName2agentProjActions != null; // if we have already calculated the dependencies and which of them to use, than use the previous selection.
+            
             bool allEqual = true;
             if(Program.projectionVersion==Program.ProjectionVersion.ProjectionFF)
             {
@@ -49,8 +51,15 @@ namespace Planning
             GroundedPredicate newPrePredicate = null;
             newPrePredicate = new GroundedPredicate(Domain.ARTIFICIAL_PREDICATE + "StartState");
             basicStartState.AddPredicate(newPrePredicate);
-            predicates = new List<Predicate>();
-            predicates.Add(newPrePredicate);
+            if (usingPreviouslySelectedDependencies)
+            {
+                predicates = new List<Predicate>(previouslyCalcPredicates);
+            }
+            else
+            {
+                predicates = new List<Predicate>();
+                predicates.Add(newPrePredicate);
+            }
 
             Program.countOfProjAction = 0;
             Program.countOfProjFact = 0;
@@ -88,7 +97,10 @@ namespace Planning
 
             foreach (Agent agent in agents)
             {
-                agent.initLandmarksDetect();
+                if (!usingPreviouslySelectedDependencies)
+                {
+                    agent.initLandmarksDetect();
+                }
 
                 foreach (Action act in agent.publicActions)
                 {
@@ -102,29 +114,47 @@ namespace Planning
                 }
 
                 List<Action> currentlProjAction = null;
-
-                if (allEqual || !agent.name.Equals(fullAgent.name))
+                if (usingPreviouslySelectedDependencies)
                 {
-                    if (projectionType == ProjectionType.DP)
+                    if (allEqual || !agent.name.Equals(fullAgent.name))
                     {
-                        currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
+                        currentlProjAction = agentName2agentProjActions[agent.name];
                     }
                     else
                     {
-                        if (projectionType == ProjectionType.LocalWiew)
+                        if (Program.projectionVersion == Program.ProjectionVersion.ProjectionFF)
                         {
-                            currentlProjAction = agent.GetLocalView();
+                            currentlProjAction = fullAgent.publicActions;
                         }
+                        else
+                            currentlProjAction = fullAgent.m_actions;
                     }
                 }
                 else
                 {
-                    if (Program.projectionVersion == Program.ProjectionVersion.ProjectionFF)
+                    if (allEqual || !agent.name.Equals(fullAgent.name))
                     {
-                        currentlProjAction = fullAgent.publicActions;
+                        if (projectionType == ProjectionType.DP)
+                        {
+                            currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
+                        }
+                        else
+                        {
+                            if (projectionType == ProjectionType.LocalWiew)
+                            {
+                                currentlProjAction = agent.GetLocalView();
+                            }
+                        }
                     }
                     else
-                        currentlProjAction = fullAgent.m_actions;
+                    {
+                        if (Program.projectionVersion == Program.ProjectionVersion.ProjectionFF)
+                        {
+                            currentlProjAction = fullAgent.publicActions;
+                        }
+                        else
+                            currentlProjAction = fullAgent.m_actions;
+                    }
                 }
 
                 if (false && Program.projectionVersion == Program.ProjectionVersion.ProjectionFF && agent.name.Equals(fullAgent.name))
@@ -180,7 +210,20 @@ namespace Planning
 
                 /**** I implmented this in GetPublicStartState function in Agent  ****/
             }
-
+            /*
+            //Just for checking the differences:
+            string mainDirectory = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)\MAFS_bugs_fixing";
+            //string currentDirectory = mainDirectory + @"\afterSelection";
+            string currentDirectory = mainDirectory + @"\beforeSelection";
+            string currentFile = currentDirectory + @"\actions_agent_" + fullAgent.getID() + ".txt";
+            List<string> lines = new List<string>();
+            foreach (Action action in allProjectionAction)
+            {
+                lines.Add(action.ToString().Replace('\n','\t'));
+            }
+            File.WriteAllLines(currentFile, lines);
+            int breakpoint = 0;
+            */
 
             /*
                 string fault;
@@ -279,7 +322,8 @@ namespace Planning
             {
                 localGoal.Add(p);
             }
-            highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans);
+            //highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans);
+            highLevelplan = externalPlanners.Plan(true, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans);
             // hsp = new HSPHeuristic(dPublic.Actions, localGoal, false);
            //  forwardSearch = new ForwardSearchPlanner(dPublic.Actions, hsp);
            //  List<Action> highLevelplan = forwardSearch.Plan(publicStartState, localGoal);

@@ -41,7 +41,7 @@ namespace Planning
         static public bool directMessage = false;
         static public PlanerType internalPlaner;
         public enum ProjectionVersion { Local, Global, GlobalV2, GlobalWithMemo, fullGlobal, ProjectionFF, NULL };
-        static public ProjectionVersion projectionVersion = ProjectionVersion.ProjectionFF; // Relevant: "Global" (is the full plan h) + "ProjectionFF" 
+        static public ProjectionVersion projectionVersion = ProjectionVersion.Global; // Relevant: "Global" (is the full plan h) + "ProjectionFF" 
         static public List<double> times = new List<double>();
         static public List<double> countActions = new List<double>();
         static public double timeSum = 0;
@@ -63,6 +63,13 @@ namespace Planning
         public static int sizeOfRegressionTree = 0;
         public static int maxSizeOfRegressionTree = 0;
         public static int maxDepthOfRegressionTree = 0;
+
+        //Dependencies selection timing:
+        public static double averageTimeForCreatingDependencies;
+        public static double minTimeForCreatingDependencies;
+        public static double maxTimeForCreatingDependencies;
+        public static double totalTimeForCreatingDependencies;
+        public static double timeForSelectingDependencies;
 
         public static double currPercentageForSelectingActionInAdvancedProjectionPlaner = 1;
         public static bool dependencyUsed = false; // false = selecting actions, true = selecting dependencies
@@ -113,11 +120,15 @@ namespace Planning
         //Run with a dummy init action:
         public static bool runWithDummyInitAction; //This shall be true if the user is using Rotem's experiment settings (with the partial discloser of private dependencies)
 
-        public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
-        //public static string baseFolderName = @"D:\GPPP(last_v)"; //Server's path
+        //For the MAFS planner heuristic calculation:
+        public static bool selectingDependenciesToUseInTheHueristic = false; //do not need to touch this, it will be true automatically in the start of the MAFS experiment.
 
-        //public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
-        public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        //public static string baseFolderName = @"D:\GPPP(last_v)"; //Left server's path
+        //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
+
+        public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
+        //public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -137,7 +148,6 @@ namespace Planning
             }
             pJoint.Goal = cfAnd.Simplify();
         }
-
 
         public static bool VerifyPlan(Domain dJoint, Problem pJoint, List<string> lPlan)
         {
@@ -1068,7 +1078,6 @@ namespace Planning
                                                 {
                                                     if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
                                                     {
-                                                        MapsPlanner.ResetStaticFields();
 
                                                         bool stop = false;
                                                         while (!stop)
@@ -1108,16 +1117,20 @@ namespace Planning
                                                         Console.WriteLine("Planning");
 
                                                         MapsPlanner Planner = new MapsPlanner(agents, lDomains, lProblems);
-                                                        /*
-                                                         * Do this in order to run a regular MAFS planner, without limiting the published states:
-                                                        MapsPlanner.MAFSPublisher = new PublishEverything();
-                                                        MapsPlanner.dependenciesSelectionPreperation = new NotSelectionPreperation();
-                                                        MapsPlanner.tracesHandler = new DontHandleTraces();
-                                                        */
-                                                        //Do this in order to run MAFS planner while limiting the revealed dependencies:
-                                                        MapsPlanner.MAFSPublisher = new PublishOnlyRevealedDependencies();
-                                                        MapsPlanner.dependenciesSelectionPreperation = new DoSelectionPreperation();
-                                                        MapsPlanner.tracesHandler = new TracesHandler();
+                                                        if (!selectingDependenciesToUseInTheHueristic)
+                                                        {
+                                                            //Do this in order to run a regular MAFS planner, without limiting the published states:
+                                                            MapsPlanner.MAFSPublisher = new PublishEverything();
+                                                            MapsPlanner.dependenciesSelectionPreperation = new NotSelectionPreperation();
+                                                            MapsPlanner.tracesHandler = new DontHandleTraces();
+                                                        }
+                                                        else
+                                                        {
+                                                            //Do this in order to run MAFS planner while limiting the revealed dependencies:
+                                                            MapsPlanner.MAFSPublisher = new PublishOnlyRevealedDependencies();
+                                                            MapsPlanner.dependenciesSelectionPreperation = new DoSelectionPreperation();
+                                                            MapsPlanner.tracesHandler = new TracesHandler();
+                                                        }
 
                                                         if (!creatingTracesAfterSolutionWasFound)
                                                         {
@@ -1131,7 +1144,7 @@ namespace Planning
 
                                                         AAdvancedProjectionActionPublisher publisher = GetAdvancedProjectionPublisher();
 
-                                                        Planner.PrepareDependenciesSelection(agents, publisher);
+                                                        Planner.PrepareDependenciesSelection(agents, publisher, lDomains, lProblems);
                                                         Planner.PublishStartStatesForTraces();
 
                                                         StartGrounding = DateTime.Now;
@@ -1401,6 +1414,7 @@ namespace Planning
                     sOutputPlanFile += @"\Plan.txt";
                 }
                 */
+                ResetStaticFields();
 
                 Vertex.agents = new List<Agent>();
                 Vertex.ffLplan = new List<string>();
@@ -1450,6 +1464,56 @@ namespace Planning
                 //KillAll(lPlanningProcesses);
             }
         }
+
+        private static void ResetStaticFields()
+        {
+            Argument.ResetStaticFields();
+            MapsVertex.ResetStaticFields();
+            MapsPlanner.ResetStaticFields();
+            Predicate.ResetStaticFields();
+            //Reset the time measuring fields:
+            averageTimeForCreatingDependencies = -1;
+            minTimeForCreatingDependencies = -1;
+            maxTimeForCreatingDependencies = -1;
+            totalTimeForCreatingDependencies = -1;
+            timeForSelectingDependencies = -1;
+        }
+
+        public static void SaveTimeMeasurmentsForCreatingDependencies(List<DateTime> dependenciesProjectionStartTimes, List<DateTime> dependenciesProjectionEndTimes)
+        {
+            if (dependenciesProjectionStartTimes.Count != dependenciesProjectionEndTimes.Count)
+            {
+                throw new Exception("The start and end times must be of the same length, it is the amount of agents...");
+            }
+            double sum = 0;
+            double min = double.MaxValue;
+            double max = -1;
+            for (int i = 0; i < dependenciesProjectionStartTimes.Count; i++)
+            {
+                DateTime start = dependenciesProjectionStartTimes[i];
+                DateTime end = dependenciesProjectionEndTimes[i];
+                double seconds = end.Subtract(start).TotalSeconds;
+                sum += seconds;
+                if (seconds < min)
+                {
+                    min = seconds;
+                }
+                if (seconds > max)
+                {
+                    max = seconds;
+                }
+            }
+            totalTimeForCreatingDependencies = sum;
+            averageTimeForCreatingDependencies = sum / dependenciesProjectionStartTimes.Count;
+            minTimeForCreatingDependencies = min;
+            maxTimeForCreatingDependencies = max;
+        }
+
+        public static void SaveTimeMeasurmentForSelectingDependencies(DateTime dependenciesSelectionStartTime, DateTime dependenciesSelectionEndTime)
+        {
+            timeForSelectingDependencies = dependenciesSelectionEndTime.Subtract(dependenciesSelectionStartTime).TotalSeconds;
+        }
+
         public static List<Process> GetPlanningProcesses()
         {
             List<Process> l = new List<Process>();
@@ -1571,6 +1635,11 @@ namespace Planning
                  + "," + amountOfDependenciesUsed
                  + "," + amountOfDependenciesPublished
                  + "," + amountOfDependenciesUsedInPlanningProcess
+                 + "," + averageTimeForCreatingDependencies
+                 + "," + minTimeForCreatingDependencies
+                 + "," + maxTimeForCreatingDependencies
+                 + "," + totalTimeForCreatingDependencies
+                 + "," + timeForSelectingDependencies
                //  + "," + ffMessageCounter
                //  + "," + countMacro
                // + "," + countAvgPerMacro
@@ -1634,13 +1703,13 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment)
         {
             List<double> percentages = new List<double>();
-            /*if (!regularExperiment)
+            if (!regularExperiment)
             {
                 for (double i = 0; i <= 1; i += 0.05)
                 {
                     percentages.Add(i);
                 }
-            }*/
+            }
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1714,6 +1783,7 @@ namespace Planning
             using (System.IO.StreamWriter outFile = new System.IO.StreamWriter(outputFile))
             {
                 string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used, amount of dependecies published, amount of dependencies used in planning process (MAFS)";
+                header += ", avg dependencies creation time, min dependencies creation time, max dependencies creation time, total dependencies creation time, time for dependencies selection";
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
@@ -1824,8 +1894,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever"/*, "Random", "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*/"logistics_only_13_0" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_10_and_13"*//*"logistics_only_13_0"*/"logistics_only_14_0" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1870,8 +1940,8 @@ namespace Planning
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
 
             string[] allPossibleDependenciesSelectors = { "FF_and_FD", "FD", "FF" };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*/"logistics_only_13_0" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*/"logistics_only_13_0" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2031,6 +2101,7 @@ namespace Planning
 
         static void RunMAFSProjectionExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
+            selectingDependenciesToUseInTheHueristic = true;
             RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_IJCAI");
         }
 
@@ -2388,7 +2459,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         { 
-            /*
+            
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -2425,15 +2496,15 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
-            */
             
+            /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] { 4 });
             return dict;
-            
+            */
         }
     }
 }

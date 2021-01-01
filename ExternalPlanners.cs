@@ -851,24 +851,28 @@ namespace Planning
             }
             return null;
         }
-        static Mutex m = new Mutex();
+        public static Mutex m = new Mutex();
 
         private Process RunFF(string domainStr, string problemStr)
         {
-            m.WaitOne();
-            Process pFF = new Process();
+            //m.WaitOne();
+            Process pFF;
+            lock (m)
+            {
+                pFF = new Process();
 
-            pFF.StartInfo.FileName = ffPath;
+                pFF.StartInfo.FileName = ffPath;
 
 
-            pFF.StartInfo.UseShellExecute = false;
-            pFF.StartInfo.RedirectStandardInput = true;
-            pFF.StartInfo.RedirectStandardOutput = true;
-            pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
-            pFF.Start();
-            FFOutput[pFF.Id] = "";
-            pFF.BeginOutputReadLine();
-            m.ReleaseMutex();
+                pFF.StartInfo.UseShellExecute = false;
+                pFF.StartInfo.RedirectStandardInput = true;
+                pFF.StartInfo.RedirectStandardOutput = true;
+                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                pFF.Start();
+                FFOutput[pFF.Id] = "";
+                pFF.BeginOutputReadLine();
+            }
+            //m.ReleaseMutex();
 
             string domain = domainStr;
 
@@ -891,21 +895,24 @@ namespace Planning
             msProblem.Position = 0;
             msDomain.Position = 0;
 
+            Process pFF;
+            //m.WaitOne();
+            lock (m)
+            {
+                pFF = new Process();
 
-            m.WaitOne();
-            Process pFF = new Process();
-
-            pFF.StartInfo.FileName = ffPath;
+                pFF.StartInfo.FileName = ffPath;
 
 
-            pFF.StartInfo.UseShellExecute = false;
-            pFF.StartInfo.RedirectStandardInput = true;
-            pFF.StartInfo.RedirectStandardOutput = true;
-            pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
-            pFF.Start();
-            FFOutput[pFF.Id] = "";
-            pFF.BeginOutputReadLine();
-            m.ReleaseMutex();
+                pFF.StartInfo.UseShellExecute = false;
+                pFF.StartInfo.RedirectStandardInput = true;
+                pFF.StartInfo.RedirectStandardOutput = true;
+                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                pFF.Start();
+                FFOutput[pFF.Id] = "";
+                pFF.BeginOutputReadLine();
+            }
+            //m.ReleaseMutex();
 
             StreamReader srOps = new StreamReader(msDomain);
 

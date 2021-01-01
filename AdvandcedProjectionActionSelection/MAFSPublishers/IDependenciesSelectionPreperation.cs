@@ -8,6 +8,6 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 {
     interface IDependenciesSelectionPreperation
     {
-        void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler);
+        void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler, List<Domain> lDomains, List<Problem> lProblems);
     }
 }

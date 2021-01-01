@@ -17,6 +17,12 @@ namespace Planning
         protected int m_iName;
 
         public string Name { get { return Names[m_iName]; } set { SetName(value); } }
+
+        public static void ResetStaticFields()
+        {
+            Names = new List<string>();
+        }
+
         private void SetName(string sName)
         {
             m_iName = Names.IndexOf(sName);

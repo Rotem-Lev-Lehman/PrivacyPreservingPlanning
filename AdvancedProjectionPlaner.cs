@@ -82,6 +82,9 @@ namespace Planning
             HashSet<Action> allprivateActionToTest = new HashSet<Action>();
 
             Dictionary<Agent, List<Action>> agentsProjections = new Dictionary<Agent, List<Action>>();
+            //Measuring the time for the dependencies generation:
+            List<DateTime> dependenciesProjectionStartTimes = new List<DateTime>();
+            List<DateTime> dependenciesProjectionEndTimes = new List<DateTime>();
 
             foreach (Agent agent in agents)
             {
@@ -119,7 +122,14 @@ namespace Planning
                 }
 
                 //this returns all of the projections, we will need to take only some of them and look at how does it affect the solution
+                DateTime startDependenciesGeneration = DateTime.Now;
+                dependenciesProjectionStartTimes.Add(startDependenciesGeneration);
+
                 List<Action> currentlProjAction = agent.getAdvancedProjectionPublicAction(index, predicates);
+
+                DateTime endDependenciesGeneration = DateTime.Now;
+                dependenciesProjectionEndTimes.Add(endDependenciesGeneration);
+                //Save the dependencies for later usage:
                 agentsProjections.Add(agent, currentlProjAction);
 
                 foreach (Action act in currentlProjAction)
@@ -139,6 +149,8 @@ namespace Planning
                 index += 1000;
                 lGoal.UnionWith(agent.GetPublicGoals());
             }
+
+            Program.SaveTimeMeasurmentsForCreatingDependencies(dependenciesProjectionStartTimes, dependenciesProjectionEndTimes);
 
             LeakageTrace.setAgents(agents);
             Dictionary<Agent, LeakageTrace> traces = new Dictionary<Agent, LeakageTrace>();
@@ -165,8 +177,13 @@ namespace Planning
             Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
             publisher.setTraces(traces);
-            
+
+            DateTime dependenciesSelectionStartTime = DateTime.Now;
             publisher.publishActions(allProjectionAction, agentsProjections);
+            DateTime dependenciesSelectionEndTime = DateTime.Now;
+
+            Program.SaveTimeMeasurmentForSelectingDependencies(dependenciesSelectionStartTime, dependenciesSelectionEndTime);
+
 
             if (Program.creatingTracesAfterSolutionWasFound)
             {
