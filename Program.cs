@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
 using Planning.AdvandcedProjectionActionSelection.OptimalPlanner;
 using Planning.AdvandcedProjectionActionSelection.DependenciesGraphGeneration;
+using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.CalculateLeakageLocally;
 
 
 namespace Planning
@@ -29,13 +30,15 @@ namespace Planning
         static string pdbPath;
         static string domainFolderPath;
         public enum PlanerType { ff_tryCoordinate, hsp_tryCoordinate, ff_directPlan, hsp_directPlan, ff_toActions };
-        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner, DependenciesGraphGenerator};
+        public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner, DependenciesGraphGenerator, ManualDebugPlanner, TestsForRotem};
         
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
         static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.SingleAgentPlanner; //Plan using the single agent pddl file only (go over all agents until a single agent plan is found).
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.DependenciesGraphGenerator; //Do not plan, but create a dependency graph for the given problem.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ManualDebugPlanner; //Do not plan, but create a dependency graph for the given problem.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.TestsForRotem; //Do not plan, but create a dependency graph for the given problem.
         static public bool testingProjectionWithLessDependenciesRevealed = true;
 
         static public bool directMessage = false;
@@ -127,8 +130,23 @@ namespace Planning
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Left server's path
         //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
 
-        public static readonly int maxTimeInMinutes = 5; //After 5 minutes, there will be a timeout. -- For other experiments
-        //public static readonly int maxTimeInMinutes = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        public static readonly int maxTimeInMinutesRegularExperiment = 5; //After 5 minutes, there will be a timeout. -- For other experiments
+        public static readonly int maxTimeInMinutesOptimalExperiment = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        public static int maxTimeInMinutes { 
+            get {
+                if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+                {
+                    return maxTimeInMinutesOptimalExperiment;
+                }
+                else
+                {
+                    return maxTimeInMinutesRegularExperiment;
+                }
+            }
+            set { 
+                // do not enable to set the max time...
+            } 
+        }
 
         public static void GetJointDomain(List<Domain> lDomains, List<Problem> lProblems, out Domain dJoint, out Problem pJoint)
         {
@@ -476,6 +494,83 @@ namespace Planning
             return split[1];
         }
 
+        private static void FindActionsWhichArePubliclyEqual(Agent agent)
+        {
+            Dictionary<Predicate, int> pred2id = new Dictionary<Predicate, int>();
+            Dictionary<int, Predicate> id2pred = new Dictionary<int, Predicate>();
+            int id = 0;
+            foreach (Predicate p in agent.PublicPredicates)
+            {
+                pred2id[p] = id;
+                id2pred[id] = p;
+                id++;
+            }
+            List<Action> publicActions = agent.publicActions;
+            Dictionary<string, HashSet<Action>> samePreconditions = new Dictionary<string, HashSet<Action>>();
+            Dictionary<string, HashSet<Action>> sameEffects = new Dictionary<string, HashSet<Action>>();
+
+            foreach (Action action in publicActions)
+            {
+                HashSet<Predicate> preconditions = GetPublicPredicates(agent, action.HashPrecondition);
+                HashSet<Predicate> effects = GetPublicPredicates(agent, action.HashEffects);
+
+                string preconditionsStr = predicates2id_string(pred2id, preconditions);
+                string effectsStr = predicates2id_string(pred2id, effects);
+
+                if (!samePreconditions.ContainsKey(preconditionsStr))
+                {
+                    samePreconditions[preconditionsStr] = new HashSet<Action>();
+                }
+                samePreconditions[preconditionsStr].Add(action);
+                if (!sameEffects.ContainsKey(effectsStr))
+                {
+                    sameEffects[effectsStr] = new HashSet<Action>();
+                }
+                sameEffects[effectsStr].Add(action);
+            }
+            List<HashSet<Action>> preconditionsVals = new List<HashSet<Action>>(samePreconditions.Values);
+            List<HashSet<Action>> effectsVals = new List<HashSet<Action>>(sameEffects.Values);
+            List<HashSet<Action>> publiclyEqualActions = new List<HashSet<Action>>();
+            foreach (HashSet<Action> pre in preconditionsVals)
+            {
+                if (pre.Count < 2)
+                    continue;
+                foreach (HashSet<Action> eff in effectsVals)
+                {
+                    HashSet<Action> intersection = new HashSet<Action>(pre);
+                    intersection.IntersectWith(eff);
+                    if (intersection.Count > 1)
+                        publiclyEqualActions.Add(intersection);
+                }
+            }
+            if (publiclyEqualActions.Count > 0)
+            {
+                int i = 0;
+            }
+        }
+
+        private static string predicates2id_string(Dictionary<Predicate, int> pred2id, HashSet<Predicate> predicates)
+        {
+            List<int> ids = new List<int>();
+            foreach (Predicate p in predicates)
+            {
+                ids.Add(pred2id[p]);
+            }
+            ids.Sort();
+            return String.Join(",", ids);
+        }
+
+        private static HashSet<Predicate> GetPublicPredicates(Agent agent, List<Predicate> predicates)
+        {
+            HashSet<Predicate> publicPredicates = new HashSet<Predicate>();
+            foreach (Predicate p in predicates)
+            {
+                if (agent.PublicPredicates.Contains(p))
+                    publicPredicates.Add(p);
+            }
+            return publicPredicates;
+        }
+
         public static double pdbCreationTime;
         static List<string> SolveFactored(List<Domain> lDomains, List<Problem> lProblems, ref List<Agent> m_agents, Domain joinDomain)
         {
@@ -572,7 +667,25 @@ namespace Planning
             */
             List<string> lPlan = null;
 
-            if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+            if(highLevelPlanerType == HighLevelPlanerType.TestsForRotem)
+            {
+                Console.WriteLine("Doing tests :)");
+                foreach(Agent agent in agents)
+                {
+                    FindActionsWhichArePubliclyEqual(agent);
+                }
+                lPlan = null;
+            }
+            else if(highLevelPlanerType == HighLevelPlanerType.ManualDebugPlanner)
+            {
+                Console.WriteLine("Applying a manual debug session on the problem:");
+                ExternalPlanners externalPlanners = new ExternalPlanners();
+                Problem jointProblem = null;
+                Domain jointDomain = null;
+                GetJointDomain(lDomains, lProblems, out jointDomain, out jointProblem);
+                lPlan = externalPlanners.ManualSolve(jointProblem, jointDomain);
+            }
+            else if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
             {
                 Console.WriteLine("Generating dependencies graph");
                 DependenciesGraphGenerator.GenerateDependenciesGraph(agents, tracesFolder);
@@ -651,7 +764,7 @@ namespace Planning
                         string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
                         recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
                     }
-                    System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                    //System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
                 }
 
                 publisher = GetAdvancedProjectionPublisher();
@@ -1129,7 +1242,9 @@ namespace Planning
                                                             //Do this in order to run MAFS planner while limiting the revealed dependencies:
                                                             MapsPlanner.MAFSPublisher = new PublishOnlyRevealedDependencies();
                                                             MapsPlanner.dependenciesSelectionPreperation = new DoSelectionPreperation();
-                                                            MapsPlanner.tracesHandler = new TracesHandler();
+                                                            //MapsPlanner.tracesHandler = new TracesHandler();
+                                                            //MapsPlanner.tracesHandler = new TracesHandlerRealStartState();
+                                                            MapsPlanner.tracesHandler = new DontHandleTraces();
                                                         }
 
                                                         if (!creatingTracesAfterSolutionWasFound)
@@ -1139,18 +1254,22 @@ namespace Planning
                                                                 string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
                                                                 recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
                                                             }
-                                                            System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
+                                                            //System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
                                                         }
 
                                                         AAdvancedProjectionActionPublisher publisher = GetAdvancedProjectionPublisher();
 
                                                         Planner.PrepareDependenciesSelection(agents, publisher, lDomains, lProblems);
                                                         Planner.PublishStartStatesForTraces();
+                                                        Planner.SetIParentForStartStates();
 
                                                         StartGrounding = DateTime.Now;
 
                                                         lPlan = Planner.PreferablePlan();
 
+                                                        // calculate leakage:
+                                                        //LeakageCalculatorAllAgents calculatorAllAgents = new LeakageCalculatorAllAgents();
+                                                        //calculatorAllAgents.CalculateLeakage(Planner.MapsAgents);
                                                     }
                                                     else
                                                     if (highLevelPlanerType == HighLevelPlanerType.DistrebutedProjectionMafs)
@@ -1381,10 +1500,12 @@ namespace Planning
                         //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
                         recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
 
+                        /*
                         //leakage traces:
                         tracesFolder = currentRecordingFolder + @"\traces";
                         System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
                         agentsTraces = new Dictionary<Agent, AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.LeakageTrace>();
+                        */
 
                         //golden standard calculation:
                         amountOfDependenciesUsed = 0;
@@ -1703,13 +1824,13 @@ namespace Planning
         static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment)
         {
             List<double> percentages = new List<double>();
-            if (!regularExperiment)
+            /*if (!regularExperiment)
             {
                 for (double i = 0; i <= 1; i += 0.05)
                 {
                     percentages.Add(i);
                 }
-            }
+            }*/
             if (!percentages.Contains(1))
             {
                 percentages.Add(1);
@@ -1895,7 +2016,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
             string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_10_and_13"*//*"logistics_only_13_0"*//*"logistics_only_14_0"*//*"blocksworld_only_13_1"*/"logistics_easy_examples" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_10_and_13"*//*"logistics_only_13_0"*//*"logistics_only_14_0"*//*"blocksworld_only_13_1"*//*"logistics_easy_examples"*//*"logistics_with_prepare_airport"*//*"logistics_with_action_appliabale"*//*"zenotravel_only_3"*/"logistics_only_14_0" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -1940,8 +2061,8 @@ namespace Planning
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
 
             string[] allPossibleDependenciesSelectors = { "FF_and_FD", "FD", "FF" };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*/"logistics_only_13_0" };
+            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*/"logistics_only_4_0" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2094,20 +2215,30 @@ namespace Planning
             File.WriteAllText(outputFilename, outputData);
         }
 
+        private static void RunTestsForRotem(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "TestsForRotem");
+        }
+
+        static void RunManualDebugPlannerOnExperimentProblems(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Manual_Debug_exp");
+        }
+
         static void RunProjectionOnlyExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only_IJCAI");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only_journal");
         }
 
         static void RunMAFSProjectionExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
             selectingDependenciesToUseInTheHueristic = true;
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_IJCAI");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_journal");
         }
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_IJCAI");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_journal");
         }
 
         private static void RunSingleAgentSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
@@ -2143,7 +2274,15 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+                if(highLevelPlanerType == HighLevelPlanerType.TestsForRotem)
+                {
+                    RunTestsForRotem(selectorsAndDomains);
+                }
+                else if(highLevelPlanerType == HighLevelPlanerType.ManualDebugPlanner)
+                {
+                    RunManualDebugPlannerOnExperimentProblems(selectorsAndDomains);
+                }
+                else if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
                 {
                     RunGenerationOfDependenciesGraphs(selectorsAndDomains);
                 }
@@ -2197,8 +2336,8 @@ namespace Planning
             }
             else if (addDummyInitAction)
             {
-                string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "zenotravel" };
-                //string[] allPossibleDependenciesDomains = { "taxi", "wireless", "woodworking08" }; // need to look at these domains, they have constants in them...
+                //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+                string[] allPossibleDependenciesDomains = {  }; // Already added dummy init action to all domains :)
                 AddADummyInitActionToDomains(allPossibleDependenciesDomains);
             }
             else
@@ -2459,7 +2598,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         { 
-            
+            /*
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
@@ -2496,15 +2635,14 @@ namespace Planning
             selectorsAndDomains.Add("domains", domains);
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
+            */
             
-            /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
-            dict.Add("selectors", new int[] { 4 });
+            dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] { 0 });
+            dict.Add("domains", new int[] {4});
             return dict;
-            */
         }
     }
 }

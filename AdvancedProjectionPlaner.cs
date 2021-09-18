@@ -152,6 +152,7 @@ namespace Planning
 
             Program.SaveTimeMeasurmentsForCreatingDependencies(dependenciesProjectionStartTimes, dependenciesProjectionEndTimes);
 
+            /*
             LeakageTrace.setAgents(agents);
             Dictionary<Agent, LeakageTrace> traces = new Dictionary<Agent, LeakageTrace>();
             List<Action> publicActionsForTraces = new List<Action>();
@@ -169,14 +170,14 @@ namespace Planning
                 firstTimeWritenStates.Add(agent, true);
             }
             
-
+            */
             //clear the actions affected dictionary:
             actionsAffectedForAgent = new Dictionary<Agent, Dictionary<Predicate, List<Action>>>();
 
             //publish all of the chosen projections, by the chosen policy:
             Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
-            publisher.setTraces(traces);
+            //publisher.setTraces(traces);
 
             DateTime dependenciesSelectionStartTime = DateTime.Now;
             publisher.publishActions(allProjectionAction, agentsProjections);
@@ -184,7 +185,7 @@ namespace Planning
 
             Program.SaveTimeMeasurmentForSelectingDependencies(dependenciesSelectionStartTime, dependenciesSelectionEndTime);
 
-
+            /*
             if (Program.creatingTracesAfterSolutionWasFound)
             {
                 //write the traces with the dependencies that were published to the file
@@ -198,6 +199,7 @@ namespace Planning
                 }
                 return null;
             }
+            */
             Console.WriteLine("Published dependencies, now trying to find a high level plan");
 
             dPublic.Actions = allProjectionAction;
@@ -303,7 +305,8 @@ namespace Planning
                 }
                 */
                 //calculate amount of dependencies used:
-                Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces, true);
+                //Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, traces, true);
+                Program.amountOfDependenciesUsed = CalculateAmountOfDependenciesUsedAndSaveGoldenStandardTrace(highLevelplan, allProjectionAction, agents, null, false);
 
             }
 

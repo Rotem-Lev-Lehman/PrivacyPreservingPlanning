@@ -1,18 +1,18 @@
-﻿using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
+﻿using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
+namespace Planning.AdvandcedProjectionActionSelection.RevealDepOnTheFly
 {
-    class DoSelectionPreperation : IDependenciesSelectionPreperation
+    class PrepareOnTheFlyPlanningSelection : IDependenciesSelectionPreperation
     {
         /*
-         * Use this class in order to limit the publishing of states that reveal a certain dependency that shouldn't be revealed.
-         * This class shall pick which dependencies should we reveal and which should we not reveal.
-         */
+        * Use this class in order to limit the publishing of states that reveal a certain dependency that shouldn't be revealed.
+        * This class will select no dependencies to reveal at first, but will enable the application of "On the fly" dependencies revealness in MAFS.
+        */
         public void PrepareSelection(AAdvancedProjectionActionPublisher publisher, List<MapsAgent> mafsAgents, List<Agent> agents, AHandleTraces tracesHandler, List<Domain> lDomains, List<Problem> lProblems)
         {
             //TODO: handle traces later...
@@ -71,16 +71,17 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 
             tracesHandler.setAgents(agents);
             tracesHandler.setTraces(traces);
-            */
+            
             //clear the actions affected dictionary:
             AdvancedLandmarkProjectionPlaner.actionsAffectedForAgent = new Dictionary<Agent, Dictionary<Predicate, List<Action>>>();
-
+            
             //publish all of the chosen projections, by the chosen policy:
             Console.WriteLine("Choosing which dependencies to publish");
             publisher.setAgents(agents);
-
+            */
             DateTime dependenciesSelectionStartTime = DateTime.Now;
-            publisher.publishActions(allProjectionAction, agentsProjections);
+            // Do not publish any dependency at first...
+            //publisher.publishActions(allProjectionAction, agentsProjections);
             DateTime dependenciesSelectionEndTime = DateTime.Now;
 
             Program.SaveTimeMeasurmentForSelectingDependencies(dependenciesSelectionStartTime, dependenciesSelectionEndTime);
@@ -104,6 +105,18 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 mapsAgent.SetDependenciesAtStartState(startStatePredicates);
 
                 agentName2agentProjActions[agent.name] = new List<Action>();
+
+                foreach(Action action in agentsProjections[agent])
+                {
+                    List<Predicate> effects = GetTransformedArtificialPredicates(agent, action.HashEffects);
+                    mapsAgent.AddToAllDependenciesListOfAction(action.Name, effects);
+                    mapsAgent.AddToEffectsActionsAndDependencies(action.Name, new List<Predicate>()); // revealed nothing...
+                    List<Predicate> preconditions = GetTransformedArtificialPredicates(agent, action.HashPrecondition);
+                    mapsAgent.AddToPreconditionActionsAndDependencies(action.Name, preconditions);
+
+                    //agentName2agentProjActions efwfewf CONTINUE HERE
+                    throw new NotImplementedException();
+                }
             }
 
             foreach (Action action in allProjectionAction)

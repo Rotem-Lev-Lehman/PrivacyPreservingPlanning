@@ -118,6 +118,7 @@
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionPublicPredicatesAchieverDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionPublicPredicatesAchieverWithoutNegationDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AdvancedProjectionRandomizedDependeciesSelector.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\DependenciesPublishing\AIntegerLinearProgrammingDependenciesSelector.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\AHandleTraces.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\DontHandleTraces.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\DoSelectionPreperation.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\PublishEverything.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\PublishOnlyRevealedDependencies.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\TracesHandler.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\MAFSPublishers\TracesHandlerRealStartState.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\Dependency.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\OptimalDependenciesPlanner.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\PddlBuilderForOptimalDependenciesPlanningVer5.cs" />
@@ -134,10 +136,17 @@
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\PddlBuilderForOptimalDependenciesPlanningVer3.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\PddlBuilderForOptimalDependenciesPlanningVer2.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\OptimalPlanner\PddlBuilderForOptimalDependenciesPlanning.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\CalculateLeakageLocally\LeakageCalculatorAllAgents.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\CalculateLeakageLocally\LeakageCalculatorOneAgent.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\CalculateLeakageLocally\LeakageProperty.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\CalculateLeakageLocally\LeakagePropertyType.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\LeakageTrace.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\TraceOperator.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\TraceState.cs" />
     <Compile Include="AdvandcedProjectionActionSelection\PrivacyLeakageCalculation\TraceVariable.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\RevealDepOnTheFly\DependenciesSelectionVoting\ASelectByPriority.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\RevealDepOnTheFly\DependenciesSelectionVoting\VotingManager.cs" />
+    <Compile Include="AdvandcedProjectionActionSelection\RevealDepOnTheFly\PrepareOnTheFlyPlanningSelection.cs" />
     <Compile Include="Agent.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Block.cs" />

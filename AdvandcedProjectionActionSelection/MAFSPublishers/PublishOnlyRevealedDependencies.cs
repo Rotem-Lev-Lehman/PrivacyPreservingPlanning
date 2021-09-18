@@ -44,7 +44,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                             }
                         }
                         //Reveal:
-                        RevealEffects(effectsRevealed, agent.GetPredicatesRevealedByAction(action.Name), action, whoRevealed);
+                        RevealEffects(effectsRevealed, agent.GetPredicatesRevealedByAction(action.Name)/*, agent.GetAllPossibleDependenciesOfAction(action.Name)*/, action, whoRevealed);
                     }
                 }
             }
@@ -52,7 +52,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             return true;
         }
 
-        private void RevealEffects(HashSet<Predicate> effectsRevealed, List<Predicate> effects, Action action, Dictionary<Predicate, string> whoRevealed)
+        private void RevealEffects(HashSet<Predicate> effectsRevealed, List<Predicate> effects/*, List<Predicate> allPossibleDependencies*/, Action action, Dictionary<Predicate, string> whoRevealed)
         {
             foreach (Predicate p in effects)
             {

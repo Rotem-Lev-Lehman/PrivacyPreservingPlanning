@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Planning.AdvandcedProjectionActionSelection.OptimalPlanner;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
 
 
 namespace Planning
@@ -53,13 +55,38 @@ namespace Planning
         public List<Order> ReasonableOrdering = null;
 
         Dictionary<string, List<Predicate>> actionName_to_revealedDependenciesList;
+        Dictionary<string, List<Predicate>> actionName_to_allDependenciesList;
         Dictionary<string, List<Predicate>> actionName_to_preconditionsDependenciesList;
+
         List<Predicate> dependenciesAtStartState;
         HashSet<Tuple<string, Predicate>> dependenciesUsed;
 
+        //Revealing dependencies when stuck:
+        Dictionary<Dependency, List<MapsVertex>> dependency_to_nonPublishedStatesList;
+        PriorityQueue<Dependency, int> nextDependencyToBeRevealed;
+        const int NUM_STATES_UNTIL_REVEALING_DEPENDENCY = 1000;
+        int currentAmountOfStates;
+        //now we need to use these datastructures in order to pick which dependency should be revealed when we get to a dead-end (1000 states without solving the problem)
+
         public MapsVertex startVertexForTrace;
         public Agent regularAgent;
+        public MapsVertex realStartStateVertex;
 
+        //For leakage calculation:
+        public List<MapsVertex> allSentStates { get; private set; }
+        public void AddToAllSentStates(MapsVertex sentVertex)
+        {
+            allSentStates.Add(sentVertex);
+            allStates.Add(sentVertex);
+        }
+        public List<MapsVertex> allReceivedStates { get; private set; }
+        public void AddToAllReceivedStates(MapsVertex recVertex)
+        {
+            allReceivedStates.Add(recVertex);
+            allStates.Add(recVertex);
+        }
+        public List<MapsVertex> allStates { get; private set; }
+        
         public static void ResetStaticFields()
         {
             counter = 0;
@@ -79,6 +106,7 @@ namespace Planning
         public MapsAgent(MapsVertex start, Agent a, List<GroundedPredicate> m_allGoal, Dictionary<string, int> m_landmarksCount, Dictionary<string, HashSet<MapsVertex>> m_openLists, Dictionary<string, HashSet<MapsVertex>> m_receivedStates, Dictionary<string, Mutex> m_globalMutex, Dictionary<string, int> countOfReasonableOrdering, List<GroundedPredicate> fullState)
         {
             startVertexForTrace = start;
+            realStartStateVertex = null;
             firstIt = true;
             domain = a.domain;
             problem = a.problem;
@@ -149,14 +177,24 @@ namespace Planning
             first = true;
 
             actionName_to_revealedDependenciesList = new Dictionary<string, List<Predicate>>();
+            actionName_to_allDependenciesList = new Dictionary<string, List<Predicate>>();
             actionName_to_preconditionsDependenciesList = new Dictionary<string, List<Predicate>>();
             dependenciesAtStartState = new List<Predicate>();
             dependenciesUsed = new HashSet<Tuple<string, Predicate>>();
+
+            allSentStates = new List<MapsVertex>();
+            allReceivedStates = new List<MapsVertex>();
+            allStates = new List<MapsVertex>();
         }
 
         public void AddToEffectsActionsAndDependencies(string actionName, List<Predicate> predicates)
         {
             actionName_to_revealedDependenciesList.Add(actionName, predicates);
+        }
+
+        public void AddToAllDependenciesListOfAction(string actionName, List<Predicate> predicates)
+        {
+            actionName_to_allDependenciesList.Add(actionName, predicates);
         }
 
         public void AddToPreconditionActionsAndDependencies(string actionName, List<Predicate> predicates)
@@ -182,6 +220,11 @@ namespace Planning
         public List<Predicate> GetPredicatesRevealedByAction(string actionName)
         {
             return actionName_to_revealedDependenciesList[actionName];
+        }
+
+        public List<Predicate> GetAllPossibleDependenciesOfAction(string actionName)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Predicate> GetPredicatesPreconditionsForAction(string actionName)
@@ -1349,6 +1392,7 @@ namespace Planning
                         {
                             //SendVertexToAll(courentVertex);
                             bool flag = true;
+                            bool sendingRealStartState = false;
 
                             /*
                              * This is for sending only states that are different in their public reflection.
@@ -1367,12 +1411,30 @@ namespace Planning
                                 flag = MapsPlanner.MAFSPublisher.CanPublish(this, courentVertex);
                                 if (flag)
                                 {
+                                    courentVertex.h_when_sent = courentVertex.h;
                                     MapsPlanner.tracesHandler.publishState(courentVertex, this);
+                                    //Handle i-parent dictionary:
+                                    courentVertex.agent2iparentVertex = new Dictionary<string, MapsVertex>(courentVertex.publicParent.agent2iparentVertex);
+                                    HandleIParent(courentVertex, this);
+                                    courentVertex.senderAgent = this.name;
+                                    if (courentVertex.lplan.Last().Name.Contains("turn-to-regular-actions-stage"))
+                                    {
+                                        realStartStateVertex = courentVertex;
+
+                                        if (MapsPlanner.tracesHandler.usesRealStartState())
+                                        {
+                                            int startStateID = TraceState.GetNextStateID();
+                                            Dictionary<string, int> iparents = new Dictionary<string, int>();
+                                            MapsPlanner.tracesHandler.publishRealStartState(this, courentVertex, startStateID, iparents);                                          
+                                        }
+                                        sendingRealStartState = true;
+                                    }
                                 }
                             }
 
                             if (!flag)
                             {
+                                //courentVertex.agent2iparentVertex = courentVertex.publicParent.agent2iparentVertex;
                                 courentVertex.agent2iparent = courentVertex.publicParent.agent2iparent;
                                 courentVertex.traceStateForPublicRevealedState = courentVertex.publicParent.traceStateForPublicRevealedState;
                                 // not sending...
@@ -1385,7 +1447,7 @@ namespace Planning
                             }
 
                             if (flag && !MapsPlanner.directMessage)
-                                SendVertexToAllAgentOnNextListUse(courentVertex);
+                                SendVertexToAllAgentOnNextListUse(courentVertex, sendingRealStartState);
                             else
                             {
                                 if (flag && MapsPlanner.directMessage)
@@ -1503,6 +1565,21 @@ namespace Planning
             {
                 Console.WriteLine(ex.ToString());
                 return null;
+            }
+        }
+
+        private void HandleIParent(MapsVertex courentVertex, MapsAgent mapsAgent)
+        {
+            // check if the public parent of this vertex is the i-parent of it (sent by the current agent - or it is the start state...)
+            if(courentVertex.publicParent.senderAgent == mapsAgent.name || courentVertex.publicParent == startVertexForTrace)
+            {
+                // if it is, then update the i-parent of this state to be the public parent of this state
+                courentVertex.agent2iparentVertex[mapsAgent.name] = courentVertex.publicParent;
+            }
+            else
+            {
+                // if it is not, then the i-parent of this state is the same as the public parent's state
+                courentVertex.agent2iparentVertex[mapsAgent.name] = courentVertex.publicParent.agent2iparentVertex[mapsAgent.name];
             }
         }
 
@@ -1685,7 +1762,7 @@ namespace Planning
                             }
 
                             if (flag && !MapsPlanner.directMessage)
-                                SendVertexToAllAgentOnNextListUse(courentVertex);
+                                SendVertexToAllAgentOnNextListUse(courentVertex, false);
                             else
                             {
                                 if (flag && MapsPlanner.directMessage)
@@ -2296,9 +2373,10 @@ namespace Planning
             }
         }
         public void SendVertexToAll(MapsVertex mv)
-        {
+        { 
             try
             {
+                AddToAllSentStates(mv);
                 foreach (string index in agentsNames)
                 {
                     if (!name.Equals(index))
@@ -2337,10 +2415,12 @@ namespace Planning
                 Console.WriteLine(ex.ToString());
             }
         }
-        public void SendVertexToAllAgentOnNextListUse(MapsVertex mv)
+        public void SendVertexToAllAgentOnNextListUse(MapsVertex mv, bool sendingRealStartState)
         {
             try
             {
+                // save the sent state as sent for the sender agent:
+                AddToAllSentStates(mv);
                 foreach (string index in agentsNames)
                 {
                     if (!name.Equals(index))
@@ -2350,6 +2430,9 @@ namespace Planning
                         ++Program.sendedStateCounter;
                         MapsVertex mapsVertex = new MapsVertex(mv);
                         mapsVertex.fullCopy(mv);
+
+                        mapsVertex.senderAgent = this.name;
+                        mapsVertex.agent2iparentVertex = mv.agent2iparentVertex;
 
                         if (Program.projectionVersion == Program.ProjectionVersion.Global || Program.projectionVersion == Program.ProjectionVersion.GlobalV2)
                         {
@@ -2382,7 +2465,25 @@ namespace Planning
                             ++Program.messages;
                         }
 
-                        MapsPlanner.tracesHandler.RecieveState(mapsVertex, MapsPlanner.name2mapsAgent[index], mv, this);
+                        mapsVertex.h_when_sent = mv.h;
+                        if (sendingRealStartState && MapsPlanner.tracesHandler.usesRealStartState())
+                        {
+                            // we recieved the real start state, so we need to save it in this agent's trace.
+                            MapsPlanner.tracesHandler.publishRealStartState(MapsPlanner.name2mapsAgent[index], mapsVertex, -1, null);
+                        }
+                        else
+                        {
+                            // we recieved a regular state, save it in the trace.
+                            MapsPlanner.tracesHandler.RecieveState(mapsVertex, MapsPlanner.name2mapsAgent[index], mv, this);
+                        }
+                        // save the received state as received for the receiver agent:
+                        MapsPlanner.name2mapsAgent[index].AddToAllReceivedStates(mapsVertex);
+                        // iparent:
+                        HandleIParent(mapsVertex, MapsPlanner.name2mapsAgent[index]);
+                        if(mv == realStartStateVertex)
+                        {
+                            MapsPlanner.name2mapsAgent[index].realStartStateVertex = mapsVertex;
+                        }
                     }
                 }
             }

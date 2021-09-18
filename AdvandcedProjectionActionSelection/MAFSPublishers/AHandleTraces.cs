@@ -22,8 +22,10 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             this.agents = agents;
         }
 
+        public abstract bool usesRealStartState();
         public abstract void publishState(MapsVertex vertex, MapsAgent agent);
         public abstract void publishStartState(MapsAgent agent, MapsVertex startState, int stateID, Dictionary<string, int> iparents);
+        public abstract void publishRealStartState(MapsAgent agent, MapsVertex realStartState, int stateID, Dictionary<string, int> iparents);
         public abstract void FinishPlanning(List<string> highLevelPlan);
         public abstract void RecieveState(MapsVertex recievedVertex, MapsAgent recievedAgent, MapsVertex sentVertex, MapsAgent senderAgent);
         public abstract void PublishGoalState(MapsVertex goalVertex, MapsAgent goalFinder);

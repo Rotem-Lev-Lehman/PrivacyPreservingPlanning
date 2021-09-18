@@ -15,7 +15,7 @@ namespace Planning
         public static int massageEffCounter = 0;
         public static int massagePreCounter = 0;
         public static HashSet<GroundedPredicate> allPublicFacts = null;
-        List<MapsAgent> MapsAgents = null;
+        public List<MapsAgent> MapsAgents = null;
         Dictionary<string, HashSet<MapsVertex>> openLists = null;
         Dictionary<string, HashSet<MapsVertex>> receivedStates = null;
         Dictionary<string, Mutex> mutexs = null;
@@ -295,11 +295,28 @@ namespace Planning
 
         public void PublishStartStatesForTraces()
         {
+            if (tracesHandler.usesRealStartState())
+            {
+                // if we use the real start state, we don't need this function to run (as we do not record the "fake" start state...)
+                return;
+            }
             int startStateID = TraceState.GetNextStateID();
             Dictionary<string, int> iparents = new Dictionary<string, int>();
             foreach (MapsAgent agent in MapsAgents)
             {
                 tracesHandler.publishStartState(agent, agent.startVertexForTrace, startStateID, iparents);
+            }
+        }
+
+        public void SetIParentForStartStates()
+        {
+            foreach (MapsAgent agent in MapsAgents)
+            {
+                agent.startVertexForTrace.agent2iparentVertex = new Dictionary<string, MapsVertex>();
+                foreach (MapsAgent agent2 in MapsAgents)
+                {
+                    agent.startVertexForTrace.agent2iparentVertex[agent2.name] = null;
+                }
             }
         }
 

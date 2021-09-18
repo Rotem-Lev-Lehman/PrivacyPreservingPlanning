@@ -7,11 +7,21 @@ using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation;
 
 namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 {
-    class TracesHandler : AHandleTraces
+    class TracesHandlerRealStartState : AHandleTraces
     {
+        private bool gotToRealStartState;
+
+        private int realStartStateTraceID;
+        private Dictionary<string, int> realStartState_iparents;
+
+        public TracesHandlerRealStartState()
+        {
+            gotToRealStartState = false;
+        }
+
         public override bool usesRealStartState()
         {
-            return false;
+            return true;
         }
 
         public override void FinishPlanning(List<string> highLevelPlan)
@@ -29,7 +39,7 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
         private List<string> EditPlan(List<string> highLevelPlan)
         {
             List<string> editted = new List<string>();
-            foreach(string action in highLevelPlan)
+            foreach (string action in highLevelPlan)
             {
                 editted.Add(action.Replace("_", " "));
             }
@@ -64,6 +74,17 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 
         public override void publishStartState(MapsAgent agent, MapsVertex startState, int stateID, Dictionary<string, int> iparents)
         {
+            // don't do anything here...
+        }
+
+        public override void publishRealStartState(MapsAgent agent, MapsVertex realStartState, int stateID, Dictionary<string, int> iparents)
+        {
+            if (gotToRealStartState)
+            {
+                // Someone else published the real start state already, this is the recieved state...
+                stateID = realStartStateTraceID;
+                iparents = realStartState_iparents;
+            }
             int senderID = -1;
             int parentID = -1;
             int iparentID = -1;
@@ -73,11 +94,20 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
             //iparents[agent.name] = 0;
             iparents[agent.name] = iparentID;
 
-            WriteStateToTrace(startState, agent, context, parentID, iparentID, stateID, senderID, cost, heuristic, iparents);
+            WriteStateToTrace(realStartState, agent, context, parentID, iparentID, stateID, senderID, cost, heuristic, iparents);
+
+            realStartStateTraceID = stateID;
+            realStartState_iparents = iparents;
+            gotToRealStartState = true;
         }
 
         public override void publishState(MapsVertex vertex, MapsAgent senderAgent)
         {
+            if (!gotToRealStartState)
+            {
+                // Only when we got to the real start state, we will start publishing regular states...
+                return;
+            }
             //int senderID = senderAgent.GetID();
             int senderID = -1; //The json of sent state needs to be with senderID of -1...
             int stateID = TraceState.GetNextStateID();
@@ -99,6 +129,11 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 
         public override void RecieveState(MapsVertex recievedVertex, MapsAgent recievedAgent, MapsVertex sentVertex, MapsAgent senderAgent)
         {
+            if (!gotToRealStartState)
+            {
+                // Only when we got to the real start state, we will start publishing regular states...
+                return;
+            }
             int senderID = senderAgent.GetID();
             int stateID = sentVertex.traceStateForPublicRevealedState.stateID;
             TraceState parentState = recievedVertex.publicParent.traceStateForPublicRevealedState;
@@ -153,9 +188,9 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
         }
 
         private List<int> GetPrivateIDs(MapsVertex vertex)
-        { 
+        {
             List<int> privateIDs = new List<int>();
-            foreach(Agent agent in agents)
+            foreach (Agent agent in agents)
             {
                 privateIDs.Add(vertex.stateIndexes[agent.name]);
             }
@@ -189,11 +224,6 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
                 state.AddPredicate(gp);
             }
             return state;
-        }
-
-        public override void publishRealStartState(MapsAgent agent, MapsVertex realStartState, int stateID, Dictionary<string, int> iparents)
-        {
-            // don't do anything here...
         }
     }
 }

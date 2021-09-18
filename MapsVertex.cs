@@ -65,6 +65,10 @@ namespace Planning
 
         public TraceState traceStateForPublicRevealedState = null;
         public Dictionary<string, int> agent2iparent = null;
+        // Leakage calculation:
+        public Dictionary<string, MapsVertex> agent2iparentVertex = null;
+        public string senderAgent = null;
+        public int h_when_sent;
 
         public static void ResetStaticFields()
         {

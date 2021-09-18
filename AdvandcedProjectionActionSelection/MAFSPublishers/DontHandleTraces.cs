@@ -8,12 +8,22 @@ namespace Planning.AdvandcedProjectionActionSelection.MAFSPublishers
 {
     class DontHandleTraces : AHandleTraces
     {
+        public override bool usesRealStartState()
+        {
+            return false;
+        }
+
         public override void FinishPlanning(List<string> highLevelPlan)
         {
             //don't do anything here...
         }
 
         public override void PublishGoalState(MapsVertex goalVertex, MapsAgent goalFinder)
+        {
+            //don't do anything here...
+        }
+
+        public override void publishRealStartState(MapsAgent agent, MapsVertex realStartState, int stateID, Dictionary<string, int> iparents)
         {
             //don't do anything here...
         }

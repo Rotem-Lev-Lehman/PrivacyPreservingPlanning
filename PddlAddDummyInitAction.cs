@@ -368,11 +368,26 @@ namespace Planning
             return updatedDomain;
         }
 
+        private static string GetConstantsSection(string allText)
+        {
+            string constants = GetSection(allText, "(:constants");
+            return constants;
+        }
+
+        private static string RemoveConstantsSection(string allText)
+        {
+            string textWithoutConstants = RemoveSection(allText, "(:constants");
+            return textWithoutConstants;
+        }
+
         private static string FixConstants(string domain, string objects, List<int> agents)
         {
             if(DomainContainsConstantsSection(domain))
             {
-                throw new Exception("The domain already contains a constants section. Need to check this.");
+                //throw new Exception("The domain already contains a constants section. Need to check this.");
+                string constants = GetConstantsSection(domain);
+                domain = RemoveConstantsSection(domain);
+                objects += "\n" + constants;
             }
             string constantsSection = "(:constants";
             foreach (int agentNum in agents)
@@ -571,6 +586,17 @@ namespace Planning
             int endOfSection = findEndOfSection(section);
             section = section.Substring(0, endOfSection);
             return section;
+        }
+
+        private static string RemoveSection(string allText, string sectionName)
+        {
+            string[] split = allText.Split(new string[] { sectionName }, StringSplitOptions.None);
+            string beforeSection = split[0];
+            string section = split[1];
+            int endOfSection = findEndOfSection(section);
+            string afterSection = section.Substring(endOfSection + 1);
+            string withoutSection = beforeSection + afterSection;
+            return withoutSection;
         }
 
         private static int findEndOfSection(string section)
