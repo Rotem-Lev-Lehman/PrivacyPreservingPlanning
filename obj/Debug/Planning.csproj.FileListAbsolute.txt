@@ -265,3 +265,13 @@ C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\Planning.cspr
 C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\GPPP.exe
 C:\Users\levlerot\source\repos\PrivacyPreservingPlanning\obj\Debug\GPPP.pdb
 C:\Users\User\coding\c#Projects\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CoreCompileInputs.cache
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\bin\Debug\GPPP.exe.config
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\bin\Debug\GPPP.exe
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\bin\Debug\GPPP.pdb
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\bin\Debug\Newtonsoft.Json.xml
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\obj\Debug\Planning.csprojAssemblyReference.cache
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CoreCompileInputs.cache
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\obj\Debug\Planning.csproj.CopyComplete
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\obj\Debug\GPPP.exe
+C:\Users\User\coding\c#Projects\CPPP_core_ver\PrivacyPreservingPlanning\obj\Debug\GPPP.pdb

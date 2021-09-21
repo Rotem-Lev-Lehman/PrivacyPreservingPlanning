@@ -131,7 +131,7 @@ namespace Planning
         //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
 
         public static readonly int maxTimeInMinutesRegularExperiment = 5; //After 5 minutes, there will be a timeout. -- For other experiments
-        public static readonly int maxTimeInMinutesOptimalExperiment = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        public static readonly int maxTimeInMinutesOptimalExperiment = 5; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
         public static int maxTimeInMinutes { 
             get {
                 if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
@@ -2015,8 +2015,8 @@ namespace Planning
             string[] nonCollaborationDomains = { "logistics00" };
 
             string[] allPossibleDependenciesSelectors = { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
-            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_10_and_13"*//*"logistics_only_13_0"*//*"logistics_only_14_0"*//*"blocksworld_only_13_1"*//*"logistics_easy_examples"*//*"logistics_with_prepare_airport"*//*"logistics_with_action_appliabale"*//*"zenotravel_only_3"*/"logistics_only_14_0" };
+            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_10_and_13"*//*"logistics_only_13_0"*//*"logistics_only_14_0"*//*"blocksworld_only_13_1"*//*"logistics_easy_examples"*//*"logistics_with_prepare_airport"*//*"logistics_with_action_appliabale"*//*"zenotravel_only_3"*/"logistics_only_14_0" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2062,7 +2062,7 @@ namespace Planning
 
             string[] allPossibleDependenciesSelectors = { "FF_and_FD", "FD", "FF" };
             //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*/"logistics_only_4_0" };
+            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*//*"logistics_only_14_0"*/"zenotravel_only_23" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2238,7 +2238,7 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_journal");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_journal_test");
         }
 
         private static void RunSingleAgentSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
@@ -2641,7 +2641,7 @@ namespace Planning
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] {4});
+            dict.Add("domains", new int[] {0});
             return dict;
         }
     }
