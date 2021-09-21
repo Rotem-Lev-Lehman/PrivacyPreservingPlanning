@@ -19,7 +19,7 @@ namespace Planning
         // public static StreamWriter timeResults = new StreamWriter("timeResults.txt", false);
         public static bool supportPrivateGoal = true;
         public static bool thereIsPrivateGoal = false;
-        public static string outputPath = Directory.GetCurrentDirectory() + @"\Results3\";
+        public static string outputPath = Directory.GetCurrentDirectory() + "/Results3/";
         static public int notSendedStates = 0;
         static public double makeSpanPlanTime = 0;
         public static int sendedStateCounter = 0;
@@ -126,7 +126,8 @@ namespace Planning
         //For the MAFS planner heuristic calculation:
         public static bool selectingDependenciesToUseInTheHueristic = false; //do not need to touch this, it will be true automatically in the start of the MAFS experiment.
 
-        public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        //public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        public static string baseFolderName = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Left server's path
         //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
 
@@ -225,7 +226,7 @@ namespace Planning
                 currentJointDomain = dJoint;
                 currentJointProblem = pJoint;
 
-                pdbPath = @"PdbFiles/" + dir.Parent.Name;
+                pdbPath = "PdbFiles/" + dir.Parent.Name;
                 if (!Directory.Exists(pdbPath))
                 {
                     Directory.CreateDirectory(pdbPath);
@@ -761,7 +762,7 @@ namespace Planning
                 {
                     foreach (Agent a in agents)
                     {
-                        string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
+                        string currentAgentFile = agentsRecordingFolder + "/" + ConvertAgentNameToItsUsableName(a) + ".csv";
                         recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
                     }
                     //System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
@@ -1251,7 +1252,7 @@ namespace Planning
                                                         {
                                                             foreach (Agent a in agents)
                                                             {
-                                                                string currentAgentFile = agentsRecordingFolder + @"\" + ConvertAgentNameToItsUsableName(a) + ".csv";
+                                                                string currentAgentFile = agentsRecordingFolder + "/" + ConvertAgentNameToItsUsableName(a) + ".csv";
                                                                 recordingDependencyPickingPerAgent.Add(a, currentAgentFile);
                                                             }
                                                             //System.IO.Directory.CreateDirectory(tracesFolder); //create the directory if it does not exist
@@ -1491,12 +1492,12 @@ namespace Planning
                     else
                     {
                         //create recording folder:
-                        string currentRecordingFolder = recordingFolderWithPercentage + @"\" + di.Name + @"\Round_" + currentParsingRound;
+                        string currentRecordingFolder = recordingFolderWithPercentage + "/" + di.Name + "/Round_" + currentParsingRound;
                         System.IO.Directory.CreateDirectory(currentRecordingFolder); //create the directory if it does not exist
-                        recordingDependencyPickingAllTogether = currentRecordingFolder + @"\AllTogether.csv";
-                        recordingHighLevelPlanFileName = currentRecordingFolder + @"\HighLevelPlan.csv";
+                        recordingDependencyPickingAllTogether = currentRecordingFolder + "/AllTogether.csv";
+                        recordingHighLevelPlanFileName = currentRecordingFolder + "/HighLevelPlan.csv";
 
-                        agentsRecordingFolder = currentRecordingFolder + @"\Agents";
+                        agentsRecordingFolder = currentRecordingFolder + "/Agents";
                         //System.IO.Directory.CreateDirectory(agentsRecordingFolder); //create the directory if it does not exist
                         recordingDependencyPickingPerAgent = new Dictionary<Agent, string>();
 
@@ -1510,7 +1511,7 @@ namespace Planning
                         //golden standard calculation:
                         amountOfDependenciesUsed = 0;
                         amountOfDependenciesUsedInPlanningProcess = 0;
-                        goldenStandardCurrentDirectory = goldenStandardDomainDirectory + @"\" + di.Name;
+                        goldenStandardCurrentDirectory = goldenStandardDomainDirectory + "/" + di.Name;
                         System.IO.Directory.CreateDirectory(goldenStandardCurrentDirectory);
                         if (!alreadySolved.ContainsKey(di.Name))
                         {
@@ -1520,7 +1521,7 @@ namespace Planning
                         //amount of dependencies to reveal:
                         amountOfDependenciesPublished = 0;
 
-                        sOutputPlanFile = currentRecordingFolder + @"\Plan.txt";
+                        sOutputPlanFile = currentRecordingFolder + "/Plan.txt";
                     }
 
                     //clear traces anyways...
@@ -1743,7 +1744,7 @@ namespace Planning
         {
 
             Console.WriteLine(sDomain + " " + sMsg);
-            swResults = new StreamWriter(outputPath + @"/Results.txt", true);
+            swResults = new StreamWriter(outputPath + "/Results.txt", true);
             swResults.WriteLine(sDomain + ", " + sMsg.Replace(",", ":") + ", " + PlanCost + ", " + PlanMakeSpan
                + "," + makeSpanPlanTime
                + "," + (End.Subtract(Start).TotalSeconds - pdbCreationTime)
@@ -1841,7 +1842,7 @@ namespace Planning
             for (int j = 0; j < percentages.Count; j++)
             {
                 double percentage = percentages[j];
-                outputPath = resultsFolderPath + @"/percentage_" + percentage;
+                outputPath = resultsFolderPath + "/percentage_" + percentage;
                 try
                 {
                     // Determine whether the directory exists.
@@ -1856,7 +1857,7 @@ namespace Planning
                     Console.WriteLine("Error creating a directory: " + e.ToString());
                 }
 
-                recordingFolderWithPercentage = recordingFolderPath + @"\percentage_" + percentage;
+                recordingFolderWithPercentage = recordingFolderPath + "/percentage_" + percentage;
                 try
                 {
                     // Determine whether the directory exists.
@@ -1912,7 +1913,7 @@ namespace Planning
                     string percentage = split[split.Length - 1].Split('_')[1];
 
                     string line;
-                    System.IO.StreamReader file = new System.IO.StreamReader(dir + @"/Results.txt");
+                    System.IO.StreamReader file = new System.IO.StreamReader(dir + "/Results.txt");
                     while ((line = file.ReadLine()) != null)
                     {
                         line = percentage + "," + line;
@@ -2035,15 +2036,15 @@ namespace Planning
             }
             Console.WriteLine("Lets start running them :)");
 
-            string experimentPath = baseFolderName + @"\Experiment\" + plannerType + @"\";
+            string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
 
-            goldenStandardRootDirectory = baseFolderName + @"\hindsight"; //changed it's name to hindsight as it is in the paper...
+            goldenStandardRootDirectory = baseFolderName + "/hindsight"; //changed it's name to hindsight as it is in the paper...
             System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
-            string collaborationPath = experimentPath + @"Collaboration\Order_Of_Agents\";
-            string nonCollaborationPath = experimentPath + @"No_Collaboration\exp2\";
+            string collaborationPath = experimentPath + "Collaboration/Order_Of_Agents/";
+            string nonCollaborationPath = experimentPath + "No_Collaboration/exp2/";
 
-            string dependenciesNonCollaborativePath = experimentPath + @"Dependecies\No_Collaboration\";
+            string dependenciesNonCollaborativePath = experimentPath + "Dependecies/No_Collaboration/";
 
             //first run the collaborations:
             //collaborationUsed = true;
@@ -2081,12 +2082,12 @@ namespace Planning
             }
             Console.WriteLine("Lets start running them :)");
 
-            string experimentPath = baseFolderName + @"\Experiment\" + plannerType + @"\";
+            string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
 
             //goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
             //System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
-            string dependenciesPath = experimentPath + @"Dependecies\";
+            string dependenciesPath = experimentPath + "Dependecies/";
 
             //first run the collaborations:
             //collaborationUsed = true;
@@ -2100,21 +2101,21 @@ namespace Planning
 
         static void RunSpecificExperiment(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString, bool regularExperiment)
         {
-            string domainsPath = baseFolderName + @"\factored\";
+            string domainsPath = baseFolderName + "/factored/";
             if (runWithDummyInitAction)
             {
-                domainsPath += @"domains_with_init_action\";
+                domainsPath += "domains_with_init_action/";
             }
-            string resultName = @"\experiment_results";
-            string outputFileDirectory = @"\Experiment_Output_File";
-            string outputFileName = @"\output.csv";
-            string recordingsDirectoryName = @"\Recordings";
+            string resultName = "/experiment_results";
+            string outputFileDirectory = "/Experiment_Output_File";
+            string outputFileName = "/output.csv";
+            string recordingsDirectoryName = "/Recordings";
 
-            string oldPathAndName = @"ff.exe";
+            string oldPathAndName = "ff.exe";
 
             foreach (string domainName in domains)
             {
-                goldenStandardDomainDirectory = goldenStandardRootDirectory + @"\" + domainName;
+                goldenStandardDomainDirectory = goldenStandardRootDirectory + "/" + domainName;
                 System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
                 foreach (string selectorType in selectors)
                 {
@@ -2138,7 +2139,7 @@ namespace Planning
 
                     typeOfSelector = selectorType;
 
-                    string currPath = mainPath + selectorType + @"\" + domainName;
+                    string currPath = mainPath + selectorType + "/" + domainName;
                     System.IO.Directory.CreateDirectory(currPath); //create the directory if it does not exist
 
                     string problemsPath = domainsPath + domainName;
@@ -2163,10 +2164,10 @@ namespace Planning
         {
             //the directory must contain the files: "AllTogether.csv", and "HighLevelPlan.csv" among other files.
             string outputData = "Action,Effects\n";
-            string outputFilename = directoryPath + @"\HighLevelPlanWithEffects.csv";
+            string outputFilename = directoryPath + "/HighLevelPlanWithEffects.csv";
 
-            string planFilename = directoryPath + @"\HighLevelPlan.csv";
-            string publishedEffectsFilename = directoryPath + @"\AllTogether.csv";
+            string planFilename = directoryPath + "/HighLevelPlan.csv";
+            string publishedEffectsFilename = directoryPath + "/AllTogether.csv";
 
             string publishedEffectsText = File.ReadAllText(publishedEffectsFilename);
             string[] effectsLines = publishedEffectsText.Split('\n');
@@ -2328,7 +2329,7 @@ namespace Planning
             else if (creatingNewBenchmarks)
             {
                 //string savePath = baseFolderName + @"\factored\MA_Logistics";
-                string savePath = baseFolderName + @"\factored\MA_Blocksworld";
+                string savePath = baseFolderName + "/factored/MA_Blocksworld";
 
                 //CreateMALogistics(savePath, 3, 7, 2, 5, 5, 25, 5);
                 //CreateMABlocksWorld(savePath, 3, 7, 2, 5, 5, 25, 5);
@@ -2344,7 +2345,7 @@ namespace Planning
             {
                 if (args.Length == 0)
                 {
-                    swResults = new StreamWriter(@"Results.txt", false);
+                    swResults = new StreamWriter("Results.txt", false);
                     swResults.Close();
 
                     //string sPath = @"C:\Users\Samsung\Dropbox\privacyPreserving\Competition\all\factored\depot";
@@ -2411,21 +2412,21 @@ namespace Planning
             }
             Console.WriteLine("*********************************************************");
             Console.WriteLine("Starting now");
-            string sourcePath = baseFolderName + @"\factored";
-            string destPath = baseFolderName + @"\factored\domains_with_init_action";
+            string sourcePath = baseFolderName + "/factored";
+            string destPath = baseFolderName + "/factored/domains_with_init_action";
             foreach(string domain in domains)
             {
                 Console.WriteLine("*********************************************************");
                 Console.WriteLine("Now adding dummy init action to the domain: " + domain);
-                string domainSourcePath = sourcePath + @"\" + domain;
-                string domainDestPath = destPath + @"\" + domain;
+                string domainSourcePath = sourcePath + "/" + domain;
+                string domainDestPath = destPath + "/" + domain;
                 string[] problems = Directory.GetDirectories(domainSourcePath);
                 foreach(string problemPath in problems)
                 {
                     string problem = problemPath.Remove(0, domainSourcePath.Length + 1); //get only the name of the last subdirectory. Remove the \ too
                     Console.WriteLine("Problem: " + problem);
-                    string problemSourcePath = domainSourcePath + @"\" + problem;
-                    string problemDestPath = domainDestPath + @"\" + problem;
+                    string problemSourcePath = domainSourcePath + "/" + problem;
+                    string problemDestPath = domainDestPath + "/" + problem;
                     PddlAddDummyInitAction.AddDummyInitAction(problemSourcePath, problemDestPath);
                 }
             }

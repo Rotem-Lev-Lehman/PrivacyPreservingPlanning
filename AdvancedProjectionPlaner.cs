@@ -503,7 +503,7 @@ namespace Planning
                 }
             }
 
-            string filename = Program.goldenStandardCurrentDirectory + @"\" + goldenStandard + ".txt";
+            string filename = Program.goldenStandardCurrentDirectory + "/" + goldenStandard + ".txt";
             File.Create(filename).Dispose();
         }
 

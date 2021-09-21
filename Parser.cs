@@ -160,7 +160,7 @@ namespace Planning
 
         public Domain ParseDomain(string sDomainFile)
         {
-            string sPath = sDomainFile.Substring(0, sDomainFile.LastIndexOf(@"\") + 1);
+            string sPath = sDomainFile.Substring(0, sDomainFile.LastIndexOf("/") + 1);
             StreamReader sr = new StreamReader(sDomainFile);
 
             /*
