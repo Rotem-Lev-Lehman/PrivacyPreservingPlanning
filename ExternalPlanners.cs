@@ -204,6 +204,7 @@ namespace Planning
                     // Delete domain and problem files:
                     File.Delete(FFdomainName);
                     File.Delete(FFproblemName);
+                    File.Delete(FFproblemName + ".ff");
                 }
                 else if (bFDDone)
                 {
