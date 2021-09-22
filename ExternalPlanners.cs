@@ -918,6 +918,20 @@ namespace Planning
 
 
             string domain = srOps.ReadToEnd();
+            try
+            {
+                Process.GetProcessById(pFF.Id);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("*******************************************************");
+                Console.WriteLine("Process is not alive");
+                Console.WriteLine("*******************************************************");
+            }
+            Console.WriteLine("*******************************************************");
+            Console.WriteLine("Process is alive");
+            Console.WriteLine("*******************************************************");
+
 
             pFF.StandardInput.Write(domain);
             srOps.Close();
