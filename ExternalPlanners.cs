@@ -961,15 +961,17 @@ namespace Planning
             string domain = srOps.ReadToEnd();
             //Console.WriteLine("pFF output:");
             //Console.WriteLine(FFOutput[pFF.Id]);
-
-            StreamWriter domainWriter = new StreamWriter("domain.pddl");
+            long timestamp = DateTime.Now.Ticks;
+            string domainName = "domain_" + timestamp + ".pddl"; 
+            StreamWriter domainWriter = new StreamWriter(domainName);
             domainWriter.Write(domain);
             srOps.Close();
             domainWriter.Close();
 
+            string problemName = "problem_" + timestamp + ".pddl";
             StreamReader srFct = new StreamReader(msProblem);
             string problem = srFct.ReadToEnd();
-            StreamWriter problemWriter = new StreamWriter("problem.pddl");
+            StreamWriter problemWriter = new StreamWriter(problemName);
             problemWriter.Write(problem);
             srFct.Close();
             problemWriter.Close();
@@ -981,7 +983,7 @@ namespace Planning
                 pFF = new Process();
 
                 pFF.StartInfo.FileName = ffPath;
-                pFF.StartInfo.Arguments = "-o domain.pddl -f problem.pddl";
+                pFF.StartInfo.Arguments = "-o " + domainName + " -f " + problemName;
 
 
                 pFF.StartInfo.UseShellExecute = false;
