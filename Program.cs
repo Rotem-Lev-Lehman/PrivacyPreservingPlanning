@@ -126,8 +126,19 @@ namespace Planning
         //For the MAFS planner heuristic calculation:
         public static bool selectingDependenciesToUseInTheHueristic = false; //do not need to touch this, it will be true automatically in the start of the MAFS experiment.
 
-        //public static string baseFolderName = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
-        public static string baseFolderName = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
+        public static bool runningOnLinux = true;
+        public static string baseFolderNameMyComputer = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
+        public static string baseFolderNameLinuxServer = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
+        public static string baseFolderName { get
+            {
+                if (runningOnLinux)
+                    return baseFolderNameLinuxServer;
+                else
+                    return baseFolderNameMyComputer;
+            }
+            set { }
+        }
+        //public static string baseFolderName = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
         //public static string baseFolderName = @"D:\GPPP(last_v)"; //Left server's path
         //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
 
@@ -344,13 +355,16 @@ namespace Planning
 
         public static string GetWantedName(string path)
         {
-            string[] split = path.Split('\\');
+            char splitChar = '\\';
+            if (runningOnLinux)
+                splitChar = '/';
+            string[] split = path.Split(splitChar);
             string ans = "";
             for(int i = split.Length - 1; i >= split.Length - 2; i--)
             {
                 string temp = split[i];
                 if(i != split.Length - 1)
-                    temp += "\\" + ans;
+                    temp += splitChar + ans;
                 ans = temp;
             }
             return ans;

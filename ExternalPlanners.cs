@@ -918,8 +918,8 @@ namespace Planning
 
 
             string domain = srOps.ReadToEnd();
-            Console.WriteLine("pFF output:");
-            Console.WriteLine(FFOutput[pFF.Id]);
+            //Console.WriteLine("pFF output:");
+            //Console.WriteLine(FFOutput[pFF.Id]);
 
             pFF.StandardInput.Write(domain);
             srOps.Close();
@@ -1228,7 +1228,7 @@ namespace Planning
         private void FFOutputHandler(object sendingProcess,
           DataReceivedEventArgs outLine)
         {
-            Console.WriteLine(outLine.Data);
+            //Console.WriteLine(outLine.Data);
             Process p = (Process)sendingProcess;
             if (!String.IsNullOrEmpty(outLine.Data))
             {
