@@ -1228,6 +1228,7 @@ namespace Planning
         private void FFOutputHandler(object sendingProcess,
           DataReceivedEventArgs outLine)
         {
+            Console.WriteLine(outLine.Data);
             Process p = (Process)sendingProcess;
             if (!String.IsNullOrEmpty(outLine.Data))
             {
