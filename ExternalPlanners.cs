@@ -166,7 +166,10 @@ namespace Planning
           //  string sFDPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
             Process pFF = null, pFD = null;
             if (bUseFF)
-                pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+            {
+                //pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+            }
             if (bUseFD)
             {
                 //pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
@@ -938,6 +941,60 @@ namespace Planning
             srFct.Close();
 
             b.Write('\0');
+            //planer.StandardInput.Flush();
+
+            pFF.StandardInput.Close();
+
+            return pFF;
+        }
+
+        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem)
+        {
+            msProblem.Position = 0;
+            msDomain.Position = 0;
+
+            Process pFF;
+
+            StreamReader srOps = new StreamReader(msDomain);
+
+
+            string domain = srOps.ReadToEnd();
+            //Console.WriteLine("pFF output:");
+            //Console.WriteLine(FFOutput[pFF.Id]);
+
+            StreamWriter domainWriter = new StreamWriter("domain.pddl");
+            domainWriter.Write(domain);
+            srOps.Close();
+            domainWriter.Close();
+
+            StreamReader srFct = new StreamReader(msProblem);
+            string problem = srFct.ReadToEnd();
+            StreamWriter problemWriter = new StreamWriter("problem.pddl");
+            problemWriter.Write(problem);
+            srFct.Close();
+            problemWriter.Close();
+
+
+            //m.WaitOne();
+            lock (m)
+            {
+                pFF = new Process();
+
+                pFF.StartInfo.FileName = ffPath;
+                pFF.StartInfo.Arguments = "-o domain.pddl -f problem.pddl";
+
+
+                pFF.StartInfo.UseShellExecute = false;
+                //pFF.StartInfo.RedirectStandardInput = true;
+                //pFF.StartInfo.RedirectStandardOutput = true;
+                //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                pFF.Start();
+                FFOutput[pFF.Id] = "";
+                //pFF.BeginOutputReadLine();
+            }
+            //m.ReleaseMutex();
+
+            
             //planer.StandardInput.Flush();
 
             pFF.StandardInput.Close();
