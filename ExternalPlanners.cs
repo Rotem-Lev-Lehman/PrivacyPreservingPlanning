@@ -912,8 +912,8 @@ namespace Planning
 
                 pFF.StartInfo.UseShellExecute = false;
                 pFF.StartInfo.RedirectStandardInput = true;
-                pFF.StartInfo.RedirectStandardOutput = true;
-                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                //pFF.StartInfo.RedirectStandardOutput = true;
+                //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
                 pFF.Start();
                 FFOutput[pFF.Id] = "";
                 pFF.BeginOutputReadLine();
