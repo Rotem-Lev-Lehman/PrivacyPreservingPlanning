@@ -2021,10 +2021,20 @@ namespace Planning
             } 
         }
 
-        static void RunExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType)
+        static void RunExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType, bool choosingPercentages)
         {
             int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
+            double[] percentagesToUse = null;
+            if (choosingPercentages)
+            {
+                int[] percentagesChosen = selectorsAndDomains["percentages"];
+                percentagesToUse = new double[percentagesChosen.Length];
+                for(int i = 0; i < percentagesChosen.Length; i++)
+                {
+                    percentagesToUse[i] = percentagesChosen[i] / 100.0;
+                }
+            }
 
             //string[] collaborationSelectors = { "Diversity", "Achievable_Diversity" };
             string[] nonCollaborationSelectors = { "Random", "Diversity", "Achievable_Diversity" };
@@ -2051,6 +2061,16 @@ namespace Planning
                 dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
                 Console.WriteLine(dependenciesDomains[i]);
             }
+
+            if (choosingPercentages)
+            {
+                Console.WriteLine("Percentages that we will run our problems on:");
+                for(int i = 0; i < percentagesToUse.Length; i++)
+                {
+                    Console.WriteLine(percentagesToUse[i]);
+                }
+            }
+            return;
             Console.WriteLine("Lets start running them :)");
 
             string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
@@ -2240,18 +2260,18 @@ namespace Planning
 
         static void RunManualDebugPlannerOnExperimentProblems(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Manual_Debug_exp");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Manual_Debug_exp", false);
         }
 
         static void RunProjectionOnlyExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only_journal");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "Projection_Only_journal", false);
         }
 
         static void RunMAFSProjectionExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
             selectingDependenciesToUseInTheHueristic = true;
-            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_journal");
+            RunExperimentOnAlotOfDomains(selectorsAndDomains, "MAFS_Projection_journal", false);
         }
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
@@ -2269,6 +2289,18 @@ namespace Planning
             RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Dependencies_Graphs_IJCAI");
         }
 
+        //Run on a specific set of percentages:
+        private static void RunProjectionOnlyExperimentOnSpecificPercentage(Dictionary<string, int[]> selectorsDomainsAndPercentages)
+        {
+            RunExperimentOnAlotOfDomains(selectorsDomainsAndPercentages, "Projection_Only_journal", true);
+        }
+
+        private static void RunMAFSProjectionExperimentOnSpecificPercentage(Dictionary<string, int[]> selectorsDomainsAndPercentages)
+        {
+            selectingDependenciesToUseInTheHueristic = true;
+            RunExperimentOnAlotOfDomains(selectorsDomainsAndPercentages, "MAFS_Projection_journal", true);
+        }
+
         static StreamWriter swResults;
 
         static void Main(string[] args)
@@ -2283,7 +2315,9 @@ namespace Planning
                  resultFilePath = args[1];
              }*/
             Console.WriteLine("Running configuration " + highLevelPlanerType);
-            bool runningMyExperiment = true;
+            bool runningMyExperiment = false;
+            bool runningExpWithChosenPercentages = true;
+
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
 
@@ -2292,11 +2326,11 @@ namespace Planning
             if (runningMyExperiment)
             {
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
-                if(highLevelPlanerType == HighLevelPlanerType.TestsForRotem)
+                if (highLevelPlanerType == HighLevelPlanerType.TestsForRotem)
                 {
                     RunTestsForRotem(selectorsAndDomains);
                 }
-                else if(highLevelPlanerType == HighLevelPlanerType.ManualDebugPlanner)
+                else if (highLevelPlanerType == HighLevelPlanerType.ManualDebugPlanner)
                 {
                     RunManualDebugPlannerOnExperimentProblems(selectorsAndDomains);
                 }
@@ -2343,6 +2377,19 @@ namespace Planning
                     */
                 }
             }
+            else if (runningExpWithChosenPercentages)
+            {
+                Dictionary<string, int[]> selectorsDomainsAndPercentages = GetDomainAndSelectorIndexesAndPercentagesToUse(args);
+                
+                if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                {
+                    RunMAFSProjectionExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+                }
+                else // if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                {
+                    RunProjectionOnlyExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+                }
+            }
             else if (creatingNewBenchmarks)
             {
                 //string savePath = baseFolderName + @"\factored\MA_Logistics";
@@ -2355,7 +2402,7 @@ namespace Planning
             else if (addDummyInitAction)
             {
                 //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-                string[] allPossibleDependenciesDomains = {  }; // Already added dummy init action to all domains :)
+                string[] allPossibleDependenciesDomains = { }; // Already added dummy init action to all domains :)
                 AddADummyInitActionToDomains(allPossibleDependenciesDomains);
             }
             else
@@ -2657,6 +2704,75 @@ namespace Planning
             Console.WriteLine("Now Running those selectors on the domains indexes by order");
             return selectorsAndDomains;
             
+            /*
+            Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
+            //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            dict.Add("selectors", new int[] { 0 });
+            //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
+            dict.Add("domains", new int[] {0});
+            return dict;
+            */
+        }
+
+        private static Dictionary<string, int[]> GetDomainAndSelectorIndexesAndPercentagesToUse(string[] args)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
+            }
+            int domainsSepIndex = -1;
+            int percentagesSepIndex = -1;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Equals("d"))
+                {
+                    domainsSepIndex = i;
+                }
+                else if (args[i].Equals("p"))
+                {
+                    percentagesSepIndex = i;
+                }
+            }
+
+            int[] selectors = new int[domainsSepIndex];
+            int[] domains = new int[percentagesSepIndex - domainsSepIndex - 1];
+            int[] percentages = new int[args.Length - percentagesSepIndex - 1];
+
+            Console.WriteLine("Selectors are:");
+            for (int i = 0; i < domainsSepIndex; i++)
+            {
+                selectors[i] = int.Parse(args[i]);
+                Console.WriteLine(selectors[i]);
+                if (selectors[i] < 0 || selectors[i] > 4)
+                    throw new Exception("The selectors indexes must be between [0, 4]");
+            }
+
+            Console.WriteLine("Domains are:");
+            for (int i = 0; i < domains.Length; i++)
+            {
+                domains[i] = int.Parse(args[i + domainsSepIndex + 1]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
+            }
+
+            Console.WriteLine("Percentages are:");
+            for (int i = 0; i < percentages.Length; i++)
+            {
+                percentages[i] = int.Parse(args[i + percentagesSepIndex + 1]);
+                Console.WriteLine(percentages[i]);
+                if (domains[i] < 0 || percentages[i] > 100)
+                    throw new Exception("The percentages must in the integer range of [0, 100]");
+            }
+
+            Dictionary<string, int[]> selectorsDomainsAndPercentages = new Dictionary<string, int[]>();
+            selectorsDomainsAndPercentages.Add("selectors", selectors);
+            selectorsDomainsAndPercentages.Add("domains", domains);
+            selectorsDomainsAndPercentages.Add("percentages", percentages);
+            Console.WriteLine("Now Running those selectors on the domains indexes for the given percentages by order");
+
+            return selectorsDomainsAndPercentages;
+
             /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
