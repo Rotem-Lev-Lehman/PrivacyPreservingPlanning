@@ -2616,7 +2616,10 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesToUse(string[] args)
         { 
-            
+            for(int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
+            }
             int seperatorIndex = -1;
             for(int i = 0; i < args.Length; i++)
             {
