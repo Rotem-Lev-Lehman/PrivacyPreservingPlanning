@@ -165,10 +165,11 @@ namespace Planning
 
           //  string sFDPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
             Process pFF = null, pFD = null;
+            string FFdomainName = null, FFproblemName = null;
             if (bUseFF)
             {
                 //pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
-                pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName);
             }
             if (bUseFD)
             {
@@ -200,6 +201,9 @@ namespace Planning
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                     //Console.WriteLine("3");
+                    // Delete domain and problem files:
+                    File.Delete(FFdomainName);
+                    File.Delete(FFproblemName);
                 }
                 else if (bFDDone)
                 {
@@ -948,7 +952,7 @@ namespace Planning
             return pFF;
         }
 
-        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem)
+        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem, out string domainName, out string problemName)
         {
             msProblem.Position = 0;
             msDomain.Position = 0;
@@ -956,19 +960,20 @@ namespace Planning
             Process pFF;
 
             StreamReader srOps = new StreamReader(msDomain);
-
+            long timestamp;
+            lock (m)
+            {
+                timestamp = DateTime.Now.Ticks;
+            }
 
             string domain = srOps.ReadToEnd();
-            //Console.WriteLine("pFF output:");
-            //Console.WriteLine(FFOutput[pFF.Id]);
-            long timestamp = DateTime.Now.Ticks;
-            string domainName = "domain_" + timestamp + ".pddl"; 
+            domainName = "domain_" + timestamp + ".pddl"; 
             StreamWriter domainWriter = new StreamWriter(domainName);
             domainWriter.Write(domain);
             srOps.Close();
             domainWriter.Close();
 
-            string problemName = "problem_" + timestamp + ".pddl";
+            problemName = "problem_" + timestamp + ".pddl";
             StreamReader srFct = new StreamReader(msProblem);
             string problem = srFct.ReadToEnd();
             StreamWriter problemWriter = new StreamWriter(problemName);
