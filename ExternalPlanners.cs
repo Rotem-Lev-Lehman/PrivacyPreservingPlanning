@@ -187,19 +187,19 @@ namespace Planning
                 process = new Process[] { pFD };
             else
                 process = new Process[] { pFF, pFD };
-            Console.WriteLine("0");
+            //Console.WriteLine("0");
             if (WaitForProcesses(process, cMaxMilliseconds, out bFFDone, out bFDDone))
             {
-                Console.WriteLine("1");
+                //Console.WriteLine("1");
                 if (bFFDone)
                 {
-                    Console.WriteLine("2");
+                    //Console.WriteLine("2");
                     //Console.WriteLine("Plan found by FF");
                     Thread.Sleep(150);
                     lPlan = ReadFFPlan(process[0].Id, out bUnsolvable);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
-                    Console.WriteLine("3");
+                    //Console.WriteLine("3");
                 }
                 else if (bFDDone)
                 {
@@ -225,7 +225,7 @@ namespace Planning
                 }
                 return lPlan;
             }
-            Console.WriteLine("4");
+            //Console.WriteLine("4");
             return null;
         }
 
@@ -280,8 +280,8 @@ namespace Planning
         public List<string> ReadFFPlan(int iPID, out bool bUnsolvable)
         {
             string sOutput = FFOutput[iPID];
-            Console.WriteLine("Writing FF output:");
-            Console.WriteLine(sOutput);
+            //Console.WriteLine("Writing FF output:");
+            //Console.WriteLine(sOutput);
             MemoryStream planMs = new MemoryStream();
             if (sOutput.Contains("found legal plan as follows"))
             {
