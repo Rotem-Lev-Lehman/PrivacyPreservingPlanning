@@ -916,7 +916,7 @@ namespace Planning
                 //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
                 pFF.Start();
                 FFOutput[pFF.Id] = "";
-                pFF.BeginOutputReadLine();
+                //pFF.BeginOutputReadLine();
             }
             //m.ReleaseMutex();
 
