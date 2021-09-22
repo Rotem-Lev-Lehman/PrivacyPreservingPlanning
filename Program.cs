@@ -1836,19 +1836,26 @@ namespace Planning
             return false;
         }
 
-        static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment)
+        static void Experiment(string folderPath, string resultsFolderPath, string recordingFolderPath, bool regularExperiment, bool runSpecificPercentage, double chosenPercentage)
         {
             List<double> percentages = new List<double>();
-            /*if (!regularExperiment)
+            if (runSpecificPercentage)
             {
-                for (double i = 0; i <= 1; i += 0.05)
+                percentages.Add(chosenPercentage);
+            }
+            else
+            {
+                if (!regularExperiment)
                 {
-                    percentages.Add(i);
+                    for (double i = 0; i <= 1; i += 0.05)
+                    {
+                        percentages.Add(i);
+                    }
                 }
-            }*/
-            if (!percentages.Contains(1))
-            {
-                percentages.Add(1);
+                if (!percentages.Contains(1))
+                {
+                    percentages.Add(1);
+                }
             }
 
             alreadySolved = new Dictionary<string, bool>();
@@ -1908,8 +1915,6 @@ namespace Planning
                     ParseAll(new DirectoryInfo(folderPath), outputPath);
                 }
             }
-
-
         }
 
         static void fixExperimentsResults(string resultsFolder, string outputFile)
@@ -2070,7 +2075,7 @@ namespace Planning
                     Console.WriteLine(percentagesToUse[i]);
                 }
             }
-            return;
+            
             Console.WriteLine("Lets start running them :)");
 
             string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
@@ -2090,7 +2095,14 @@ namespace Planning
             //now run the non collaborations:
             collaborationUsed = false;
             dependencyUsed = true;
-            RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesNonCollaborativePath, "Non_Collaborative", "Dependencies", false);
+            if (choosingPercentages)
+            {
+                RunSpecificExperimentOnSpecificPercentages(dependenciesSelectors, dependenciesDomains, percentagesToUse, dependenciesNonCollaborativePath, "Non_Collaborative", "Dependencies");
+            }
+            else
+            {
+                RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesNonCollaborativePath, "Non_Collaborative", "Dependencies", false);
+            }
         }
 
         static void RunRegularExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType)
@@ -2191,8 +2203,73 @@ namespace Planning
                     string recordingFolder = currPath + recordingsDirectoryName;
                     System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
 
-                    Experiment(problemsPath, resultsPath, recordingFolder, regularExperiment);
+                    Experiment(problemsPath, resultsPath, recordingFolder, regularExperiment, false, -1);
                     fixExperimentsResults(resultsPath, outputFilePath);
+                }
+            }
+        }
+
+        static void RunSpecificExperimentOnSpecificPercentages(string[] selectors, string[] domains, double[] percentages, string mainPath, string collaborativeString, string dependencyString)
+        {
+            string domainsPath = baseFolderName + "/factored/";
+            if (runWithDummyInitAction)
+            {
+                domainsPath += "domains_with_init_action/";
+            }
+            string resultName = "/experiment_results";
+            string outputFileDirectory = "/Experiment_Output_File";
+            string outputFileName = "/output.csv";
+            string recordingsDirectoryName = "/Recordings";
+
+            string oldPathAndName = "ff.exe";
+
+            foreach (double percentage in percentages)
+            {
+                foreach (string domainName in domains)
+                {
+                    goldenStandardDomainDirectory = goldenStandardRootDirectory + "/" + domainName;
+                    System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
+                    foreach (string selectorType in selectors)
+                    {
+                        // copy the ff.exe file to be as the domain's name:
+                        currentFFProcessName = "ff_" + domainName + "_" + selectorType + "_" + percentage;
+                        string newPathAndName = currentFFProcessName + ".exe";
+                        if (!File.Exists(newPathAndName))
+                            System.IO.File.Copy(oldPathAndName, newPathAndName);
+                        ExternalPlanners.ffPath = newPathAndName;
+
+                        currentFFProcessName = currentFFProcessName.ToLower();
+
+                        // start:
+
+                        Console.WriteLine("*************************************************************");
+                        Console.WriteLine("Now using " + dependencyString + " selection");
+                        Console.WriteLine("Now using " + collaborativeString + " approaches");
+                        Console.WriteLine("Now using selector: " + selectorType);
+                        Console.WriteLine("Now running domain: " + domainName);
+                        Console.WriteLine("Now revealing " + percentage + " out of all dependencies");
+                        Console.WriteLine("*************************************************************");
+
+                        typeOfSelector = selectorType;
+
+                        string currPath = mainPath + selectorType + "/" + domainName;
+                        System.IO.Directory.CreateDirectory(currPath); //create the directory if it does not exist
+
+                        string problemsPath = domainsPath + domainName;
+
+                        string resultsPath = currPath + resultName;
+                        System.IO.Directory.CreateDirectory(resultsPath); //create the directory if it does not exist
+
+                        string outputFolder = currPath + outputFileDirectory;
+                        System.IO.Directory.CreateDirectory(outputFolder); //create the directory if it does not exist
+                        string outputFilePath = outputFolder + outputFileName;
+
+                        string recordingFolder = currPath + recordingsDirectoryName;
+                        System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
+
+                        Experiment(problemsPath, resultsPath, recordingFolder, false, true, percentage);
+                        //fixExperimentsResults(resultsPath, outputFilePath);
+                    }
                 }
             }
         }
