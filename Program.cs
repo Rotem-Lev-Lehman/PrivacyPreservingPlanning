@@ -1923,7 +1923,10 @@ namespace Planning
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
-                    string[] split = dir.Split('\\');
+                    char splitChar = '\\';
+                    if (runningOnLinux)
+                        splitChar = '/';
+                    string[] split = dir.Split(splitChar);
                     string percentage = split[split.Length - 1].Split('_')[1];
 
                     string line;
