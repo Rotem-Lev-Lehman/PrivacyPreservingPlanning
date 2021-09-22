@@ -2398,7 +2398,7 @@ namespace Planning
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
 
-            runWithDummyInitAction = runningMyExperiment; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
+            runWithDummyInitAction = runningMyExperiment || runningExpWithChosenPercentages; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
 
             if (runningMyExperiment)
             {
