@@ -986,18 +986,18 @@ namespace Planning
 
                 pFF.StartInfo.UseShellExecute = false;
                 //pFF.StartInfo.RedirectStandardInput = true;
-                //pFF.StartInfo.RedirectStandardOutput = true;
-                //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                pFF.StartInfo.RedirectStandardOutput = true;
+                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
                 pFF.Start();
                 FFOutput[pFF.Id] = "";
-                //pFF.BeginOutputReadLine();
+                pFF.BeginOutputReadLine();
             }
             //m.ReleaseMutex();
 
             
             //planer.StandardInput.Flush();
 
-            pFF.StandardInput.Close();
+            //pFF.StandardInput.Close();
 
             return pFF;
         }
