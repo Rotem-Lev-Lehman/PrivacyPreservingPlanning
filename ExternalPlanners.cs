@@ -277,6 +277,8 @@ namespace Planning
         public List<string> ReadFFPlan(int iPID, out bool bUnsolvable)
         {
             string sOutput = FFOutput[iPID];
+            Console.WriteLine("Writing FF output:");
+            Console.WriteLine(sOutput);
             MemoryStream planMs = new MemoryStream();
             if (sOutput.Contains("found legal plan as follows"))
             {
