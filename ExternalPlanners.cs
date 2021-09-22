@@ -918,9 +918,8 @@ namespace Planning
 
 
             string domain = srOps.ReadToEnd();
-            string processOutput = pFF.StandardOutput.ReadToEnd();
             Console.WriteLine("pFF output:");
-            Console.WriteLine(processOutput);
+            Console.WriteLine(FFOutput[pFF.Id]);
 
             pFF.StandardInput.Write(domain);
             srOps.Close();
