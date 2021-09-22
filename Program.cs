@@ -2761,7 +2761,7 @@ namespace Planning
             {
                 percentages[i] = int.Parse(args[i + percentagesSepIndex + 1]);
                 Console.WriteLine(percentages[i]);
-                if (domains[i] < 0 || percentages[i] > 100)
+                if (percentages[i] < 0 || percentages[i] > 100)
                     throw new Exception("The percentages must in the integer range of [0, 100]");
             }
 
