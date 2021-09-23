@@ -968,13 +968,13 @@ namespace Planning
             }
 
             string domain = srOps.ReadToEnd();
-            domainName = "domain_" + timestamp + ".pddl"; 
+            domainName = "domain_" + Program.currentFFProcessName + "_" + timestamp + ".pddl"; 
             StreamWriter domainWriter = new StreamWriter(domainName);
             domainWriter.Write(domain);
             srOps.Close();
             domainWriter.Close();
 
-            problemName = "problem_" + timestamp + ".pddl";
+            problemName = "problem_" + Program.currentFFProcessName + "_" + timestamp + ".pddl";
             StreamReader srFct = new StreamReader(msProblem);
             string problem = srFct.ReadToEnd();
             StreamWriter problemWriter = new StreamWriter(problemName);
