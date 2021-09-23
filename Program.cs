@@ -2391,7 +2391,6 @@ namespace Planning
              {
                  resultFilePath = args[1];
              }*/
-            Console.WriteLine("Running configuration " + highLevelPlanerType);
             bool runningMyExperiment = false;
             bool runningExpWithChosenPercentages = true;
 
@@ -2402,6 +2401,8 @@ namespace Planning
 
             if (runningMyExperiment)
             {
+                Console.WriteLine("Running configuration " + highLevelPlanerType);
+
                 Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexesToUse(args);
                 if (highLevelPlanerType == HighLevelPlanerType.TestsForRotem)
                 {
@@ -2457,7 +2458,8 @@ namespace Planning
             else if (runningExpWithChosenPercentages)
             {
                 Dictionary<string, int[]> selectorsDomainsAndPercentages = GetDomainAndSelectorIndexesAndPercentagesToUse(args);
-                
+                Console.WriteLine("Running configuration " + highLevelPlanerType);
+
                 if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
                 {
                     RunMAFSProjectionExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
@@ -2797,11 +2799,16 @@ namespace Planning
             {
                 Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
             }
+            int selectorsSepIndex = -1;
             int domainsSepIndex = -1;
             int percentagesSepIndex = -1;
             for (int i = 0; i < args.Length; i++)
             {
-                if (args[i].Equals("d"))
+                if (args[i].Equals("s"))
+                {
+                    selectorsSepIndex = i;
+                }
+                else if (args[i].Equals("d"))
                 {
                     domainsSepIndex = i;
                 }
@@ -2811,14 +2818,18 @@ namespace Planning
                 }
             }
 
-            int[] selectors = new int[domainsSepIndex];
+            int plannerChoice = int.Parse(args[0]);
+            int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
             int[] domains = new int[percentagesSepIndex - domainsSepIndex - 1];
             int[] percentages = new int[args.Length - percentagesSepIndex - 1];
 
+            Console.WriteLine("Chosen planner number " + plannerChoice);
+            ChoosePlanner(plannerChoice);
+
             Console.WriteLine("Selectors are:");
-            for (int i = 0; i < domainsSepIndex; i++)
+            for (int i = 0; i < selectors.Length; i++)
             {
-                selectors[i] = int.Parse(args[i]);
+                selectors[i] = int.Parse(args[i + selectorsSepIndex + 1]);
                 Console.WriteLine(selectors[i]);
                 if (selectors[i] < 0 || selectors[i] > 4)
                     throw new Exception("The selectors indexes must be between [0, 4]");
@@ -2858,6 +2869,24 @@ namespace Planning
             dict.Add("domains", new int[] {0});
             return dict;
             */
+        }
+
+        private static void ChoosePlanner(int plannerChoice)
+        {
+            if(plannerChoice == 0)
+            {
+                Console.WriteLine("The chosen planner is the Joint Projection planner");
+                highLevelPlanerType = HighLevelPlanerType.Projection;
+            }
+            else if(plannerChoice == 1)
+            {
+                Console.WriteLine("The chosen planner is the MAFS planner");
+                highLevelPlanerType = HighLevelPlanerType.ProjectionMafs;
+            }
+            else
+            {
+                throw new ArgumentException("The chosen planner must be 0 or 1 at this point");
+            }
         }
     }
 }
