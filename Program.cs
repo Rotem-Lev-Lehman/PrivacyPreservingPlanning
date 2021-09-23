@@ -2549,8 +2549,9 @@ namespace Planning
                 }
             }
 
-            Console.WriteLine("Press any key to end the program...");
-            Console.ReadKey();
+            //Console.WriteLine("Press any key to end the program...");
+            //Console.ReadKey();
+            Console.WriteLine("Done :)");
         }
 
         private static void AddADummyInitActionToDomains(string[] domains)
