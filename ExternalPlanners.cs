@@ -152,7 +152,7 @@ namespace Planning
 
         public List<string> Plan(bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
         {
-            //bUseFD = false;
+            bUseFD = false;
             //Program.KillPlanners();
             List<string> lPlan = null;
             unsolvableProblem = false;
