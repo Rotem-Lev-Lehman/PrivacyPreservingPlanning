@@ -4,6 +4,7 @@ import itertools
 from psutil import virtual_memory
 import subprocess
 from pathlib import Path
+import sys
 
 
 def run_cppp_project(planner, selector, domain, percentage):
@@ -20,8 +21,9 @@ def run_cppp_project(planner, selector, domain, percentage):
         print(e)
 
 
-def get_all_planners():
-    return list(range(0, 2))  # [0, 1]
+def get_all_planners(planner_to_run):
+    # return list(range(0, 2))  # [0, 1]
+    return [int(planner_to_run)]
 
 
 def get_all_selectors():
@@ -38,8 +40,8 @@ def get_all_percentages():
     return list(range(0, 101, 5))  # [0, 100] (with jumps of 5)
 
 
-def get_all_possible_arguments():
-    planners = get_all_planners()
+def get_all_possible_arguments(planner_to_run):
+    planners = get_all_planners(planner_to_run)
     selectors = get_all_selectors()
     domains = get_all_domains()
     percentages = get_all_percentages()
@@ -52,7 +54,7 @@ def get_all_permutations(planners, selectors, domains, percentages):
     return list(itertools.product(*all_lists))
 
 
-def run_all_cppp_processes():
+def run_all_cppp_processes(planner_to_run):
     # num_of_cpus = mp.cpu_count()
     num_of_cpus = 128
     # mem = virtual_memory()
@@ -68,7 +70,7 @@ def run_all_cppp_processes():
     print('Applying percentages:')
     print(get_all_percentages())
 
-    all_arguments = get_all_possible_arguments()
+    all_arguments = get_all_possible_arguments(planner_to_run)
     n = len(all_arguments)
     print(f'Total amount of permutations is {n}')
 
@@ -85,12 +87,12 @@ def run_all_cppp_processes():
     Path("results").mkdir(parents=True, exist_ok=True)
     pool = mp.Pool(processes=num_of_parallel_jobs)
     print('Running all CPPP processes now...')
-    #for args_perm in all_arguments:
-    #    pool.apply_async(run_cppp_project, args=args_perm)
-    pool.apply_async(run_cppp_project, args=(0, 0, 0, 100))
-    pool.apply_async(run_cppp_project, args=(0, 0, 0, 95))
-    pool.apply_async(run_cppp_project, args=(0, 1, 0, 95))
-    pool.apply_async(run_cppp_project, args=(1, 0, 0, 95))
+    for args_perm in all_arguments:
+       pool.apply_async(run_cppp_project, args=args_perm)
+    # pool.apply_async(run_cppp_project, args=(0, 0, 0, 100))
+    # pool.apply_async(run_cppp_project, args=(0, 0, 0, 95))
+    # pool.apply_async(run_cppp_project, args=(0, 1, 0, 95))
+    # pool.apply_async(run_cppp_project, args=(1, 0, 0, 95))
 
     print('Applied all of the jobs into the thread-pool')
     pool.close()
@@ -100,4 +102,4 @@ def run_all_cppp_processes():
 
 
 if __name__ == '__main__':
-    run_all_cppp_processes()
+    run_all_cppp_processes(sys.argv[1])
