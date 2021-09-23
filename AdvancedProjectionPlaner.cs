@@ -253,7 +253,7 @@ namespace Planning
                     WriteTraceToFile(agent, traces[agent]);
                 }
                 */
-                Console.WriteLine("Hey********************************************************************");
+                //Console.WriteLine("Hey********************************************************************");
                 return null;
             }
 
