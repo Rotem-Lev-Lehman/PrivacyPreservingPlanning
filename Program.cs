@@ -2161,6 +2161,7 @@ namespace Planning
             string recordingsDirectoryName = "/Recordings";
 
             string oldPathAndName = "ff.exe";
+            
 
             foreach (string domainName in domains)
             {
@@ -2223,6 +2224,12 @@ namespace Planning
 
             string oldPathAndName = "ff.exe";
 
+            string plannerName = "";
+            if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                plannerName = "proj";
+            else if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                plannerName = "mafs";
+
             foreach (double percentage in percentages)
             {
                 foreach (string domainName in domains)
@@ -2232,7 +2239,7 @@ namespace Planning
                     foreach (string selectorType in selectors)
                     {
                         // copy the ff.exe file to be as the domain's name:
-                        currentFFProcessName = "ff_" + domainName + "_" + selectorType + "_" + percentage;
+                        currentFFProcessName = "ff_" + plannerName + "_" + domainName + "_" + selectorType + "_" + percentage;
                         string newPathAndName = currentFFProcessName + ".exe";
                         if (!File.Exists(newPathAndName))
                             System.IO.File.Copy(oldPathAndName, newPathAndName);
