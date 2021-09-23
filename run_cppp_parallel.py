@@ -86,6 +86,7 @@ def run_all_cppp_processes(planner_to_run):
     print(f'We will have a maximal amount of repetitions of {n / num_of_parallel_jobs}')
 
     # Results dir:
+    Path("results").mkdir(parents=True, exist_ok=True)
     Path("errors").mkdir(parents=True, exist_ok=True)
     pool = mp.Pool(processes=num_of_parallel_jobs)
     print('Running all CPPP processes now...')
