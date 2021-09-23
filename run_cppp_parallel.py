@@ -16,6 +16,8 @@ def run_cppp_project(planner, selector, domain, percentage):
         output_filename = args_row.replace(' ', '_')
         with open(f'results/{output_filename}.txt', 'w') as text_file:
             text_file.write(result.stdout)
+        with open(f'errors/{output_filename}.txt', 'w') as text_file:
+            text_file.write(result.stderr)
         print(f'done {output_filename}')
     except Exception as e:
         print(e)
@@ -84,7 +86,7 @@ def run_all_cppp_processes(planner_to_run):
     print(f'We will have a maximal amount of repetitions of {n / num_of_parallel_jobs}')
 
     # Results dir:
-    Path("results").mkdir(parents=True, exist_ok=True)
+    Path("errors").mkdir(parents=True, exist_ok=True)
     pool = mp.Pool(processes=num_of_parallel_jobs)
     print('Running all CPPP processes now...')
     for args_perm in all_arguments:
