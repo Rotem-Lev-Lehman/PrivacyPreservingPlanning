@@ -8,11 +8,16 @@ from pathlib import Path
 
 def run_cppp_project(planner, selector, domain, percentage):
     args_row = f'run {planner} s {selector} d {domain} p {percentage}'
-    result = subprocess.run("dotnet", args_row, capture_output=True, text=True)
-    output_filename = args_row.replace(' ', '_')
-    with open(f'results/{output_filename}.txt', 'w') as text_file:
-        text_file.write(result.stdout)
-    print(f'done {output_filename}')
+    args_list = ['dotnet', 'run', '--no-build', str(planner), 's', str(selector), 'd', str(domain), 'p', str(percentage)]
+    print(f'running process {args_row}')
+    try:
+        result = subprocess.run(args_list, capture_output=True, text=True)
+        output_filename = args_row.replace(' ', '_')
+        with open(f'results/{output_filename}.txt', 'w') as text_file:
+            text_file.write(result.stdout)
+        print(f'done {output_filename}')
+    except Exception as e:
+        print(e)
 
 
 def get_all_planners():
@@ -48,12 +53,13 @@ def get_all_permutations(planners, selectors, domains, percentages):
 
 
 def run_all_cppp_processes():
-    num_of_cpus = mp.cpu_count()
-    # num_of_cpus = 128
-    mem = virtual_memory()
-    # mem = 506528
-    ram_size_in_gb = mem.total / math.pow(2, 30)  # total physical memory available
-    print(f'Running the CPPP project on {num_of_cpus} CPUs on parallel, with {round(ram_size_in_gb, 2)} GB of RAM available')
+    # num_of_cpus = mp.cpu_count()
+    num_of_cpus = 128
+    # mem = virtual_memory()
+    # mem = 494
+    # ram_size_in_gb = mem.total / math.pow(2, 30)  # total physical memory available
+    ram_size_in_gb = 494
+    print(f'Running the CPPP project on {num_of_cpus} CPUs on parallel, with {ram_size_in_gb} GB of RAM available')
 
     print('Applying selectors:')
     print(get_all_selectors())
