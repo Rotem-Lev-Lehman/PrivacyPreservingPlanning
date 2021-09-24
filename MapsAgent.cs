@@ -1561,6 +1561,12 @@ namespace Planning
                 Console.WriteLine(); //Go one line down so the heuristics will not disturb the "failed" printout
                 return null;
             }
+            catch(OperationCanceledException cancellationEx)
+            {
+                //Don't print stack trace, because it just makes it look bad...
+                Console.WriteLine(); //Go one line down so the heuristics will not disturb the "failed" printout
+                return null;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
