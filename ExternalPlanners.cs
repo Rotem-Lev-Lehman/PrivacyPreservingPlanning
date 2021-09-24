@@ -355,6 +355,7 @@ namespace Planning
             int indexOfWorkingProcess = 0;
             while (!bDone)
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 bDone = false;
                 workingProcesses[indexOfWorkingProcess].WaitForExit(200);
                 //List<Process> l = GetPlanningProcesses();
