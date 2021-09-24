@@ -10,7 +10,7 @@ using Planning.AdvandcedProjectionActionSelection.MAFSPublishers;
 using Planning.AdvandcedProjectionActionSelection.OptimalPlanner;
 using Planning.AdvandcedProjectionActionSelection.DependenciesGraphGeneration;
 using Planning.AdvandcedProjectionActionSelection.PrivacyLeakageCalculation.CalculateLeakageLocally;
-
+using System.Threading.Tasks;
 
 namespace Planning
 {
@@ -1568,12 +1568,12 @@ namespace Planning
 
 
                 cancellationTokenSource = new CancellationTokenSource();
-                Thread t = new Thread(() => ReadAgentFiles(di, sOutputPlanFile));
+                Task t = new Task(() => ReadAgentFiles(di, sOutputPlanFile), cancellationTokenSource.Token);
 
-                t.Name = "ReadAgentFiles " + di.Name;
+                //t.Name = "ReadAgentFiles " + di.Name;
                 t.Start();
                 //if (t.Join(maxTimeInMinutes * 60 * 1000))
-                if (t.Join(5000))
+                if (t.Wait(5000))
                 {
                 }
                 else
@@ -1584,7 +1584,7 @@ namespace Planning
                     // Program.timeResults.WriteLine("*");
                     //Program.timeResults.Flush();
                     End = DateTime.Now; //write the total time it took until the failure...
-                    t.Join();
+                    t.Wait();
                     Console.WriteLine("Done");
                     Thread.Sleep(1000);
                     //writing an empty plan file
