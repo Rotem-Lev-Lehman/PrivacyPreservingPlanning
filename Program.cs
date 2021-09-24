@@ -1284,6 +1284,7 @@ namespace Planning
                                                         StartGrounding = DateTime.Now;
 
                                                         lPlan = Planner.PreferablePlan();
+                                                        Console.WriteLine("Was here....");
 
                                                         // calculate leakage:
                                                         //LeakageCalculatorAllAgents calculatorAllAgents = new LeakageCalculatorAllAgents();
@@ -1766,14 +1767,6 @@ namespace Planning
 
         public static void WriteResults(string sDomain, string sMsg)
         {
-            try
-            {
-                throw new Exception("Checking stack trace...");
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
             Console.WriteLine(sDomain + " " + sMsg);
             swResults = new StreamWriter(outputPath + "/Results.txt", true);
             swResults.WriteLine(sDomain + ", " + sMsg.Replace(",", ":") + ", " + PlanCost + ", " + PlanMakeSpan
