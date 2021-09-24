@@ -406,6 +406,7 @@ namespace Planning
                     DateTime startTime = DateTime.Now;
                     lplan = agent.BeginPreferablePlanning();
                     iterationTimes.Add(DateTime.Now.Subtract(startTime).TotalSeconds);
+                    Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     if (lplan != null)
                         break;
                 }
