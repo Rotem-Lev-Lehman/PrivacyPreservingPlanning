@@ -3100,6 +3100,7 @@ namespace Planning
             List<KeyValuePair<string, CompoundFormula>> list1 = new List<KeyValuePair<string, CompoundFormula>>();
             foreach (Action action in highLevelplan)
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 CompoundFormula compoundFormula = new CompoundFormula("and");
                 bool flag = false;
                 foreach (GroundedPredicate groundedPredicate in action.HashEffects)
@@ -3131,6 +3132,7 @@ namespace Planning
             int countAction = 0;
             for (int i = 0; i < list1.Count; i++)
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 dellList.Add(new List<Action>());
                 KeyValuePair<string, CompoundFormula> keyValuePair = list1[i];
                 ++index1;
