@@ -341,7 +341,6 @@ namespace Planning
 
         public bool WaitForProcesses(Process[] a, int cMaxMilliseconds, out bool bFFDone, out bool bFDDone)
         {
-            Console.WriteLine("WaitForProcesses");
             DateTime dtStart = DateTime.Now;
             bool bDone = false;
             bFFDone = false;

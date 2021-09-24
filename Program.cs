@@ -1598,7 +1598,7 @@ namespace Planning
                     //Program.timeResults.Flush();
                     End = DateTime.Now; //write the total time it took until the failure...
                     t.Wait();
-                    Console.WriteLine("Done*************************************************************************************");
+                    
                     Thread.Sleep(1000);
                     //writing an empty plan file
                     if (!creatingTracesAfterSolutionWasFound)
