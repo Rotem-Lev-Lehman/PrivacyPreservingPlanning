@@ -1156,6 +1156,7 @@ namespace Planning
                 courentVertex = null;
                 foreach (MapsVertex publicVertex in openLists[name])
                 {
+                    Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     publicVertex.ChangeAgent(name, orderList, publicRelevantLandmark, ReasonableOrdering);
                     bool incloseList = false;
                     bool inOpenList = false;
