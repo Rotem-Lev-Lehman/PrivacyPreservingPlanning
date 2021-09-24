@@ -1284,7 +1284,6 @@ namespace Planning
                                                         StartGrounding = DateTime.Now;
 
                                                         lPlan = Planner.PreferablePlan();
-                                                        Console.WriteLine("Was here....");
 
                                                         // calculate leakage:
                                                         //LeakageCalculatorAllAgents calculatorAllAgents = new LeakageCalculatorAllAgents();
@@ -1349,6 +1348,11 @@ namespace Planning
                         }
 
                     }
+                }
+                catch (OperationCanceledException cancellationEx)
+                {
+                    KillPlanners();
+                    throw cancellationEx;
                 }
                 catch (Exception ex)
                 {
