@@ -1772,7 +1772,7 @@ namespace Planning
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString);
             }
             Console.WriteLine(sDomain + " " + sMsg);
             swResults = new StreamWriter(outputPath + "/Results.txt", true);
