@@ -1585,7 +1585,8 @@ namespace Planning
 
                 //t.Name = "ReadAgentFiles " + di.Name;
                 t.Start();
-                if (t.Wait(maxTimeInMinutes * 60 * 1000))
+                //if (t.Wait(maxTimeInMinutes * 60 * 1000))
+                if (t.Wait(5000))
                 {
                 }
                 else
