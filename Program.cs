@@ -248,6 +248,11 @@ namespace Planning
                 pdbPath += "/" + dir.Name + ".pdb";
                 List<Agent> agents = null;
                 List<string> lPlan = SolveFactored(lDomains, lProblems, ref agents, dJoint);
+                if (lPlan == null && cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    //If there was a timeout, dont write results as they will be written in the main thread...
+                    return;
+                }
 
                 if(highLevelPlanerType is HighLevelPlanerType.OptimalDependenciesPlanner)
                 {
@@ -1348,11 +1353,6 @@ namespace Planning
                         }
 
                     }
-                }
-                catch (OperationCanceledException cancellationEx)
-                {
-                    KillPlanners();
-                    throw cancellationEx;
                 }
                 catch (Exception ex)
                 {
