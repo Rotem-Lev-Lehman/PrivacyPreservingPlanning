@@ -1616,7 +1616,7 @@ namespace Planning
                         }
                     }
                 }
-
+                cancellationTokenSource.Dispose();
                 KillPlanners();
                 // List<Process> lPlanningProcesses = GetPlanningProcesses();
                 //KillAll(lPlanningProcesses);
