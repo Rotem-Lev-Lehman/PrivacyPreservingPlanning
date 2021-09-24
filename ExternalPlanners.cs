@@ -425,6 +425,8 @@ namespace Planning
             KillAll(a.ToList());
             List<Process> lPlanningProcesses = GetPlanningProcesses();
             KillAll(lPlanningProcesses);
+
+            Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
             return bFDDone || bFFDone;
         }
         public static void KillPlanners()

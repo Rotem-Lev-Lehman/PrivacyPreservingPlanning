@@ -126,6 +126,9 @@ namespace Planning
         //For the MAFS planner heuristic calculation:
         public static bool selectingDependenciesToUseInTheHueristic = false; //do not need to touch this, it will be true automatically in the start of the MAFS experiment.
 
+        //Cancelation token:
+        public static CancellationTokenSource cancellationTokenSource;
+
         public static bool runningOnLinux = true;
         public static string baseFolderNameMyComputer = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         public static string baseFolderNameLinuxServer = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
@@ -1563,19 +1566,26 @@ namespace Planning
 
                 //ReadAgentFiles(di, sOutputPlanFile);
 
+
+                cancellationTokenSource = new CancellationTokenSource();
                 Thread t = new Thread(() => ReadAgentFiles(di, sOutputPlanFile));
 
                 t.Name = "ReadAgentFiles " + di.Name;
                 t.Start();
-                if (t.Join(maxTimeInMinutes * 60 * 1000))
+                //if (t.Join(maxTimeInMinutes * 60 * 1000))
+                if (t.Join(5000))
                 {
                 }
                 else
                 {
-                    t.Abort();
+                    //t.Abort();
+                    cancellationTokenSource.Cancel();
+                    
                     // Program.timeResults.WriteLine("*");
                     //Program.timeResults.Flush();
                     End = DateTime.Now; //write the total time it took until the failure...
+                    t.Join();
+                    Console.WriteLine("Done");
                     Thread.Sleep(1000);
                     //writing an empty plan file
                     if (!creatingTracesAfterSolutionWasFound)
