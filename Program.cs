@@ -216,135 +216,143 @@ namespace Planning
 
         static void ReadAgentFiles(DirectoryInfo dir, string sOutputFile)
         {
-            Console.WriteLine("Reading files " + dir.Name);
-            List<string> lDomainFiles = new List<string>();
-            List<string> lProblemFiles = new List<string>();
-            domainsAndProblems = new List<Tuple<string, string>>();
-            foreach (FileInfo fi in dir.GetFiles())
+            try
             {
-                if (fi.Name.Contains("domain"))
-                    lDomainFiles.Add(fi.FullName);
-                if (fi.Name.Contains("problem"))
-                    lProblemFiles.Add(fi.FullName);
-            }
-            //try
-            {
-                Domain.ResetStaticVar();
-                List<Domain> lDomains = new List<Domain>();
-                List<Problem> lProblems = new List<Problem>();
-                Domain dJoint = null;
-                Problem pJoint = null;
-                ReadAgentFiles(lDomainFiles, lProblemFiles, lDomains, lProblems);
-                GetJointDomain(lDomains, lProblems, out dJoint, out pJoint);
-
-                currentJointDomain = dJoint;
-                currentJointProblem = pJoint;
-
-                pdbPath = "PdbFiles/" + dir.Parent.Name;
-                if (!Directory.Exists(pdbPath))
+                Console.WriteLine("Reading files " + dir.Name);
+                List<string> lDomainFiles = new List<string>();
+                List<string> lProblemFiles = new List<string>();
+                domainsAndProblems = new List<Tuple<string, string>>();
+                foreach (FileInfo fi in dir.GetFiles())
                 {
-                    Directory.CreateDirectory(pdbPath);
+                    if (fi.Name.Contains("domain"))
+                        lDomainFiles.Add(fi.FullName);
+                    if (fi.Name.Contains("problem"))
+                        lProblemFiles.Add(fi.FullName);
                 }
-                pdbPath += "/" + dir.Name + ".pdb";
-                List<Agent> agents = null;
-                List<string> lPlan = SolveFactored(lDomains, lProblems, ref agents, dJoint);
-                if (lPlan == null && cancellationTokenSource.Token.IsCancellationRequested)
+                //try
                 {
-                    //If there was a timeout, dont write results as they will be written in the main thread...
-                    return;
-                }
+                    Domain.ResetStaticVar();
+                    List<Domain> lDomains = new List<Domain>();
+                    List<Problem> lProblems = new List<Problem>();
+                    Domain dJoint = null;
+                    Problem pJoint = null;
+                    ReadAgentFiles(lDomainFiles, lProblemFiles, lDomains, lProblems);
+                    GetJointDomain(lDomains, lProblems, out dJoint, out pJoint);
 
-                if(highLevelPlanerType is HighLevelPlanerType.OptimalDependenciesPlanner)
-                {
-                    if(lPlan != null)
+                    currentJointDomain = dJoint;
+                    currentJointProblem = pJoint;
+
+                    pdbPath = "PdbFiles/" + dir.Parent.Name;
+                    if (!Directory.Exists(pdbPath))
                     {
-                        amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
-                        WritePlanToFile(lPlan, sOutputFile);
-                        if (ExternalPlanners.unsolvableProblem || optimalAmountOfDependenciesForCurrentProblem == 0)
+                        Directory.CreateDirectory(pdbPath);
+                    }
+                    pdbPath += "/" + dir.Name + ".pdb";
+                    List<Agent> agents = null;
+                    List<string> lPlan = SolveFactored(lDomains, lProblems, ref agents, dJoint);
+                    if (lPlan == null && cancellationTokenSource.Token.IsCancellationRequested)
+                    {
+                        //If there was a timeout, dont write results as they will be written in the main thread...
+                        return;
+                    }
+
+                    if (highLevelPlanerType is HighLevelPlanerType.OptimalDependenciesPlanner)
+                    {
+                        if (lPlan != null)
                         {
-                            //This means that we have proved the optimality of our solution.
+                            amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
+                            WritePlanToFile(lPlan, sOutputFile);
+                            if (ExternalPlanners.unsolvableProblem || optimalAmountOfDependenciesForCurrentProblem == 0)
+                            {
+                                //This means that we have proved the optimality of our solution.
+                                WriteResults(GetWantedName(dir.FullName), " success");
+                            }
+                            else
+                            {
+                                //This means that we did not proved the optimality of our solution, but we had an error (e.g. memory error)...
+                                WriteResults(GetWantedName(dir.FullName), " partial success - not proven optimality of solution");
+                            }
+                        }
+                        else
+                        {
+                            WritePlanToFile(new List<string>(), sOutputFile);
+                            if (!isValidPlan)
+                            {
+                                WriteResults(GetWantedName(dir.FullName), " warning - fail, plan was found but was not valid");
+                            }
+                            else
+                            {
+                                WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                            }
+                        }
+                        Console.WriteLine();
+                        return;
+                    }
+                    else if (highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
+                    {
+                        if (lPlan != null)
+                        {
+                            WritePlanToFile(lPlan, sOutputFile);
                             WriteResults(GetWantedName(dir.FullName), " success");
                         }
                         else
                         {
-                            //This means that we did not proved the optimality of our solution, but we had an error (e.g. memory error)...
-                            WriteResults(GetWantedName(dir.FullName), " partial success - not proven optimality of solution");
+                            WritePlanToFile(new List<string>(), sOutputFile);
+                            WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
                         }
+                        Console.WriteLine();
+                        return;
                     }
-                    else
+                    else if (highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
                     {
+                        //The plan will always be null in this planner, so just write " success", and leave it like this...
                         WritePlanToFile(new List<string>(), sOutputFile);
-                        if (!isValidPlan)
+                        WriteResults(GetWantedName(dir.FullName), " success");
+                        Console.WriteLine();
+                        return;
+                    }
+                    if (creatingTracesAfterSolutionWasFound)
+                    {
+                        return; //don't need to write results...
+                    }
+                    //Program.projResults.WriteLine(
+                    if (lPlan != null)
+                    {
+                        if (lPlan.Count == 1 && lPlan.Contains(null))
                         {
-                            WriteResults(GetWantedName(dir.FullName), " warning - fail, plan was found but was not valid");
+                            WritePlanToFile(new List<string>(), sOutputFile);
+                            WriteResults(GetWantedName(dir.FullName), " fail, public plan found, but could not ground it");
+                        }
+                        else if (VerifyPlan(dJoint, pJoint, lPlan))
+                        {
+                            PlanMakeSpan = MaxSpanCalculation(agents, lPlan, dJoint);
+                            WritePlanToFile(lPlan, sOutputFile);
+                            WriteResults(GetWantedName(dir.FullName), " success");
                         }
                         else
                         {
-                            WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                            //Program.timeResults.WriteLine("*");
+                            //Program.timeResults.Flush();
+                            WriteResults(GetWantedName(dir.FullName), " plan verification failed");
                         }
-                    }
-                    Console.WriteLine();
-                    return;
-                }
-                else if(highLevelPlanerType == HighLevelPlanerType.SingleAgentPlanner)
-                {
-                    if (lPlan != null)
-                    {
-                        WritePlanToFile(lPlan, sOutputFile);
-                        WriteResults(GetWantedName(dir.FullName), " success");
+                        Console.WriteLine();
+
                     }
                     else
                     {
                         WritePlanToFile(new List<string>(), sOutputFile);
                         WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
                     }
-                    Console.WriteLine();
-                    return;
                 }
-                else if(highLevelPlanerType == HighLevelPlanerType.DependenciesGraphGenerator)
+                //catch (Exception e)
                 {
-                    //The plan will always be null in this planner, so just write " success", and leave it like this...
-                    WritePlanToFile(new List<string>(), sOutputFile);
-                    WriteResults(GetWantedName(dir.FullName), " success");
-                    Console.WriteLine();
-                    return;
-                }
-                if (creatingTracesAfterSolutionWasFound)
-                {
-                    return; //don't need to write results...
-                }
-                //Program.projResults.WriteLine(
-                if (lPlan != null)
-                {
-                    if(lPlan.Count == 1 && lPlan.Contains(null))
-                    {
-                        WritePlanToFile(new List<string>(), sOutputFile);
-                        WriteResults(GetWantedName(dir.FullName), " fail, public plan found, but could not ground it");
-                    }
-                    else if (VerifyPlan(dJoint, pJoint, lPlan))
-                    {
-                        PlanMakeSpan = MaxSpanCalculation(agents, lPlan, dJoint);
-                        WritePlanToFile(lPlan, sOutputFile);
-                        WriteResults(GetWantedName(dir.FullName), " success");
-                    }
-                    else
-                    {
-                        //Program.timeResults.WriteLine("*");
-                        //Program.timeResults.Flush();
-                        WriteResults(GetWantedName(dir.FullName), " plan verification failed");
-                    }
-                    Console.WriteLine();
-
-                }
-                else
-                {
-                    WritePlanToFile(new List<string>(), sOutputFile);
-                    WriteResults(GetWantedName(dir.FullName), " fail, plan is null");
+                    //WriteResults(dir.Name , " fail, " + e.Message + ", " + e.StackTrace);
                 }
             }
-            //catch (Exception e)
+            catch(OperationCanceledException cancellationEx)
             {
-                //WriteResults(dir.Name , " fail, " + e.Message + ", " + e.StackTrace);
+                //Don't do anything...
+                //Just here so the task won't crash...
             }
         }
 
