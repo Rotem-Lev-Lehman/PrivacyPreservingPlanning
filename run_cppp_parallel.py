@@ -133,5 +133,7 @@ def run_all_cppp_processes(planner_to_run, selector_to_run):
 
 
 if __name__ == '__main__':
-    # run_all_cppp_processes(sys.argv[1])
-    run_all_cppp_processes(0, [0, 1])
+    print(sys.argv[1])
+    print(sys.argv[2:])
+    run_all_cppp_processes(sys.argv[1], sys.argv[2:])
+    # run_all_cppp_processes(0, [0, 1])
