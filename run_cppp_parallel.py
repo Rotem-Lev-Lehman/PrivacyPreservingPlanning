@@ -54,7 +54,7 @@ def get_all_planners(planner_to_run):
 
 def get_all_selectors(selector_to_run):
     # return list(range(0, 4))  # [0, 3]
-    return [int(selector_to_run)]
+    return [int(s) for s in selector_to_run]
 
 
 def get_all_domains():
@@ -90,7 +90,7 @@ def run_all_cppp_processes(planner_to_run, selector_to_run):
     # mem = virtual_memory()
     # mem = 494
     # ram_size_in_gb = mem.total / math.pow(2, 30)  # total physical memory available
-    ram_size_in_gb = 494
+    ram_size_in_gb = 400
     print(f'Running the CPPP project on {num_of_cpus} CPUs on parallel, with {ram_size_in_gb} GB of RAM available')
 
     print('Applying selectors:')
@@ -134,4 +134,4 @@ def run_all_cppp_processes(planner_to_run, selector_to_run):
 
 if __name__ == '__main__':
     # run_all_cppp_processes(sys.argv[1])
-    run_all_cppp_processes(0, 0)
+    run_all_cppp_processes(0, [0, 1])
