@@ -30,6 +30,7 @@ namespace Planning
 
             for (int i = 0; i < amountToSelect; i++)
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 FixPrivateEffectsList(effectsWeCanReveal, privateEffects);
 
                 //pick the effect with the most achievable actions.

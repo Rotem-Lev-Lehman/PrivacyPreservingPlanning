@@ -1215,6 +1215,7 @@ namespace Planning
         Dictionary<GroundedPredicate, HashSet<Action>> mapAGpToList = null;
         public List<Action> getAdvancedProjectionPublicAction(int index, List<Predicate> newPredicates)
         {
+            Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
             mapActToList = new Dictionary<string, Dictionary<string, HashSet<Action>>>();
             mapAGpToList = new Dictionary<GroundedPredicate, HashSet<Action>>();
             Dictionary<string, Action> mapActionName = new Dictionary<string, Action>();
@@ -1236,6 +1237,7 @@ namespace Planning
             }
             foreach (var actionName in mapActionName.Keys.ToList())
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 Action act = mapActionName[actionName];
                 Program.sizeOfRegressionTree = 0;
 
@@ -1243,6 +1245,7 @@ namespace Planning
                 int globaDepth = 0;
                 foreach (GroundedPredicate gpPre in act.Preconditions.GetAllPredicates())
                 {
+                    Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     string gpName = gpPre.Name + gpPre.Constants[0];
                    // gpName = gpPre.ToString();
                     if (gpPre.Name.Contains(Domain.ARTIFICIAL_PREDICATE) || PublicPredicates.Contains(gpPre))
@@ -1362,6 +1365,7 @@ namespace Planning
             }
             foreach (var actionName in mapActionName.Keys.ToList())
             {
+                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 Action act = mapActionName[actionName];
                 HashSet<Predicate> hash = new HashSet<Predicate>();
                 CompoundFormula eff = new CompoundFormula("and");
@@ -1385,6 +1389,7 @@ namespace Planning
                             {
                                 foreach (Action actName in mapActToList[act.Name][ngpName])
                                 {
+                                    Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
                                     Action preAction = mapActionName[actName.Name];
                                     if (preAction.mapEff.ContainsKey(ngpName))
                                     {

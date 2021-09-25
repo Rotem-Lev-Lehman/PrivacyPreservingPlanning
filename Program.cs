@@ -2824,6 +2824,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetDomainAndSelectorIndexesAndPercentagesToUse(string[] args)
         {
+            
             for (int i = 0; i < args.Length; i++)
             {
                 Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
@@ -2889,13 +2890,14 @@ namespace Planning
             Console.WriteLine("Now Running those selectors on the domains indexes for the given percentages by order");
 
             return selectorsDomainsAndPercentages;
-
+            
             /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] {0});
+            dict.Add("domains", new int[] {5});
+            dict.Add("percentages", new int[] {100});
             return dict;
             */
         }
