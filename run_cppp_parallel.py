@@ -112,7 +112,7 @@ def run_all_cppp_processes(planner_to_run, selector_to_run):
     print(f'RAM limit = {ram_limit}, and CPUs limit = {cpu_limit}')
     print(f'So the number of jobs that can be executed in parallel is {num_of_parallel_jobs}')
     print(f'We will have a maximal amount of repetitions of {n / num_of_parallel_jobs}')
-    return 0
+
     # Results dir:
     Path("results").mkdir(parents=True, exist_ok=True)
     Path("errors").mkdir(parents=True, exist_ok=True)
