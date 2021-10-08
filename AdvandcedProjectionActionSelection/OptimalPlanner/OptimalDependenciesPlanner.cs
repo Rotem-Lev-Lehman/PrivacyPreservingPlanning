@@ -496,8 +496,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             tempSymPAPDDLFolder = Program.baseFolderName + "/OptimalTempFiles/" + Program.currentFFProcessName + "/" + DateTime.Now.Ticks;
             System.IO.Directory.CreateDirectory(tempSymPAPDDLFolder);
 
-            Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token), token);
-            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token), token);
+            Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token));
+            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token));
 
             up2down.Start();
             down2up.Start();
