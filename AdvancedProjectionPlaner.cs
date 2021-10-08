@@ -242,7 +242,7 @@ namespace Planning
 
             bool ans;
             ExternalPlanners externalPlanners = new ExternalPlanners();
-            highLevelplan = externalPlanners.Plan(true, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10 * 60000, out ans);
+            highLevelplan = externalPlanners.Plan(true, false, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 10 * 60000, out ans, null);
 
             if (highLevelplan == null)
             {
@@ -1131,7 +1131,7 @@ namespace Planning
                   * */
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
-                ffLplan = externalPlanners.Plan(true, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
+                ffLplan = externalPlanners.Plan(true, false, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                 //List<string> todo = Plan(d, p, agentState[agentName], goalFormula, agents[map[agentName]].m_actions);
                 //planTheard = new Thread(() => FF_Plan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions));
@@ -1216,7 +1216,7 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, true, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     //ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)
@@ -1329,7 +1329,7 @@ namespace Planning
                 }
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
-                ffLplan = externalPlanners.Plan(true, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, privateAndMore, 5 * 60 * 1000, out bUnsolvable);
+                ffLplan = externalPlanners.Plan(true, false, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, privateAndMore, 5 * 60 * 1000, out bUnsolvable, null);
 
                 //List<string> todo = Plan(d, p, agentState[agentName], goalFormula, agents[map[agentName]].m_actions);
                 //planTheard = new Thread(() => FF_Plan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions));
@@ -1414,7 +1414,7 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, false, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     //ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)
@@ -1925,7 +1925,7 @@ namespace Planning
 
                 bool bUnsolvable = false;
                 ExternalPlanners externalPlanners = new ExternalPlanners();
-                ffLplan = externalPlanners.Plan(true, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable);
+                ffLplan = externalPlanners.Plan(true, false, false, agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                 //List<string> todo = Plan(d, p, agentState[agentName], goalFormula, agents[map[agentName]].m_actions);
                 //planTheard = new Thread(() => FF_Plan(agents[map[agentName]].domain, agents[map[agentName]].problem, agentState[agentName], goalFormula, agents[map[agentName]].m_actions));
@@ -2010,7 +2010,7 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, true, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     //  ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)

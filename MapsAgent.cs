@@ -3056,7 +3056,7 @@ namespace Planning
                 {
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    List<string> ffLplan = externalPlanners.Plan(true, false, domain, problem, courrentState, goalFormula, m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    List<string> ffLplan = externalPlanners.Plan(true, false, false, domain, problem, courrentState, goalFormula, m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     if (ffLplan != null)
                     {
@@ -3241,7 +3241,7 @@ namespace Planning
             if (compoundFormula1.Operands.Count > 0)
             {
                 bool bUnsolvable;
-                List<string> list4 = new ExternalPlanners().Plan(true, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable);
+                List<string> list4 = new ExternalPlanners().Plan(true, false, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable, null);
                 if (list4 != null)
                 {
                     groupPlan[highLevelplan.Count + agentIndex] = new List<string>((IEnumerable<string>)list4);
@@ -3337,7 +3337,7 @@ namespace Planning
             if (compoundFormula1.Operands.Count > 0)
             {
                 bool bUnsolvable;
-                List<string> list4 = new ExternalPlanners().Plan(true, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable);
+                List<string> list4 = new ExternalPlanners().Plan(true, false, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable, null);
                 if (list4 != null)
                 {
                     groupPlan[highLevelplan.Count + agentIndex] = new List<string>((IEnumerable<string>)list4);
@@ -3390,7 +3390,7 @@ namespace Planning
                 if (name.Equals(keyValuePair.Key))
                 {
                     bool bUnsolvable = false;
-                    List<string> list4 = new ExternalPlanners().Plan(true, false, domain, problem, courrentState, (Formula)compoundFormula, m_actions, 300000, out bUnsolvable);
+                    List<string> list4 = new ExternalPlanners().Plan(true, false, false, domain, problem, courrentState, (Formula)compoundFormula, m_actions, 300000, out bUnsolvable, null);
                     if (list4 != null)
                     {
                         groupPlan[index1] = new List<string>((IEnumerable<string>)list4);
@@ -3420,7 +3420,7 @@ namespace Planning
             if (compoundFormula1.Operands.Count > 0)
             {
                 bool bUnsolvable;
-                List<string> list4 = new ExternalPlanners().Plan(true, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable);
+                List<string> list4 = new ExternalPlanners().Plan(true, false, false, domain, problem, courrentState, (Formula)compoundFormula1, m_actions, 300000, out bUnsolvable, null);
                 if (list4 != null)
                 {
                     groupPlan[highLevelplan.Count + agentIndex] = new List<string>((IEnumerable<string>)list4);

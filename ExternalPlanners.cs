@@ -30,10 +30,31 @@ namespace Planning
 
         public static bool unsolvableProblem = false;
 
+        private CancellationToken token;
+        private string SymPATempPDDLFolder = null;
+
         public static TimeSpan PlannerTimeout = new TimeSpan(0, 5, 0);
         public ExternalPlanners()
         {
             // Console.WriteLine(" * ");
+            this.token = default(CancellationToken);
+        }
+
+        public ExternalPlanners(CancellationToken token)
+        {
+            this.token = token;
+        }
+
+        public ExternalPlanners(CancellationToken token, string SymPATempPDDLFolder)
+        {
+            this.token = token;
+            this.SymPATempPDDLFolder = SymPATempPDDLFolder;
+        }
+
+        private void ThrowIfCancellationRequested()
+        {
+            Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
         }
 
         public List<string> PlanFiles(bool bUseFF, bool bUseFD, string domainPath, string problemPath, int cMaxMilliseconds, out bool bUnsolvable)
@@ -150,9 +171,13 @@ namespace Planning
             return res;
         }
 
-        public List<string> Plan(bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
+        public List<string> Plan(bool bUseFF, bool bUseFD, bool bUseSymPA, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable, string SymPAFilename)
         {
             bUseFD = false;
+            if(bUseSymPA && SymPAFilename == null)
+            {
+                throw new ArgumentNullException("SymPA Filename", "Indicated that we want to use SymPA planner, but did not indicate where is the planner located");
+            }
             //Program.KillPlanners();
             List<string> lPlan = null;
             unsolvableProblem = false;
@@ -164,7 +189,7 @@ namespace Planning
                 p.Goal = goal;
 
           //  string sFDPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
-            Process pFF = null, pFD = null;
+            Process pFF = null, pFD = null, pSymPA = null;
             string FFdomainName = null, FFproblemName = null;
             if (bUseFF)
             {
@@ -176,20 +201,26 @@ namespace Planning
                 //pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
                 pFD = RunFDPlannerWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
             }
+            if (bUseSymPA)
+            {
+                pSymPA = RunSymPAPlannerWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), SymPAFilename);
+            }
+
                 
             bUnsolvable = false;
-            bool bFFDone = false, bFDDone = false;
+            bool bFFDone = false, bFDDone = false, bSymPADone = false;
 
-            Process[] process;
-            if (bUseFF && !bUseFD)
-                process = new Process[] { pFF };
-            else
-                if (!bUseFF && bUseFD)
-                process = new Process[] { pFD };
-            else
-                process = new Process[] { pFF, pFD };
+            
+
+            List<Process> process = new List<Process>();
+            if (bUseFF)
+                process.Add(pFF);
+            if (bUseFD)
+                process.Add(pFD);
+            if (bUseSymPA)
+                process.Add(pSymPA);
             //Console.WriteLine("0");
-            if (WaitForProcesses(process, cMaxMilliseconds, out bFFDone, out bFDDone))
+            if (WaitForProcessesWithSymPA(process, pFF, pFD, pSymPA, cMaxMilliseconds, out bFFDone, out bFDDone, out bSymPADone))
             {
                 //Console.WriteLine("1");
                 if (bFFDone)
@@ -197,7 +228,7 @@ namespace Planning
                     //Console.WriteLine("2");
                     //Console.WriteLine("Plan found by FF");
                     Thread.Sleep(150);
-                    lPlan = ReadFFPlan(process[0].Id, out bUnsolvable);
+                    lPlan = ReadFFPlan(pFF.Id, out bUnsolvable);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                     //Console.WriteLine("3");
@@ -210,10 +241,7 @@ namespace Planning
                 {
                     //Console.WriteLine("Plan found by FD");
                     Thread.Sleep(100);
-                    int pFD_id = 0;
-                    if (bUseFF)
-                        pFD_id = 1;
-                    int exitCode = process[pFD_id].ExitCode;
+                    int exitCode = pFD.ExitCode;
                     if (exitCode == 22)
                     {
                         Console.WriteLine("The search was terminated due to memory limitation");
@@ -228,10 +256,33 @@ namespace Planning
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                 }
+                else if (bSymPADone)
+                {
+                    Thread.Sleep(100);
+                    int exitCode = pSymPA.ExitCode;
+                    if (exitCode == 22)
+                    {
+                        Console.WriteLine("The search was terminated due to memory limitation");
+                    }
+                    if (exitCode == 12) //need to check these things...
+                    {
+                        Console.WriteLine("There is no solution for this problem (exusted all possabilities)");
+                        unsolvableProblem = true;
+                    }
+
+                    lPlan = ReadSymPAPlan(SymPATempPDDLFolder);
+                    KillAll(process.ToList());
+                    Thread.Sleep(50);
+                }
                 return lPlan;
             }
             //Console.WriteLine("4");
             return null;
+        }
+
+        private List<string> ReadSymPAPlan(string symPATempPDDLFolder)
+        {
+            throw new NotImplementedException();
         }
 
         public List<string> Plan(string agent, bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
@@ -354,7 +405,8 @@ namespace Planning
             int indexOfWorkingProcess = 0;
             while (!bDone)
             {
-                Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                ThrowIfCancellationRequested();
+
                 bDone = false;
                 workingProcesses[indexOfWorkingProcess].WaitForExit(200);
                 //List<Process> l = GetPlanningProcesses();
@@ -426,9 +478,129 @@ namespace Planning
             List<Process> lPlanningProcesses = GetPlanningProcesses();
             KillAll(lPlanningProcesses);
 
-            Program.cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            ThrowIfCancellationRequested();
             return bFDDone || bFFDone;
         }
+
+        public int GetNextNonNullProcess(Process[] workingProcesses, int currP)
+        {
+            for(int i = 0; i < workingProcesses.Length; i++)
+            {
+                if (i != currP && workingProcesses[i] != null)
+                    return currP;
+            }
+            return -1; //all other processes are null...
+        }
+
+        public bool WaitForProcessesWithSymPA(List<Process> a, Process pFF, Process pFD, Process pSymPA, int cMaxMilliseconds, out bool bFFDone, out bool bFDDone, out bool bSymPADone)
+        {
+            DateTime dtStart = DateTime.Now;
+            bool bDone = false;
+            bFFDone = false;
+            bFDDone = false;
+            bSymPADone = false;
+            Process[] workingProcesses = new Process[a.Count];
+            Dictionary<Process, int> placeInArray = new Dictionary<Process, int>();
+            for (int i = 0; i < a.Count; i++)
+            {
+                workingProcesses[i] = a[i];
+                placeInArray[a[i]] = i;
+            }
+
+            int indexOfWorkingProcess = 0;
+            while (!bDone)
+            {
+                ThrowIfCancellationRequested();
+
+                bDone = false;
+                workingProcesses[indexOfWorkingProcess].WaitForExit(200);
+                //List<Process> l = GetPlanningProcesses();
+                foreach (Process p in workingProcesses)
+                {
+                    if (p != null)
+                    {
+                        if (p.HasExited)
+                        {
+                            int currI = placeInArray[p];
+                            int nextP = GetNextNonNullProcess(workingProcesses, currI);
+                            if (p == pFF)
+                            {
+                                string sOutput = FFOutput[p.Id];
+                                if (sOutput.Contains("too many consts in type ARTFICIAL-ALL-OBJECTS! increase MAX_TYPE (currently 2000)") && a.Count > 1 && nextP != -1)
+                                {
+                                    Console.WriteLine("The FF search was terminated due to const limitation, continuing with other planners and trying to find a valid plan with them.");
+                                    workingProcesses[currI] = null;
+                                    indexOfWorkingProcess = nextP;
+                                    continue;
+                                }
+                                bFFDone = true;
+                            }
+                            else if(p == pFD)
+                            {
+                                int exitCode = p.ExitCode;
+                                if (exitCode == 22 && a.Count > 1 && nextP != -1) //if it is not the only process (we are running FF too), than try to wait for FF
+                                {
+                                    Console.WriteLine("The FD search was terminated due to memory limitation, continuing with other planners and trying to find a valid plan with them.");
+                                    workingProcesses[currI] = null;
+                                    indexOfWorkingProcess = nextP;
+                                    continue;
+                                }
+                                bFDDone = true;
+                            }
+                            else // if (p == pSymPA)
+                            {
+                                //need to check this exitCode;
+                                int exitCode = p.ExitCode;
+                                if (exitCode == 22 && a.Count > 1 && nextP != -1) //if it is not the only process (we are running FF too), than try to wait for FF
+                                {
+                                    Console.WriteLine("The SymPA search was terminated due to memory limitation, continuing with other planners and trying to find a valid plan with them.");
+                                    workingProcesses[currI] = null;
+                                    indexOfWorkingProcess = nextP;
+                                    continue;
+                                }
+                                bSymPADone = true;
+                            }
+                            bDone = true;
+                        }
+                    }
+                }
+
+
+                if (!bDone)
+                {
+                    try
+                    {
+                        TimeSpan ts = (DateTime.Now - dtStart);
+                        if (ts.TotalMilliseconds > cMaxMilliseconds)
+                        {
+                            bDone = true;
+                        }
+                        bool bMemSizeLimitReached = false;
+                        foreach (Process pPlanning in GetPlanningProcesses())
+                        {
+                            if (pPlanning.WorkingSet64 > 2 * Math.Pow(2, 30))
+                            {
+                                bMemSizeLimitReached = true;
+                            }
+                        }
+                        if (bMemSizeLimitReached)
+                        {
+                            bDone = true;
+                        }
+                    }
+                    catch (Exception e)
+                    { }
+                }
+
+            }
+            KillAll(a.ToList());
+            List<Process> lPlanningProcesses = GetPlanningProcesses();
+            KillAll(lPlanningProcesses);
+
+            ThrowIfCancellationRequested();
+            return bFDDone || bFFDone || bSymPADone;
+        }
+
         public static void KillPlanners()
         {
 
@@ -656,6 +828,62 @@ namespace Planning
             */
         }
 
+        private Process RunSymPAPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem, string symPAFilename)
+        {
+            File.Delete(SymPATempPDDLFolder + "/plan.txt");
+            File.Delete(SymPATempPDDLFolder + "/mipsSolution.soln");
+            File.Delete(SymPATempPDDLFolder + "/output.sas");
+            File.Delete(SymPATempPDDLFolder + "/output");
+            File.Delete(SymPATempPDDLFolder + "/sas_plan");
+            File.Delete(SymPATempPDDLFolder + "/log");
+            File.Delete(SymPATempPDDLFolder + "/err");
+
+            msProblem.Position = 0;
+            msDomain.Position = 0;
+
+            StreamWriter swDomainFile = new StreamWriter(SymPATempPDDLFolder + "/dFD.pddl");
+            StreamReader srDomain = new StreamReader(msDomain);
+            swDomainFile.Write(srDomain.ReadToEnd());
+            swDomainFile.Close();
+
+            StreamWriter swProblemFile = new StreamWriter(SymPATempPDDLFolder + "/pFD.pddl");
+            StreamReader srProblem = new StreamReader(msProblem);
+            swProblemFile.Write(srProblem.ReadToEnd());
+            swProblemFile.Close();
+
+
+            Process pSymPA = new Process();
+
+            pSymPA.StartInfo.WorkingDirectory = SymPATempPDDLFolder;
+
+            pSymPA.StartInfo.FileName = symPAFilename;
+
+            pSymPA.StartInfo.Arguments = "dFD.pddl pFD.pddl";
+
+            pSymPA.StartInfo.UseShellExecute = false;
+            //pSymPA.StartInfo.RedirectStandardOutput = true;
+
+
+            //pSymPA.StartInfo.RedirectStandardInput = true;
+            //FDOutput = "";
+            //pSymPA.OutputDataReceived += new DataReceivedEventHandler(FDOutputHandler);
+
+            //FDProcesses = new HashSet<Process>();
+            pSymPA.Start();
+            //pSymPA.BeginOutputReadLine();
+            /*
+
+            MemoryStream msModels = new MemoryStream();
+            msModels.Position = 0;
+            BinaryReader srModels = new BinaryReader(msModels);
+
+            while (srModels.PeekChar() >= 0)
+                pSymPA.StandardInput.BaseStream.WriteByte(srModels.ReadByte());
+
+            pSymPA.StandardInput.Close();
+            */
+            return pSymPA;
+        }
 
         public Process RunFDPlannerWithFiles(MemoryStream msDomain, MemoryStream msProblem)
         {

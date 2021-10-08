@@ -323,7 +323,7 @@ namespace Planning
                 localGoal.Add(p);
             }
             //highLevelplan = externalPlanners.Plan(true, true, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans);
-            highLevelplan = externalPlanners.Plan(true, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans);
+            highLevelplan = externalPlanners.Plan(true, false, false, dPublic, pPublic, publicStartState, goalf, dPublic.Actions, 5*60000, out ans, null);
             // hsp = new HSPHeuristic(dPublic.Actions, localGoal, false);
            //  forwardSearch = new ForwardSearchPlanner(dPublic.Actions, hsp);
            //  List<Action> highLevelplan = forwardSearch.Plan(publicStartState, localGoal);
@@ -800,7 +800,7 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, true, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     //ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)
@@ -1396,7 +1396,7 @@ namespace Planning
                     //List<string> todo = Plan(d, p, agentState[agent.name], agentGoal[agent.name], agent.m_actions);
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    ffLplan = externalPlanners.Plan(true, true, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    ffLplan = externalPlanners.Plan(true, true, false, agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
                     //  ffLplan = externalPlanners.FFPlan(agents[map[agent.name]].domain, agents[map[agent.name]].problem, agentState[agent.name], agentGoal[agent.name], agent.m_actions, 5 * 60 * 1000, out bUnsolvable);
                     if (ffLplan != null)

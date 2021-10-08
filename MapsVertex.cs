@@ -1755,7 +1755,7 @@ namespace Planning
                 {
                     bool bUnsolvable = false;
                     ExternalPlanners externalPlanners = new ExternalPlanners();
-                    List<string> ffLplan = externalPlanners.Plan(true, false, agents[agentName].domain, agents[agentName].problem, courrentState, goalFormula, agents[agentName].m_actions, 5 * 60 * 1000, out bUnsolvable);
+                    List<string> ffLplan = externalPlanners.Plan(true, false, false, agents[agentName].domain, agents[agentName].problem, courrentState, goalFormula, agents[agentName].m_actions, 5 * 60 * 1000, out bUnsolvable, null);
 
 
                     if (ffLplan != null)

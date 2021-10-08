@@ -115,7 +115,18 @@ namespace Planning
         public static List<string> planForOptimalAmountOfDependenciesForCurrentProblem;
         public static Domain currentJointDomain;
         public static Problem currentJointProblem;
-        public static bool isValidPlan = false;
+        public static bool isValidUp2DownPlan = false;
+        public static bool isValidDown2UpPlan = false;
+        public static bool foundOptimal = false;
+        //SymPA files in use:
+        public static string SymPAFilename1;
+        public static string SymPAFilename2;
+        public static int currentUpperBoundForOptimalDep;
+        public static int currentLowerBoundForOptimalDep;
+        public static List<string> upperBoundPlanForOptimal;
+        public static List<string> lowerBoundPlanForOptimal;
+        public static bool saveEachProblemResultToItsOwnFile = false;
+        public static string currProblem;
 
         //Single agent solver stuff:
         public static List<Tuple<string, string>> domainsAndProblems;
@@ -132,6 +143,7 @@ namespace Planning
         public static bool runningOnLinux = true;
         public static string baseFolderNameMyComputer = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         public static string baseFolderNameLinuxServer = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
+        public static string SymPAbaseFolderName = "/home/levlerot/CPPP/optimal/unsolvability/improved_sympa"; //path of the SymPA files (on the cluster server)
         public static string baseFolderName { get
             {
                 if (runningOnLinux)
@@ -262,7 +274,7 @@ namespace Planning
                         {
                             amountOfDependenciesUsed = optimalAmountOfDependenciesForCurrentProblem;//CalculateDependenciesNum(lPlan);
                             WritePlanToFile(lPlan, sOutputFile);
-                            if (ExternalPlanners.unsolvableProblem || optimalAmountOfDependenciesForCurrentProblem == 0)
+                            if (Program.foundOptimal)
                             {
                                 //This means that we have proved the optimality of our solution.
                                 WriteResults(GetWantedName(dir.FullName), " success");
@@ -276,7 +288,7 @@ namespace Planning
                         else
                         {
                             WritePlanToFile(new List<string>(), sOutputFile);
-                            if (!isValidPlan)
+                            if (!isValidUp2DownPlan || !isValidDown2UpPlan)
                             {
                                 WriteResults(GetWantedName(dir.FullName), " warning - fail, plan was found but was not valid");
                             }
@@ -1483,6 +1495,7 @@ namespace Planning
             }
             return f;
         }
+
         private static void ParseAll(DirectoryInfo di, string sOutputPlanFile)
         {
             Start = new DateTime(0);
@@ -1779,7 +1792,12 @@ namespace Planning
         public static void WriteResults(string sDomain, string sMsg)
         {
             Console.WriteLine(sDomain + " " + sMsg);
-            swResults = new StreamWriter(outputPath + "/Results.txt", true);
+            string resultsFilename = "Results.txt";
+            if (saveEachProblemResultToItsOwnFile)
+            {
+                resultsFilename = currProblem + resultsFilename;
+            }
+            swResults = new StreamWriter(outputPath + "/" + resultsFilename, true);
             swResults.WriteLine(sDomain + ", " + sMsg.Replace(",", ":") + ", " + PlanCost + ", " + PlanMakeSpan
                + "," + makeSpanPlanTime
                + "," + (End.Subtract(Start).TotalSeconds - pdbCreationTime)
@@ -1797,6 +1815,9 @@ namespace Planning
                  + "," + maxTimeForCreatingDependencies
                  + "," + totalTimeForCreatingDependencies
                  + "," + timeForSelectingDependencies
+                 //Optimal bounds:
+                 + "," + currentLowerBoundForOptimalDep
+                 + "," + currentUpperBoundForOptimalDep
                //  + "," + ffMessageCounter
                //  + "," + countMacro
                // + "," + countAvgPerMacro
@@ -1946,6 +1967,7 @@ namespace Planning
             {
                 string header = "Percentage of actions selected, folder name, success/failure, plan cost, plan make span, ? makespan plan time ?, total time, ? senderstate counter ?, ? state expend counter ?, ? generate counter ?, amount of dependencies used, amount of dependecies published, amount of dependencies used in planning process (MAFS)";
                 header += ", avg dependencies creation time, min dependencies creation time, max dependencies creation time, total dependencies creation time, time for dependencies selection";
+                header += ", lower bound (for optimal dependencies), upper bound (for optimal dependencies)";
                 outFile.WriteLine(header);
                 foreach (string dir in directories)
                 {
@@ -2126,14 +2148,202 @@ namespace Planning
             }
         }
 
-        static void RunRegularExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType)
+        private static Dictionary<string, List<string>> GetDomain2ProblemNames(string[] dependenciesDomains, int[] problemsChosen)
+        {
+            Dictionary<string, List<string>> allMappings = GetAllMappings();
+            Dictionary<string, List<string>> domain2problems = new Dictionary<string, List<string>>();
+            foreach(string domain in dependenciesDomains)
+            {
+                List<string> currProblems = allMappings[domain];
+                List<string> onlyChosenProblems = new List<string>();
+                foreach(int pID in problemsChosen)
+                {
+                    onlyChosenProblems.Add(currProblems[pID]);
+                }
+                domain2problems[domain] = onlyChosenProblems;
+            }
+            return domain2problems;
+        }
+
+        private static Dictionary<string, List<string>> GetAllMappings()
+        {
+            Dictionary<string, List<string>> allMappings = new Dictionary<string, List<string>>();
+
+            allMappings["blocksworld"] = GetBlocksWorldProblems();
+            allMappings["depot"] = GetDepotProblems();
+            allMappings["driverlog"] = GetDriverlogProblems();
+            allMappings["elevators08"] = GetElevatorsProblems();
+            allMappings["logistics00"] = GetLogisticsProblems();
+            allMappings["rovers"] = GetRoversProblems();
+            allMappings["satellites"] = GetSatellitesProblems();
+            allMappings["sokoban"] = GetSokobanProblems();
+            allMappings["taxi"] = GetTaxiProblems();
+            allMappings["wireless"] = GetWirelessProblems();
+            allMappings["woodworking08"] = GetWoodWorkingProblems();
+            allMappings["zenotravel"] = GetZenotravelProblems();
+            return allMappings;
+        }
+
+        private static List<string> GetZenotravelProblems()
+        {
+            return GetProblemsWithHeader("pfile", 3, 23, 1, false, 11);
+        }
+
+        private static List<string> GetWoodWorkingProblems()
+        {
+            return GetProblemsWithHeader("p", 1, 20, 2);
+        }
+
+        private static List<string> GetWirelessProblems()
+        {
+            return GetProblemsWithHeader("p", 1, 20, 2);
+        }
+
+        private static List<string> GetTaxiProblems()
+        {
+            return GetProblemsWithHeader("p", 1, 20, 2);
+        }
+
+        private static List<string> GetSokobanProblems()
+        {
+            return GetProblemsWithHeader("p", 1, 20, 2, true);
+        }
+
+        private static List<string> GetSatellitesProblems()
+        {
+            return new List<string>
+            {
+                "p05-pfile5",
+                "p06-pfile6",
+                "p07-pfile7",
+                "p08-pfile8",
+                "p09-pfile9",
+                "p10-pfile10",
+                "p11-pfile11",
+                "p12-pfile12",
+                "p13-pfile13",
+                "p14-pfile14",
+                "p15-pfile15",
+                "p16-pfile16",
+                "p18-pfile18",
+                "p19-pfile19",
+                "p20-pfile20",
+                "p21-HC-pfile1",
+                "p22-HC-pfile2",
+                "p23-HC-pfile3",
+                "p24-HC-pfile4",
+                "p25-HC-pfile5",
+            };
+        }
+
+        private static List<string> GetRoversProblems()
+        {
+            return GetProblemsWithHeader("p", 10, 29);
+        }
+
+        private static List<string> GetLogisticsProblems()
+        {
+            return new List<string>
+            {
+                "probLOGISTICS-4-0",
+                "probLOGISTICS-4-0-PrivateGoal",
+                "probLOGISTICS-5-0",
+                "probLOGISTICS-6-0",
+                "probLOGISTICS-7-0",
+                "probLOGISTICS-8-0",
+                "probLOGISTICS-8-1",
+                "probLOGISTICS-9-0",
+                "probLOGISTICS-9-1",
+                "probLOGISTICS-10-0",
+                "probLOGISTICS-10-1",
+                "probLOGISTICS-11-0",
+                "probLOGISTICS-11-1",
+                "probLOGISTICS-12-0",
+                "probLOGISTICS-12-1",
+                "probLOGISTICS-13-0",
+                "probLOGISTICS-13-1",
+                "probLOGISTICS-14-0",
+                "probLOGISTICS-14-1",
+                "probLOGISTICS-15-0",
+                "probLOGISTICS-15-1",
+            };
+        }
+
+        private static List<string> GetElevatorsProblems()
+        {
+            return GetProblemsWithHeader("p", 1, 20, 2);
+        }
+
+        private static List<string> GetDriverlogProblems()
+        {
+            return GetProblemsWithHeader("pfile", 1, 20);
+        }
+
+        private static List<string> GetDepotProblems()
+        {
+            return GetProblemsWithHeader("pfile", 1, 20);
+        }
+
+        private static List<string> GetProblemsWithHeader(string header, int start, int end, int digitsNum = 1, bool add1AtEnd = false, int skip = -1)
+        {
+            List<string> problems = new List<string>();
+            for (int i = start; i <= end; i++)
+            {
+                if(skip == i)
+                {
+                    continue;
+                }
+                string iStr = "";
+                if (i < Math.Pow(10, digitsNum - 1))
+                    iStr = i.ToString("D" + digitsNum);
+                else
+                    iStr = i.ToString();
+                problems.Add(header + iStr);
+                if (add1AtEnd)
+                {
+                    problems.Add(header + iStr + "-1");
+                }
+            }
+            return problems;
+        }
+
+        private static List<string> GetBlocksWorldProblems()
+        {
+            return new List<string>
+            {
+                "probBLOCKS-9-0",
+                "probBLOCKS-9-1",
+                "probBLOCKS-9-2",
+                "probBLOCKS-10-0",
+                "probBLOCKS-10-1",
+                "probBLOCKS-10-2",
+                "probBLOCKS-11-0",
+                "probBLOCKS-11-1",
+                "probBLOCKS-11-2",
+                "probBLOCKS-12-0",
+                "probBLOCKS-12-1",
+                "probBLOCKS-13-0",
+                "probBLOCKS-13-1",
+                "probBLOCKS-14-0",
+                "probBLOCKS-14-1",
+                "probBLOCKS-15-0",
+                "probBLOCKS-15-1",
+                "probBLOCKS-16-1",
+                "probBLOCKS-16-2",
+                "probBLOCKS-17-0"
+            };
+        }
+
+        static void RunRegularExperimentOnAlotOfDomains(Dictionary<string, int[]> selectorsAndDomains, string plannerType, bool choosingProblems)
         {
             int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
             int[] domainIndexesToUse = selectorsAndDomains["domains"];
+            Dictionary<string, List<string>> problemsToRun = null;
+            
 
-            string[] allPossibleDependenciesSelectors = { "FF_and_FD", "FD", "FF" };
-            //string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
-            string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*//*"logistics_only_14_0"*/"zenotravel_only_23" };
+            string[] allPossibleDependenciesSelectors = { "FF_and_SymPA", "FF_and_FD", "FD", "FF" };
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*//*"logistics_only_14_0"*/"zenotravel_only_23" };
 
             string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
             Console.WriteLine("Selectors that we will run:");
@@ -2150,6 +2360,12 @@ namespace Planning
                 dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
                 Console.WriteLine(dependenciesDomains[i]);
             }
+            if (choosingProblems)
+            {
+                int[] problemsChosen = selectorsAndDomains["problems"];
+                problemsToRun = GetDomain2ProblemNames(dependenciesDomains, problemsChosen);
+            }
+
             Console.WriteLine("Lets start running them :)");
 
             string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
@@ -2166,7 +2382,14 @@ namespace Planning
             //now run the non collaborations:
             collaborationUsed = false;
             dependencyUsed = true;
-            RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesPath, "Non_Collaborative", "Dependencies", true);
+            if (choosingProblems)
+            {
+                RunSpecificExperimentOnSpecificProblems(dependenciesSelectors, dependenciesDomains, problemsToRun, dependenciesPath, "Non_Collaborative", "Dependencies");
+            }
+            else
+            {
+                RunSpecificExperiment(dependenciesSelectors, dependenciesDomains, dependenciesPath, "Non_Collaborative", "Dependencies", true);
+            }
         }
 
         static void RunSpecificExperiment(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString, bool regularExperiment)
@@ -2227,6 +2450,82 @@ namespace Planning
 
                     Experiment(problemsPath, resultsPath, recordingFolder, regularExperiment, false, -1);
                     fixExperimentsResults(resultsPath, outputFilePath);
+                }
+            }
+        }
+
+        static void RunSpecificExperimentOnSpecificProblems(string[] selectors, string[] domains, Dictionary<string, List<string>> domain2problems, string mainPath, string collaborativeString, string dependencyString)
+        {
+            string domainsPath = baseFolderName + "/factored/";
+            if (runWithDummyInitAction)
+            {
+                domainsPath += "domains_with_init_action/";
+            }
+            string resultName = "/experiment_results";
+            string outputFileDirectory = "/Experiment_Output_File";
+            string outputFileName = "/output.csv";
+            string recordingsDirectoryName = "/Recordings";
+
+            string oldPathAndName = "ff.exe";
+
+            string plannerName = "";
+            if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                plannerName = "proj";
+            else if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                plannerName = "mafs";
+            else if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+                plannerName = "opt";
+
+            saveEachProblemResultToItsOwnFile = true;
+
+            foreach (string domainName in domains)
+            {
+                goldenStandardDomainDirectory = goldenStandardRootDirectory + "/" + domainName;
+                System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
+                foreach (string problemName in domain2problems[domainName])
+                {
+                    currProblem = problemName;
+                    foreach (string selectorType in selectors)
+                    {
+                        // copy the ff.exe file to be as the domain's name:
+                        currentFFProcessName = "ff_" + plannerName + "_" + domainName + "_" + problemName + "_" + selectorType;
+                        string newPathAndName = currentFFProcessName + ".exe";
+                        if (!File.Exists(newPathAndName))
+                            System.IO.File.Copy(oldPathAndName, newPathAndName);
+                        ExternalPlanners.ffPath = newPathAndName;
+
+                        currentFFProcessName = currentFFProcessName.ToLower();
+
+                        // start:
+
+                        Console.WriteLine("*************************************************************");
+                        Console.WriteLine("Now using " + dependencyString + " selection");
+                        Console.WriteLine("Now using " + collaborativeString + " approaches");
+                        Console.WriteLine("Now using selector: " + selectorType);
+                        Console.WriteLine("Now running domain: " + domainName);
+                        Console.WriteLine("Now running problem: " + problemName);
+                        Console.WriteLine("*************************************************************");
+
+                        typeOfSelector = selectorType;
+
+                        string currPath = mainPath + selectorType + "/" + domainName;
+                        System.IO.Directory.CreateDirectory(currPath); //create the directory if it does not exist
+
+                        string problemsPath = domainsPath + domainName + "/" + problemName;
+
+                        string resultsPath = currPath + resultName;
+                        System.IO.Directory.CreateDirectory(resultsPath); //create the directory if it does not exist
+
+                        string outputFolder = currPath + outputFileDirectory;
+                        System.IO.Directory.CreateDirectory(outputFolder); //create the directory if it does not exist
+                        string outputFilePath = outputFolder + outputFileName;
+
+                        string recordingFolder = currPath + recordingsDirectoryName;
+                        System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
+
+                        Experiment(problemsPath, resultsPath, recordingFolder, true, false, -1);
+                        //fixExperimentsResults(resultsPath, outputFilePath);
+                    }
                 }
             }
         }
@@ -2360,7 +2659,7 @@ namespace Planning
 
         private static void RunTestsForRotem(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "TestsForRotem");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "TestsForRotem", false);
         }
 
         static void RunManualDebugPlannerOnExperimentProblems(Dictionary<string, int[]> selectorsAndDomains)
@@ -2381,17 +2680,17 @@ namespace Planning
 
         static void RunOptimalDependenciesSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_journal_test");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Optimal_Dependencies_journal_test", false);
         }
 
         private static void RunSingleAgentSolverExperiment(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Single_Agent_Solver");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Single_Agent_Solver", false);
         }
 
         private static void RunGenerationOfDependenciesGraphs(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Dependencies_Graphs_IJCAI");
+            RunRegularExperimentOnAlotOfDomains(selectorsAndDomains, "Dependencies_Graphs_IJCAI", false);
         }
 
         //Run on a specific set of percentages:
@@ -2404,6 +2703,12 @@ namespace Planning
         {
             selectingDependenciesToUseInTheHueristic = true;
             RunExperimentOnAlotOfDomains(selectorsDomainsAndPercentages, "MAFS_Projection_journal", true);
+        }
+
+        //Run on a specific set of problems:
+        private static void RunOptimalDependenciesSolverExperimentOnSpecificProblems(Dictionary<string, int[]> selectorsDomainsAndProblems)
+        {
+            RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal", true);
         }
 
         static StreamWriter swResults;
@@ -2419,13 +2724,14 @@ namespace Planning
              {
                  resultFilePath = args[1];
              }*/
+            
             bool runningMyExperiment = false;
-            bool runningExpWithChosenPercentages = true;
+            bool runningExpOnClusterServer = true;
 
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
 
-            runWithDummyInitAction = runningMyExperiment || runningExpWithChosenPercentages; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
+            runWithDummyInitAction = runningMyExperiment || runningExpOnClusterServer; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
 
             if (runningMyExperiment)
             {
@@ -2483,18 +2789,30 @@ namespace Planning
                     */
                 }
             }
-            else if (runningExpWithChosenPercentages)
+            else if (runningExpOnClusterServer)
             {
-                Dictionary<string, int[]> selectorsDomainsAndPercentages = GetDomainAndSelectorIndexesAndPercentagesToUse(args);
+                int plannerChoice = int.Parse(args[0]);
+                ChoosePlanner(plannerChoice);
                 Console.WriteLine("Running configuration " + highLevelPlanerType);
 
-                if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
                 {
-                    RunMAFSProjectionExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+                    Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsToRun(args);
+                    RunOptimalDependenciesSolverExperimentOnSpecificProblems(selectorsDomainsAndProblems);
                 }
-                else // if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                else
                 {
-                    RunProjectionOnlyExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+
+                    Dictionary<string, int[]> selectorsDomainsAndPercentages = GetDomainAndSelectorIndexesAndPercentagesToUse(args);
+
+                    if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                    {
+                        RunMAFSProjectionExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+                    }
+                    else // if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                    {
+                        RunProjectionOnlyExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
+                    }
                 }
             }
             else if (creatingNewBenchmarks)
@@ -2848,13 +3166,10 @@ namespace Planning
                 }
             }
 
-            int plannerChoice = int.Parse(args[0]);
             int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
             int[] domains = new int[percentagesSepIndex - domainsSepIndex - 1];
             int[] percentages = new int[args.Length - percentagesSepIndex - 1];
-
-            Console.WriteLine("Chosen planner number " + plannerChoice);
-            ChoosePlanner(plannerChoice);
+            
 
             Console.WriteLine("Selectors are:");
             for (int i = 0; i < selectors.Length; i++)
@@ -2902,6 +3217,91 @@ namespace Planning
             */
         }
 
+        private static Dictionary<string, int[]> GetOptimalArgumentsToRun(string[] args)
+        {
+            /*
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
+            }
+            int selectorsSepIndex = -1;
+            int domainsSepIndex = -1;
+            int problemsSepIndex = -1;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Equals("s"))
+                {
+                    selectorsSepIndex = i;
+                }
+                else if (args[i].Equals("d"))
+                {
+                    domainsSepIndex = i;
+                }
+                else if (args[i].Equals("p"))
+                {
+                    problemsSepIndex = i;
+                }
+            }
+
+            int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
+            int[] domains = new int[problemsSepIndex - domainsSepIndex - 1];
+            int[] problems = new int[args.Length - problemsSepIndex - 1];
+
+
+            Console.WriteLine("Selectors are:");
+            for (int i = 0; i < selectors.Length; i++)
+            {
+                selectors[i] = int.Parse(args[i + selectorsSepIndex + 1]);
+                Console.WriteLine(selectors[i]);
+                if (selectors[i] < 0 || selectors[i] > 4)
+                    throw new Exception("The selectors indexes must be between [0, 4]");
+            }
+
+            Console.WriteLine("Domains are:");
+            for (int i = 0; i < domains.Length; i++)
+            {
+                domains[i] = int.Parse(args[i + domainsSepIndex + 1]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
+            }
+
+            Console.WriteLine("Problems are:");
+            for (int i = 0; i < problems.Length; i++)
+            {
+                problems[i] = int.Parse(args[i + problemsSepIndex + 1]);
+                Console.WriteLine(problems[i]);
+                if (problems[i] < 0 || problems[i] > 21)
+                    throw new Exception("The problems must in the integer range of [0, 21]");
+            }
+
+            Dictionary<string, int[]> selectorsDomainsAndProblems = new Dictionary<string, int[]>();
+            selectorsDomainsAndProblems.Add("selectors", selectors);
+            selectorsDomainsAndProblems.Add("domains", domains);
+            selectorsDomainsAndProblems.Add("problems", problems);
+            Console.WriteLine("Now Running those selectors on the domains indexes for the given problems by order");
+
+            return selectorsDomainsAndProblems;
+            */
+            
+            Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
+            //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            dict.Add("selectors", new int[] { 0 });
+            //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
+            dict.Add("domains", new int[] {4});
+            dict.Add("problems", new int[] {1});
+            SymPAFilename1 = GetSymPAFilename(1);
+            SymPAFilename2 = GetSymPAFilename(2);
+            return dict;
+            
+        }
+
+        private static string GetSymPAFilename(int k)
+        {
+            string filename = SymPAbaseFolderName + "/SymPA_" + k + "/plan_irr";
+            return filename;
+        }
+
         private static void ChoosePlanner(int plannerChoice)
         {
             if(plannerChoice == 0)
@@ -2914,9 +3314,14 @@ namespace Planning
                 Console.WriteLine("The chosen planner is the MAFS planner");
                 highLevelPlanerType = HighLevelPlanerType.ProjectionMafs;
             }
+            else if (plannerChoice == 2)
+            {
+                Console.WriteLine("The chosen planner is the Optimal Dependencies planner");
+                highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner;
+            }
             else
             {
-                throw new ArgumentException("The chosen planner must be 0 or 1 at this point");
+                throw new ArgumentException("The chosen planner must be 0, 1 or 2 at this point");
             }
         }
     }
