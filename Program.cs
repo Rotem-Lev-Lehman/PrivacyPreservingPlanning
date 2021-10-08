@@ -140,7 +140,7 @@ namespace Planning
         //Cancelation token:
         public static CancellationTokenSource cancellationTokenSource;
 
-        public static bool runningOnLinux = false;
+        public static bool runningOnLinux = true;
         public static string baseFolderNameMyComputer = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         public static string baseFolderNameLinuxServer = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
         public static string SymPAbaseFolderName = "/home/levlerot/CPPP/optimal/unsolvability/improved_sympa"; //path of the SymPA files (on the cluster server)
@@ -2791,8 +2791,8 @@ namespace Planning
             }
             else if (runningExpOnClusterServer)
             {
-                //int plannerChoice = int.Parse(args[0]);
-                int plannerChoice = 2;
+                int plannerChoice = int.Parse(args[0]);
+                //int plannerChoice = 2;
                 ChoosePlanner(plannerChoice);
                 Console.WriteLine("Running configuration " + highLevelPlanerType);
 
