@@ -2370,8 +2370,8 @@ namespace Planning
 
             string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
 
-            //goldenStandardRootDirectory = baseFolderName + @"\goldenStandard";
-            //System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
+            goldenStandardRootDirectory = baseFolderName + "/goldenStandard";
+            System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
             string dependenciesPath = experimentPath + "Dependecies/";
 
@@ -2480,8 +2480,8 @@ namespace Planning
 
             foreach (string domainName in domains)
             {
-                //goldenStandardDomainDirectory = goldenStandardRootDirectory + "/" + domainName;
-                //System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
+                goldenStandardDomainDirectory = goldenStandardRootDirectory + "/" + domainName;
+                System.IO.Directory.CreateDirectory(goldenStandardDomainDirectory);
                 foreach (string problemName in domain2problems[domainName])
                 {
                     currProblem = problemName;
