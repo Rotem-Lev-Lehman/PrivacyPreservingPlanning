@@ -37,7 +37,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 usingFF = true;
                 usingFD = false;
             }
-            if(Program.typeOfSelector == "FF_and_FD")
+            else if(Program.typeOfSelector == "FF_and_FD")
             {
                 usingSymPA = false;
                 usingFF = true;
