@@ -496,8 +496,21 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             tempSymPAPDDLFolder = Program.baseFolderName + "/OptimalTempFiles/" + Program.currentFFProcessName + "/" + DateTime.Now.Ticks;
             System.IO.Directory.CreateDirectory(tempSymPAPDDLFolder);
 
-            Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token));
-            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect, token));
+            List<Agent> m_agents_up2down = new List<Agent>(m_agents);
+            List<Agent> m_agents_down2up = new List<Agent>(m_agents);
+
+            Dictionary<Agent, List<Dependency>> agentsDependencies_up2down = new Dictionary<Agent, List<Dependency>>(agentsDependencies);
+            Dictionary<Agent, List<Dependency>> agentsDependencies_down2up = new Dictionary<Agent, List<Dependency>>(agentsDependencies);
+
+            Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary_up2down = new Dictionary<Agent, Dictionary<Predicate, List<Dependency>>>(agentsPreconditionDictionary);
+            Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary_down2up = new Dictionary<Agent, Dictionary<Predicate, List<Dependency>>>(agentsPreconditionDictionary);
+
+            Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect_up2down = new Dictionary<Agent, Dictionary<Action, List<Dependency>>>(agentsActions2DependenciesInEffect);
+            Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect_down2up = new Dictionary<Agent, Dictionary<Action, List<Dependency>>>(agentsActions2DependenciesInEffect);
+
+
+            Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents_up2down, agentsDependencies_up2down, agentsPreconditionDictionary_up2down, agentsActions2DependenciesInEffect_up2down, token));
+            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
 
             up2down.Start();
             down2up.Start();
