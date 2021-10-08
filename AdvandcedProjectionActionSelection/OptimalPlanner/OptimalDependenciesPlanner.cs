@@ -27,6 +27,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
         public List<string> Plan(List<Agent> m_agents)
         {
+            Console.WriteLine("Type of selector = " + Program.typeOfSelector);
             Program.isValidUp2DownPlan = true;
             Program.optimalAmountOfDependenciesForCurrentProblem = -1;
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
