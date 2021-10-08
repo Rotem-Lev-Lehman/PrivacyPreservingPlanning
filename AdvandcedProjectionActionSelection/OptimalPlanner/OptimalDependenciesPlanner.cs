@@ -27,7 +27,6 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
         public List<string> Plan(List<Agent> m_agents)
         {
-            Console.WriteLine("Type of selector = " + Program.typeOfSelector);
             Program.isValidUp2DownPlan = true;
             Program.optimalAmountOfDependenciesForCurrentProblem = -1;
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
@@ -104,7 +103,6 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             }
             else
             {
-                Console.WriteLine("HERE*******************************************************************************************");
                 plan = RunVersion4Or5PddlBuilderUsingThreads(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
             }
             
@@ -503,7 +501,6 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
             up2down.Start();
             down2up.Start();
-            Console.WriteLine("here*********************************************************************************************");
 
             int finishedIdx = Task.WaitAny(up2down, down2up);
             cancellationTokenSource.Cancel();
