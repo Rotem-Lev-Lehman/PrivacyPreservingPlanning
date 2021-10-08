@@ -103,6 +103,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             }
             else
             {
+                Console.WriteLine("HERE*******************************************************************************************");
                 plan = RunVersion4Or5PddlBuilderUsingThreads(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
             }
             
