@@ -22,6 +22,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
         private readonly object boundsLock = new object();
         private string tempSymPAPDDLFolder;
+        private bool upperFoundOptimal;
+        private bool lowerFoundOptimal;
 
         public List<string> Plan(List<Agent> m_agents)
         {
@@ -408,6 +410,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                     else
                     {
                         Console.WriteLine("The amount of dependencies needed for this problem can not be reduced to " + i + ", which means that " + (i + 1) + " is the optimal amount of dependencies needed for this problem");
+                        upperFoundOptimal = true;
                         break;
                     }
                 }
@@ -459,6 +462,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                         }
                         UpdateBoundAndPlan(i, plan, false);
                         Console.WriteLine("The optimal amount of dependencies is " + i + " :)");
+                        lowerFoundOptimal = true;
                         break;
                     }
                     else
@@ -486,6 +490,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             UpdateBoundAndPlan(int.MaxValue, null, true);
             UpdateBoundAndPlan(0, null, false);
             Program.foundOptimal = false;
+            upperFoundOptimal = false;
+            lowerFoundOptimal = false;
 
             tempSymPAPDDLFolder = Program.baseFolderName + "/OptimalTempFiles/" + Program.currentFFProcessName + "/" + DateTime.Now.Ticks;
             System.IO.Directory.CreateDirectory(tempSymPAPDDLFolder);
@@ -495,6 +501,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
             up2down.Start();
             down2up.Start();
+            Console.WriteLine("here*********************************************************************************************");
 
             int finishedIdx = Task.WaitAny(up2down, down2up);
             cancellationTokenSource.Cancel();
@@ -508,13 +515,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             List<string> up2downPlan = up2down.Result;
             List<string> down2upPlan = down2up.Result;
 
-            if(down2upPlan != null)
+            if(down2upPlan != null || lowerFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentLowerBoundForOptimalDep;
                 Program.foundOptimal = true;
                 return down2upPlan;
             }
-            if(Program.currentLowerBoundForOptimalDep == Program.currentUpperBoundForOptimalDep)
+            if(Program.currentLowerBoundForOptimalDep == Program.currentUpperBoundForOptimalDep || upperFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentUpperBoundForOptimalDep;
                 Program.foundOptimal = true;
