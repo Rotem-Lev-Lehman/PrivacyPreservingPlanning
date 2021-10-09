@@ -529,8 +529,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             cancellationTokenSource.Dispose();
             Program.KillPlanners();
 
-            System.IO.Directory.Delete(tempSymPAPDDLFolder, true);
-            System.IO.Directory.Delete(tempSymPAPDDLFolder2, true);
+            //System.IO.Directory.Delete(tempSymPAPDDLFolder, true);
+            //System.IO.Directory.Delete(tempSymPAPDDLFolder2, true);
 
             List<string> up2downPlan = up2down.Result;
             List<string> down2upPlan = down2up.Result;
