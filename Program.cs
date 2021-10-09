@@ -3298,6 +3298,7 @@ namespace Planning
             SymPAFilename2 = GetSymPAFilename(sympa2);
             Console.WriteLine(SymPAFilename1);
             Console.WriteLine(SymPAFilename2);
+            Console.WriteLine();
 
             Dictionary<string, int[]> selectorsDomainsAndProblems = new Dictionary<string, int[]>();
             selectorsDomainsAndProblems.Add("selectors", selectors);
