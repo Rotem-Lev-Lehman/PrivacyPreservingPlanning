@@ -181,12 +181,12 @@ if __name__ == '__main__':
     results_dir = f'{output_main_dir}/results'
     errors_dir = f'{output_main_dir}/errors'
 
-    # start_sympa = int(sys.argv[1])
-    # end_sympa = int(sys.argv[2])
-    # domains_to_run = sys.argv[3:]
-    start_sympa = 0
-    end_sympa = 31
-    domains_to_run = ['1', '2']
+    start_sympa = int(sys.argv[1])
+    end_sympa = int(sys.argv[2])
+    domains_to_run = sys.argv[3:]
+    # start_sympa = 0
+    # end_sympa = 31
+    # domains_to_run = ['1', '2']
 
     free_sympa_files, num_of_sympa_parallel = create_free_sympa_files(start_sympa, end_sympa)
 
