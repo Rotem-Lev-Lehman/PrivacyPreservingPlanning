@@ -195,8 +195,14 @@ namespace Planning
             string FFdomainName = null, FFproblemName = null;
             if (bUseFF)
             {
-                //pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
-                pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName);
+                if (Program.runningOnLinux)
+                {
+                    pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName);
+                }
+                else
+                {
+                    pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                }
             }
             if (bUseFD)
             {
@@ -234,10 +240,13 @@ namespace Planning
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                     //Console.WriteLine("3");
-                    // Delete domain and problem files:
-                    File.Delete(FFdomainName);
-                    File.Delete(FFproblemName);
-                    File.Delete(FFproblemName + ".ff");
+                    if (Program.runningOnLinux)
+                    {
+                        // Delete domain and problem files:
+                        File.Delete(FFdomainName);
+                        File.Delete(FFproblemName);
+                        File.Delete(FFproblemName + ".ff");
+                    }
                 }
                 else if (bFDDone)
                 {
@@ -1155,11 +1164,11 @@ namespace Planning
 
                 pFF.StartInfo.UseShellExecute = false;
                 pFF.StartInfo.RedirectStandardInput = true;
-                //pFF.StartInfo.RedirectStandardOutput = true;
-                //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                pFF.StartInfo.RedirectStandardOutput = true;
+                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
                 pFF.Start();
                 FFOutput[pFF.Id] = "";
-                //pFF.BeginOutputReadLine();
+                pFF.BeginOutputReadLine();
             }
             //m.ReleaseMutex();
 

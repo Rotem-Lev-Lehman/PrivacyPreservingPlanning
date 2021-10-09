@@ -2791,8 +2791,8 @@ namespace Planning
             }
             else if (runningExpOnClusterServer)
             {
-                int plannerChoice = int.Parse(args[0]);
-                //int plannerChoice = 2;
+                //int plannerChoice = int.Parse(args[0]);
+                int plannerChoice = 2;
                 ChoosePlanner(plannerChoice);
                 Console.WriteLine("Running configuration " + highLevelPlanerType);
 

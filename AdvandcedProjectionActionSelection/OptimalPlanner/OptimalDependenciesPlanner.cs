@@ -28,6 +28,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         public List<string> Plan(List<Agent> m_agents)
         {
             Program.isValidUp2DownPlan = true;
+            Program.isValidDown2UpPlan = true;
             Program.optimalAmountOfDependenciesForCurrentProblem = -1;
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
             if(Program.typeOfSelector == "FF_and_SymPA")
