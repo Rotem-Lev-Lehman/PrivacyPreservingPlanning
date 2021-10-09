@@ -569,6 +569,7 @@ namespace Planning
                             }
                             else // if (p == pSymPA)
                             {
+                                Console.WriteLine("Was Here***********************************************************************************")
                                 //need to check this exitCode;
                                 int exitCode = p.ExitCode;
                                 if (exitCode == 22 && a.Count > 1 && nextP != -1) //if it is not the only process (we are running FF too), than try to wait for FF
