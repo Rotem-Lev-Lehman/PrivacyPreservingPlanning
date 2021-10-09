@@ -634,8 +634,9 @@ namespace Planning
 
             }
             KillAll(a.ToList());
-            List<Process> lPlanningProcesses = GetPlanningProcesses();
-            KillAll(lPlanningProcesses);
+
+            //List<Process> lPlanningProcesses = GetPlanningProcesses();
+            //KillAll(lPlanningProcesses);
 
             ThrowIfCancellationRequested();
             return bFDDone || bFFDone || bSymPADone;
