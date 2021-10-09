@@ -159,7 +159,7 @@ namespace Planning
         //public static string baseFolderName = @"D:\rotem\GPPP(last_v)"; //Right server's path
 
         public static readonly int maxTimeInMinutesRegularExperiment = 5; //After 5 minutes, there will be a timeout. -- For other experiments
-        public static readonly int maxTimeInMinutesOptimalExperiment = 5; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
+        public static readonly int maxTimeInMinutesOptimalExperiment = 30; //After 30 minutes, there will be a timeout. -- For optimal dependencies planner
         public static int maxTimeInMinutes { 
             get {
                 if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
@@ -3300,7 +3300,7 @@ namespace Planning
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] {4});
-            dict.Add("problems", new int[] {0});
+            dict.Add("problems", new int[] {1});
             SymPAFilename1 = GetSymPAFilename(1);
             SymPAFilename2 = GetSymPAFilename(2);
             return dict;
