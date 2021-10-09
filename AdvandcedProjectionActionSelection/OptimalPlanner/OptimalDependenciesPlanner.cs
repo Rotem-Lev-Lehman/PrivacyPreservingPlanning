@@ -32,7 +32,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
             if(Program.typeOfSelector == "FF_and_SymPA")
             {
-                usingSymPA = false;
+                usingSymPA = true;
                 usingFF = true;
                 usingFD = false;
             }
