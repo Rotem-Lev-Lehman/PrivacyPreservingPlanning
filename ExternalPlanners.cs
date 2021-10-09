@@ -348,12 +348,8 @@ namespace Planning
         {
             string sOutput = FFOutput[iPID];
             Console.WriteLine("FFOutput******************************************************************************************");
-            //Console.WriteLine(sOutput);
-            foreach(KeyValuePair<int, string> pair in FFOutput)
-            {
-                Console.WriteLine("Key = " + pair.Key);
-                Console.WriteLine(pair.Value);
-            }
+            Console.WriteLine(sOutput);
+            
             //Console.WriteLine("Writing FF output:");
             //Console.WriteLine(sOutput);
             MemoryStream planMs = new MemoryStream();
@@ -1243,11 +1239,11 @@ namespace Planning
 
                 pFF.StartInfo.UseShellExecute = false;
                 //pFF.StartInfo.RedirectStandardInput = true;
-                pFF.StartInfo.RedirectStandardOutput = true;
-                pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
+                //pFF.StartInfo.RedirectStandardOutput = true;
+                //pFF.OutputDataReceived += new DataReceivedEventHandler(FFOutputHandler);
                 pFF.Start();
                 FFOutput[pFF.Id] = "";
-                pFF.BeginOutputReadLine();
+                //pFF.BeginOutputReadLine();
             }
             //m.ReleaseMutex();
 
