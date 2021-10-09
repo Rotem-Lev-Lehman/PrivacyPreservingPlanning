@@ -92,7 +92,7 @@ namespace Planning
                 {
                     //Console.WriteLine("Plan found by FF");
                     Thread.Sleep(150);
-                    lPlan = ReadFFPlan(process[0].Id, out bUnsolvable);
+                    lPlan = ReadFFPlan(process[0].Id, null, out bUnsolvable);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                 }
@@ -192,12 +192,12 @@ namespace Planning
 
           //  string sFDPath = @"C:\cygwin\home\shlomi\FastDownward\src\";
             Process pFF = null, pFD = null, pSymPA = null;
-            string FFdomainName = null, FFproblemName = null;
+            string FFdomainName = null, FFproblemName = null, FFOutputPath = null;
             if (bUseFF)
             {
                 if (Program.runningOnLinux)
                 {
-                    pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName);
+                    pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName, out FFOutputPath);
                 }
                 else
                 {
@@ -236,7 +236,7 @@ namespace Planning
                     //Console.WriteLine("2");
                     //Console.WriteLine("Plan found by FF");
                     Thread.Sleep(150);
-                    lPlan = ReadFFPlan(pFF.Id, out bUnsolvable);
+                    lPlan = ReadFFPlan(pFF.Id, FFOutputPath, out bUnsolvable);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                     //Console.WriteLine("3");
@@ -330,7 +330,7 @@ namespace Planning
                 {
                     //  Console.WriteLine("Plan found by FF");
                     Thread.Sleep(200);
-                    lPlan = ReadFFPlan(process[0].Id, out bUnsolvable);
+                    lPlan = ReadFFPlan(process[0].Id, null, out bUnsolvable);
                     KillAll(process.ToList());
                 }
                 else if (bFDDone)
@@ -344,9 +344,18 @@ namespace Planning
             }
             return null;
         }
-        public List<string> ReadFFPlan(int iPID, out bool bUnsolvable)
+        public List<string> ReadFFPlan(int iPID, string ffOutputPath, out bool bUnsolvable)
         {
-            string sOutput = FFOutput[iPID];
+            string sOutput;
+            if (Program.runningOnLinux)
+            {
+                sOutput = File.ReadAllText(ffOutputPath);
+            }
+            else
+            {
+                sOutput = FFOutput[iPID];
+            }
+            
             Console.WriteLine("FFOutput******************************************************************************************");
             Console.WriteLine(sOutput);
             
@@ -1198,7 +1207,7 @@ namespace Planning
             return pFF;
         }
 
-        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem, out string domainName, out string problemName)
+        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem, out string domainName, out string problemName, out string outputPath)
         {
             msProblem.Position = 0;
             msDomain.Position = 0;
@@ -1227,15 +1236,19 @@ namespace Planning
             srFct.Close();
             problemWriter.Close();
 
+            outputPath = "ff_output_" + Program.currentFFProcessName + "_" + timestamp + ".out";
+
 
             //m.WaitOne();
             lock (m)
             {
                 pFF = new Process();
 
-                pFF.StartInfo.FileName = ffPath;
-                pFF.StartInfo.Arguments = "-o " + domainName + " -f " + problemName;
+                //pFF.StartInfo.FileName = ffPath;
+                //pFF.StartInfo.Arguments = "-o " + domainName + " -f " + problemName;
 
+                pFF.StartInfo.FileName = "run_ff_script.sh";
+                pFF.StartInfo.Arguments = domainName + " " + problemName + " " + outputPath + " " + ffPath;
 
                 pFF.StartInfo.UseShellExecute = false;
                 //pFF.StartInfo.RedirectStandardInput = true;
