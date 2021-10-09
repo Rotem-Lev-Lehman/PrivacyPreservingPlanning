@@ -750,7 +750,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             //ExternalPlanners externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
             ExternalPlanners externalPlanners = new ExternalPlanners(default(CancellationToken), null);
             //List<string> plan = externalPlanners.ManualSolve(problem, domain);
-            List<string> plan = externalPlanners.Plan(usingFF, usingFD, usingSymPA, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, SymPAFilename);
+            List<string> plan = externalPlanners.Plan(usingFF, usingFD, false, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, null);
             return plan;
         }
 
