@@ -235,9 +235,9 @@ namespace Planning
                     Thread.Sleep(50);
                     //Console.WriteLine("3");
                     // Delete domain and problem files:
-                    //File.Delete(FFdomainName);
-                    //File.Delete(FFproblemName);
-                    //File.Delete(FFproblemName + ".ff");
+                    File.Delete(FFdomainName);
+                    File.Delete(FFproblemName);
+                    File.Delete(FFproblemName + ".ff");
                 }
                 else if (bFDDone)
                 {

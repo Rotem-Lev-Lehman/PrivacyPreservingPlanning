@@ -32,7 +32,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Program.planForOptimalAmountOfDependenciesForCurrentProblem = null;
             if(Program.typeOfSelector == "FF_and_SymPA")
             {
-                usingSymPA = false;
+                usingSymPA = true;
                 usingFF = true;
                 usingFD = false;
             }
@@ -747,7 +747,8 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token)
         {
             bool ans;
-            ExternalPlanners externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
+            //ExternalPlanners externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
+            ExternalPlanners externalPlanners = new ExternalPlanners(default(CancellationToken), null);
             //List<string> plan = externalPlanners.ManualSolve(problem, domain);
             List<string> plan = externalPlanners.Plan(usingFF, usingFD, usingSymPA, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, SymPAFilename);
             return plan;
