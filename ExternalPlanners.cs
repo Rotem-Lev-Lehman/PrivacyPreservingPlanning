@@ -1247,7 +1247,7 @@ namespace Planning
                 //pFF.StartInfo.FileName = ffPath;
                 //pFF.StartInfo.Arguments = "-o " + domainName + " -f " + problemName;
 
-                pFF.StartInfo.FileName = "./run_ff_script.sh";
+                pFF.StartInfo.FileName = "run_ff_script.sh";
                 pFF.StartInfo.Arguments = domainName + " " + problemName + " " + outputPath + " " + ffPath;
 
                 pFF.StartInfo.UseShellExecute = false;
