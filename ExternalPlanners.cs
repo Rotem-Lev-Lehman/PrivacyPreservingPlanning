@@ -348,7 +348,12 @@ namespace Planning
         {
             string sOutput = FFOutput[iPID];
             Console.WriteLine("FFOutput******************************************************************************************");
-            Console.WriteLine(sOutput);
+            //Console.WriteLine(sOutput);
+            foreach(KeyValuePair<int, string> pair in FFOutput)
+            {
+                Console.WriteLine("Key = " + pair.Key);
+                Console.WriteLine(pair.Value);
+            }
             //Console.WriteLine("Writing FF output:");
             //Console.WriteLine(sOutput);
             MemoryStream planMs = new MemoryStream();
