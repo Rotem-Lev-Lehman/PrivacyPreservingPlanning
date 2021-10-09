@@ -175,7 +175,6 @@ namespace Planning
         public List<string> Plan(bool bUseFF, bool bUseFD, bool bUseSymPA, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable, string SymPAFilename, bool useSecondFFPath = false)
         {
             bUseFD = false;
-            bUseSymPA = false;
             if(bUseSymPA && SymPAFilename == null)
             {
                 throw new ArgumentNullException("SymPA Filename", "Indicated that we want to use SymPA planner, but did not indicate where is the planner located");

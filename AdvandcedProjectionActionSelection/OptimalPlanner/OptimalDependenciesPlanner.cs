@@ -35,7 +35,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             if(Program.typeOfSelector == "FF_and_SymPA")
             {
                 usingSymPA = true;
-                usingFF = true;
+                usingFF = false;
                 usingFD = false;
             }
             else if(Program.typeOfSelector == "FF_and_FD")
@@ -518,6 +518,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
 
             Console.WriteLine("Starting both up-->down and down-->up threads now");
+            Console.WriteLine();
             up2down.Start();
             down2up.Start();
 
@@ -754,8 +755,11 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
         private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token, bool useSecondFFPath = false)
         {
             bool ans;
-            //ExternalPlanners externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
-            ExternalPlanners externalPlanners = new ExternalPlanners(default(CancellationToken), null);
+            ExternalPlanners externalPlanners;
+            if(useSecondFFPath)
+                externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder2);
+            else
+                externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
             //List<string> plan = externalPlanners.ManualSolve(problem, domain);
             List<string> plan = externalPlanners.Plan(usingFF, usingFD, false, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, null, useSecondFFPath);
             return plan;
