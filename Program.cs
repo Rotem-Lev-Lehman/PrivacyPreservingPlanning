@@ -3298,7 +3298,7 @@ namespace Planning
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] {4});
-            dict.Add("problems", new int[] {1});
+            dict.Add("problems", new int[] {0});
             SymPAFilename1 = GetSymPAFilename(1);
             SymPAFilename2 = GetSymPAFilename(2);
             return dict;
