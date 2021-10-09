@@ -38,14 +38,15 @@ def run_optimal_planner(free_sympa_files, domain, problem):
     args_list = ['dotnet', 'run', '--no-build', optimal_planner_num, 's', ff_and_sympa_selector_num, 'd', str(domain), 'p', str(problem), 'sympa', str(sympa1), str(sympa2)]
     print(f'running process {args_row}, with SymPA files: {sympa1}, {sympa2}')
     try:
-        result = subprocess.run(args_list, capture_output=True, text=True)
+
         output_filename = args_row.replace(' ', '_')
-        with open(f'{results_dir}/{output_filename}.txt', 'w') as text_file:
-            text_file.write(result.stdout)
-            # text_file.write("result.stdout")
-        with open(f'{errors_dir}/{output_filename}.txt', 'w') as text_file:
-            text_file.write(result.stderr)
-            # text_file.write("result.stderr")
+        subprocess.run(args_list, stdout=f'{results_dir}/{output_filename}.txt', stderr=f'{errors_dir}/{output_filename}.txt', text=True)
+        # with open(f'{results_dir}/{output_filename}.txt', 'w') as text_file:
+        #     text_file.write(result.stdout)
+        #     # text_file.write("result.stdout")
+        # with open(f'{errors_dir}/{output_filename}.txt', 'w') as text_file:
+        #     text_file.write(result.stderr)
+        #     # text_file.write("result.stderr")
         print(f'done {output_filename}')
     except Exception as e:
         print(e)
