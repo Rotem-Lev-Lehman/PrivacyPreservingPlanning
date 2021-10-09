@@ -352,11 +352,11 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 PddlBuilderForOptimalDependenciesPlanningVer4 pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
                 pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
-                Console.WriteLine("Solving without limitation to establish the maximum amount of dependencies we can publish");
+                Console.WriteLine("UP2DOWN - " + "Solving without limitation to establish the maximum amount of dependencies we can publish");
                 plan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename1, token);
                 if (plan == null)
                 {
-                    Console.WriteLine("Could not solve even without limitation. This is a hard problem.");
+                    Console.WriteLine("UP2DOWN - " + "Could not solve even without limitation. This is a hard problem.");
                     return null;
                 }
                 if (!VerifyPlan(Program.currentJointDomain, Program.currentJointProblem, plan))
@@ -367,27 +367,27 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                 int amountOfDependencies = CalculateAmountOfDependenciesForPlan(plan);
 
                 UpdateBoundAndPlan(amountOfDependencies, plan, true);
-                Console.WriteLine("The amount of used dependencies in the plan that was made is: " + amountOfDependencies);
+                Console.WriteLine("UP2DOWN - " + "The amount of used dependencies in the plan that was made is: " + amountOfDependencies);
 
                 if (amountOfDependencies == 0)
                 {
-                    Console.WriteLine("0 is the minimal number of dependencies, which means that we have finished this planning process :)");
+                    Console.WriteLine("UP2DOWN - " + "0 is the minimal number of dependencies, which means that we have finished this planning process :)");
                 }
                 else
                 {
-                    Console.WriteLine("Starting to loop over possible amounts of dependencies from maximum of: " + (amountOfDependencies - 1) + " to see when is it impossible to solve the problem");
+                    Console.WriteLine("UP2DOWN - " + "Starting to loop over possible amounts of dependencies from maximum of: " + (amountOfDependencies - 1) + " to see when is it impossible to solve the problem");
                 }
 
                 for (int i = amountOfDependencies - 1; i >= 0 && NeedToContinueMainLoop(); i--)
                 {
                     token.ThrowIfCancellationRequested();
 
-                    Console.WriteLine("Trying to publish maximum " + i + " dependencies for each agent");
+                    Console.WriteLine("UP2DOWN - " + "Trying to publish maximum " + i + " dependencies for each agent");
                     pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
                     pddlBuilder.UpdateMaxDependenciesRevealed(i);
                     pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
-                    Console.WriteLine("Sending the pddl files to the external planners");
+                    Console.WriteLine("UP2DOWN - " + "Sending the pddl files to the external planners");
                     List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename1, token);
                     if (tmpPlan != null)
                     {
@@ -404,14 +404,14 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                         }
                         else if (currAmountOfDependencies > i)
                         {
-                            throw new Exception("Something is wrong here, we can not be using more dependencies than allowed!");
+                            throw new Exception("UP2DOWN - " + "Something is wrong here, we can not be using more dependencies than allowed!");
                         }
                         UpdateBoundAndPlan(i, plan, true);
-                        Console.WriteLine("The amount of dependencies needed for this problem can be reduces to " + i);
+                        Console.WriteLine("UP2DOWN - " + "The amount of dependencies needed for this problem can be reduces to " + i);
                     }
                     else
                     {
-                        Console.WriteLine("The amount of dependencies needed for this problem can not be reduced to " + i + ", which means that " + (i + 1) + " is the optimal amount of dependencies needed for this problem");
+                        Console.WriteLine("UP2DOWN - " + "The amount of dependencies needed for this problem can not be reduced to " + i + ", which means that " + (i + 1) + " is the optimal amount of dependencies needed for this problem");
                         upperFoundOptimal = true;
                         break;
                     }
@@ -419,7 +419,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             }
             catch (OperationCanceledException canceledEx)
             {
-                Console.WriteLine("Terminating the up-->down thread");
+                Console.WriteLine("UP2DOWN - " + "Terminating the up-->down thread");
             }
             return plan;
         }
@@ -432,18 +432,18 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             {
                 UpdateBoundAndPlan(0, plan, false);
 
-                Console.WriteLine("Starting to loop over possible amounts of dependencies from minimum of: 0 towards optimal value (down-->up) to see when is it possible to solve the problem");
+                Console.WriteLine("DOWN2UP - " + "Starting to loop over possible amounts of dependencies from minimum of: 0 towards optimal value (down-->up) to see when is it possible to solve the problem");
 
                 for (int i = 0; NeedToContinueMainLoop(); i++)
                 {
                     token.ThrowIfCancellationRequested();
 
-                    Console.WriteLine("Trying to publish maximum " + i + " dependencies for each agent");
+                    Console.WriteLine("DOWN2UP - " + "Trying to publish maximum " + i + " dependencies for each agent");
                     pddlBuilder = new PddlBuilderForOptimalDependenciesPlanningVer4();
                     pddlBuilder.UpdateMaxDependenciesRevealed(i);
                     pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
-                    Console.WriteLine("Sending the pddl files to the external planners");
+                    Console.WriteLine("DOWN2UP - " + "Sending the pddl files to the external planners");
                     List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename2, token, true);
                     if (tmpPlan != null)
                     {
@@ -456,27 +456,27 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                         int currAmountOfDependencies = CalculateAmountOfDependenciesForPlan(plan);
                         if (currAmountOfDependencies < i)
                         {
-                            throw new Exception("Something is wrong here, we already showed that we can not solve the problem with less dependencies than " + i);
+                            throw new Exception("DOWN2UP - " + "Something is wrong here, we already showed that we can not solve the problem with less dependencies than " + i);
                         }
                         else if (currAmountOfDependencies > i)
                         {
-                            throw new Exception("Something is wrong here, we can not be using more dependencies than allowed!");
+                            throw new Exception("DOWN2UP - " + "Something is wrong here, we can not be using more dependencies than allowed!");
                         }
                         UpdateBoundAndPlan(i, plan, false);
-                        Console.WriteLine("The optimal amount of dependencies is " + i + " :)");
+                        Console.WriteLine("DOWN2UP - " + "The optimal amount of dependencies is " + i + " :)");
                         lowerFoundOptimal = true;
                         break;
                     }
                     else
                     {
                         UpdateBoundAndPlan(i + 1, plan, false);
-                        Console.WriteLine("Cannot solve the problem with " + i + " dependencies - Lower bound can be increased to " + (i + 1));
+                        Console.WriteLine("DOWN2UP - " + "Cannot solve the problem with " + i + " dependencies - Lower bound can be increased to " + (i + 1));
                     }
                 }
             }
             catch (OperationCanceledException canceledEx)
             {
-                Console.WriteLine("Terminating the down-->up thread");
+                Console.WriteLine("DOWN2UP - " + "Terminating the down-->up thread");
             }
             return plan;
         }
@@ -517,6 +517,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents_up2down, agentsDependencies_up2down, agentsPreconditionDictionary_up2down, agentsActions2DependenciesInEffect_up2down, token));
             Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
 
+            Console.WriteLine("Starting both up-->down and down-->up threads now");
             up2down.Start();
             down2up.Start();
 
