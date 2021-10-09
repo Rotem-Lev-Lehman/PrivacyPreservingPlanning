@@ -40,13 +40,10 @@ def run_optimal_planner(free_sympa_files, domain, problem):
     try:
 
         output_filename = args_row.replace(' ', '_')
-        subprocess.run(args_list, stdout=f'{results_dir}/{output_filename}.txt', stderr=f'{errors_dir}/{output_filename}.txt', universal_newlines=True)
-        # with open(f'{results_dir}/{output_filename}.txt', 'w') as text_file:
-        #     text_file.write(result.stdout)
-        #     # text_file.write("result.stdout")
-        # with open(f'{errors_dir}/{output_filename}.txt', 'w') as text_file:
-        #     text_file.write(result.stderr)
-        #     # text_file.write("result.stderr")
+        with open(f'{results_dir}/{output_filename}.txt', 'w') as results_file:
+            with open(f'{errors_dir}/{output_filename}.txt', 'w') as errors_file:
+                subprocess.run(args_list, stdout=results_file, stderr=errors_file, universal_newlines=True)
+
         print(f'done {output_filename}')
     except Exception as e:
         print(e)
