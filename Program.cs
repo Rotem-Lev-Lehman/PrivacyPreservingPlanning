@@ -104,6 +104,7 @@ namespace Planning
 
         //ff process name:
         public static string currentFFProcessName = null;
+        public static string currentFFProcessName2 = null;
 
         //creating traces after solution was found:
         public static List<string> highLevelPlanForTraces = null;
@@ -2489,12 +2490,19 @@ namespace Planning
                     {
                         // copy the ff.exe file to be as the domain's name:
                         currentFFProcessName = "ff_" + plannerName + "_" + domainName + "_" + problemName + "_" + selectorType;
-                        string newPathAndName = currentFFProcessName + ".exe";
-                        if (!File.Exists(newPathAndName))
-                            System.IO.File.Copy(oldPathAndName, newPathAndName);
-                        ExternalPlanners.ffPath = newPathAndName;
+                        currentFFProcessName2 = currentFFProcessName + "_down2up";
+                        currentFFProcessName = currentFFProcessName + "_up2down";
+                        string newPathAndName1 = currentFFProcessName + ".exe";
+                        if (!File.Exists(newPathAndName1))
+                            System.IO.File.Copy(oldPathAndName, newPathAndName1);
+                        string newPathAndName2 = currentFFProcessName2 + ".exe";
+                        if (!File.Exists(newPathAndName2))
+                            System.IO.File.Copy(oldPathAndName, newPathAndName2);
+                        ExternalPlanners.ffPath = newPathAndName1;
+                        ExternalPlanners.ffPath2 = newPathAndName2;
 
                         currentFFProcessName = currentFFProcessName.ToLower();
+                        currentFFProcessName2 = currentFFProcessName2.ToLower();
 
                         // start:
 

@@ -13,6 +13,7 @@ namespace Planning
     {
 
         public static string ffPath = @"ff.exe";
+        public static string ffPath2 = @"ff.exe";
         public static string cygwinPath = @"C:\cygwin\";
         public static string fdOutputPath = @"C:\cygwin\home\shlomi\";
 
@@ -171,7 +172,7 @@ namespace Planning
             return res;
         }
 
-        public List<string> Plan(bool bUseFF, bool bUseFD, bool bUseSymPA, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable, string SymPAFilename)
+        public List<string> Plan(bool bUseFF, bool bUseFD, bool bUseSymPA, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable, string SymPAFilename, bool useSecondFFPath = false)
         {
             Console.WriteLine("In external planners***********************************************************************************");
             bUseFD = false;
@@ -197,7 +198,7 @@ namespace Planning
             {
                 if (Program.runningOnLinux)
                 {
-                    pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName, out FFOutputPath);
+                    pFF = RunFFWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), out FFdomainName, out FFproblemName, out FFOutputPath, useSecondFFPath);
                 }
                 else
                 {
@@ -246,6 +247,7 @@ namespace Planning
                         File.Delete(FFdomainName);
                         File.Delete(FFproblemName);
                         File.Delete(FFproblemName + ".ff");
+                        File.Delete(FFOutputPath);
                     }
                 }
                 else if (bFDDone)
@@ -1207,7 +1209,7 @@ namespace Planning
             return pFF;
         }
 
-        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem, out string domainName, out string problemName, out string outputPath)
+        public Process RunFFWithFiles(MemoryStream msDomain, MemoryStream msProblem, out string domainName, out string problemName, out string outputPath, bool useSecondFFPath)
         {
             msProblem.Position = 0;
             msDomain.Position = 0;
@@ -1236,7 +1238,11 @@ namespace Planning
             srFct.Close();
             problemWriter.Close();
 
-            outputPath = "ff_output_" + Program.currentFFProcessName + "_" + timestamp + ".out";
+            outputPath = "output_" + Program.currentFFProcessName + "_" + timestamp + ".out";
+
+            string ffPathToUse = ffPath;
+            if (useSecondFFPath)
+                ffPathToUse = ffPath2;
 
 
             //m.WaitOne();
@@ -1248,7 +1254,7 @@ namespace Planning
                 //pFF.StartInfo.Arguments = "-o " + domainName + " -f " + problemName;
 
                 pFF.StartInfo.FileName = "run_ff_script.sh";
-                pFF.StartInfo.Arguments = domainName + " " + problemName + " " + outputPath + " " + ffPath;
+                pFF.StartInfo.Arguments = domainName + " " + problemName + " " + outputPath + " " + ffPathToUse;
 
                 pFF.StartInfo.UseShellExecute = false;
                 //pFF.StartInfo.RedirectStandardInput = true;

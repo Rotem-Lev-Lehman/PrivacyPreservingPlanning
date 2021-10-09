@@ -22,6 +22,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
         private readonly object boundsLock = new object();
         private string tempSymPAPDDLFolder;
+        private string tempSymPAPDDLFolder2;
         private bool upperFoundOptimal;
         private bool lowerFoundOptimal;
 
@@ -443,7 +444,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                     pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
                     Console.WriteLine("Sending the pddl files to the external planners");
-                    List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename2, token);
+                    List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename2, token, true);
                     if (tmpPlan != null)
                     {
                         if (!VerifyPlan(Program.currentJointDomain, Program.currentJointProblem, tmpPlan))
@@ -497,6 +498,9 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             tempSymPAPDDLFolder = Program.baseFolderName + "/OptimalTempFiles/" + Program.currentFFProcessName + "/" + DateTime.Now.Ticks;
             System.IO.Directory.CreateDirectory(tempSymPAPDDLFolder);
 
+            tempSymPAPDDLFolder2 = Program.baseFolderName + "/OptimalTempFiles/" + Program.currentFFProcessName2 + "/" + DateTime.Now.Ticks;
+            System.IO.Directory.CreateDirectory(tempSymPAPDDLFolder2);
+
             List<Agent> m_agents_up2down = new List<Agent>(m_agents);
             List<Agent> m_agents_down2up = new List<Agent>(m_agents);
 
@@ -511,30 +515,31 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
 
             Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents_up2down, agentsDependencies_up2down, agentsPreconditionDictionary_up2down, agentsActions2DependenciesInEffect_up2down, token));
-            //Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
+            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
 
             up2down.Start();
-            //down2up.Start();
+            down2up.Start();
 
-            int finishedIdx = Task.WaitAny(up2down);//, down2up);
+            int finishedIdx = Task.WaitAny(up2down, down2up);
             cancellationTokenSource.Cancel();
             up2down.Wait();
-            //down2up.Wait();
+            down2up.Wait();
             cancellationTokenSource.Dispose();
             Program.KillPlanners();
 
             System.IO.Directory.Delete(tempSymPAPDDLFolder, true);
+            System.IO.Directory.Delete(tempSymPAPDDLFolder2, true);
 
             List<string> up2downPlan = up2down.Result;
-            //List<string> down2upPlan = down2up.Result;
-            /*
+            List<string> down2upPlan = down2up.Result;
+            
             if(down2upPlan != null || lowerFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentLowerBoundForOptimalDep;
                 Program.foundOptimal = true;
                 return down2upPlan;
             }
-            */
+            
             if(Program.currentLowerBoundForOptimalDep == Program.currentUpperBoundForOptimalDep || upperFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentUpperBoundForOptimalDep;
@@ -745,13 +750,13 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             return SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), null, default(CancellationToken));
         }
 
-        private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token)
+        private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token, bool useSecondFFPath = false)
         {
             bool ans;
             //ExternalPlanners externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
             ExternalPlanners externalPlanners = new ExternalPlanners(default(CancellationToken), null);
             //List<string> plan = externalPlanners.ManualSolve(problem, domain);
-            List<string> plan = externalPlanners.Plan(usingFF, usingFD, false, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, null);
+            List<string> plan = externalPlanners.Plan(usingFF, usingFD, false, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, null, useSecondFFPath);
             return plan;
         }
 
