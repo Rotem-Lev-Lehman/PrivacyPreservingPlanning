@@ -2801,8 +2801,8 @@ namespace Planning
             }
             else if (runningExpOnClusterServer)
             {
-                //int plannerChoice = int.Parse(args[0]);
-                int plannerChoice = 2;
+                int plannerChoice = int.Parse(args[0]);
+                //int plannerChoice = 2;
                 ChoosePlanner(plannerChoice);
                 Console.WriteLine("Running configuration " + highLevelPlanerType);
 
@@ -3230,7 +3230,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetOptimalArgumentsToRun(string[] args)
         {
-            /*
+            
             for (int i = 0; i < args.Length; i++)
             {
                 Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
@@ -3238,6 +3238,7 @@ namespace Planning
             int selectorsSepIndex = -1;
             int domainsSepIndex = -1;
             int problemsSepIndex = -1;
+            int sympaSepIndex = -1;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i].Equals("s"))
@@ -3251,6 +3252,10 @@ namespace Planning
                 else if (args[i].Equals("p"))
                 {
                     problemsSepIndex = i;
+                }
+                else if (args[i].Equals("sympa"))
+                {
+                    sympaSepIndex = i;
                 }
             }
 
@@ -3286,6 +3291,14 @@ namespace Planning
                     throw new Exception("The problems must in the integer range of [0, 21]");
             }
 
+            Console.WriteLine("Chosen SymPA files are:");
+            int sympa1 = int.Parse(args[sympaSepIndex + 1]);
+            int sympa2 = int.Parse(args[sympaSepIndex + 2]);
+            SymPAFilename1 = GetSymPAFilename(sympa1);
+            SymPAFilename2 = GetSymPAFilename(sympa2);
+            Console.WriteLine(SymPAFilename1);
+            Console.WriteLine(SymPAFilename2);
+
             Dictionary<string, int[]> selectorsDomainsAndProblems = new Dictionary<string, int[]>();
             selectorsDomainsAndProblems.Add("selectors", selectors);
             selectorsDomainsAndProblems.Add("domains", domains);
@@ -3293,8 +3306,8 @@ namespace Planning
             Console.WriteLine("Now Running those selectors on the domains indexes for the given problems by order");
 
             return selectorsDomainsAndProblems;
-            */
             
+            /*
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
             dict.Add("selectors", new int[] { 0 });
@@ -3304,7 +3317,7 @@ namespace Planning
             SymPAFilename1 = GetSymPAFilename(1);
             SymPAFilename2 = GetSymPAFilename(2);
             return dict;
-            
+            */
         }
 
         private static string GetSymPAFilename(int k)
