@@ -174,7 +174,6 @@ namespace Planning
 
         public List<string> Plan(bool bUseFF, bool bUseFD, bool bUseSymPA, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable, string SymPAFilename, bool useSecondFFPath = false)
         {
-            Console.WriteLine("In external planners***********************************************************************************");
             bUseFD = false;
             bUseSymPA = false;
             if(bUseSymPA && SymPAFilename == null)
@@ -357,9 +356,6 @@ namespace Planning
             {
                 sOutput = FFOutput[iPID];
             }
-            
-            Console.WriteLine("FFOutput******************************************************************************************");
-            Console.WriteLine(sOutput);
             
             //Console.WriteLine("Writing FF output:");
             //Console.WriteLine(sOutput);

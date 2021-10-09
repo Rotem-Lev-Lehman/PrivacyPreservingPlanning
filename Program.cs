@@ -1692,7 +1692,7 @@ namespace Planning
             Process[] processes = Process.GetProcesses();
             foreach (Process p in processes)
             {
-                if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(currentFFProcessName))
+                if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(currentFFProcessName) || (currentFFProcessName2 != null && p.ProcessName.ToLower().Contains(currentFFProcessName2)))
                     l.Add(p);
             }
             return l;
