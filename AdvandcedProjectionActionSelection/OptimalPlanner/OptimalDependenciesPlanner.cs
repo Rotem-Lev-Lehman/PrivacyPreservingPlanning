@@ -515,17 +515,17 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 
 
             Task<List<string>> up2down = new Task<List<string>>(() => RunVersion4Up2Down(m_agents_up2down, agentsDependencies_up2down, agentsPreconditionDictionary_up2down, agentsActions2DependenciesInEffect_up2down, token));
-            //Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
+            Task<List<string>> down2up = new Task<List<string>>(() => RunVersion4Down2Up(m_agents_down2up, agentsDependencies_down2up, agentsPreconditionDictionary_down2up, agentsActions2DependenciesInEffect_down2up, token));
 
             Console.WriteLine("Starting both up-->down and down-->up threads now");
             Console.WriteLine();
             up2down.Start();
-            //down2up.Start();
+            down2up.Start();
 
             int finishedIdx = Task.WaitAny(up2down);//, down2up);
             cancellationTokenSource.Cancel();
             up2down.Wait();
-            //down2up.Wait();
+            down2up.Wait();
             cancellationTokenSource.Dispose();
             Program.KillPlanners();
 
@@ -533,15 +533,15 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             System.IO.Directory.Delete(tempSymPAPDDLFolder2, true);
 
             List<string> up2downPlan = up2down.Result;
-            //List<string> down2upPlan = down2up.Result;
-            /*
+            List<string> down2upPlan = down2up.Result;
+            
             if(down2upPlan != null || lowerFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentLowerBoundForOptimalDep;
                 Program.foundOptimal = true;
                 return down2upPlan;
             }
-            */
+            
             if(Program.currentLowerBoundForOptimalDep == Program.currentUpperBoundForOptimalDep || upperFoundOptimal)
             {
                 Program.optimalAmountOfDependenciesForCurrentProblem = Program.currentUpperBoundForOptimalDep;

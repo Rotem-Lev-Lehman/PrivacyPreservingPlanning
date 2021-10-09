@@ -226,7 +226,6 @@ namespace Planning
                 process.Add(pFD);
             if (bUseSymPA)
                 process.Add(pSymPA);
-            Console.WriteLine("Num of processes to run = " + process.Count);
             //Console.WriteLine("0");
             if (WaitForProcessesWithSymPA(process, pFF, pFD, pSymPA, cMaxMilliseconds, out bFFDone, out bFDDone, out bSymPADone))
             {
