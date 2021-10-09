@@ -270,18 +270,8 @@ namespace Planning
                 else if (bSymPADone)
                 {
                     Thread.Sleep(100);
-                    int exitCode = pSymPA.ExitCode;
-                    if (exitCode == 22)
-                    {
-                        Console.WriteLine("The search was terminated due to memory limitation");
-                    }
-                    if (exitCode == 12) //need to check these things...
-                    {
-                        Console.WriteLine("There is no solution for this problem (exusted all possabilities)");
-                        unsolvableProblem = true;
-                    }
 
-                    lPlan = ReadSymPAPlan(SymPATempPDDLFolder);
+                    lPlan = ReadSymPAPlan(SymPATempPDDLFolder, out bUnsolvable);
                     KillAll(process.ToList());
                     Thread.Sleep(50);
                 }
@@ -291,10 +281,7 @@ namespace Planning
             return null;
         }
 
-        private List<string> ReadSymPAPlan(string symPATempPDDLFolder)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public List<string> Plan(string agent, bool bUseFF, bool bUseFD, Domain d, Problem p, State curentState, Formula goal, List<Action> privateActions, int cMaxMilliseconds, out bool bUnsolvable)
         {
@@ -344,6 +331,35 @@ namespace Planning
             }
             return null;
         }
+
+        private List<string> ReadSymPAPlan(string symPATempPDDLFolder, out bool bUnsolvable)
+        {
+            string[] lines = File.ReadAllLines(symPATempPDDLFolder + "/log");
+
+            string lastLine = lines[lines.Length - 1];
+            string secondToLastLine = lines[lines.Length - 2];
+
+            if(lastLine.Contains("unsolvable") || secondToLastLine.Contains("unsolvable"))
+            {
+                unsolvableProblem = true;
+                bUnsolvable = true;
+                return null;
+            }
+            else if(lastLine.Contains("solvable") || secondToLastLine.Contains("solvable"))
+            {
+                unsolvableProblem = false;
+                bUnsolvable = false;
+                return FindSymPAPlan(symPATempPDDLFolder + "/log");
+            }
+            bUnsolvable = false;
+            return null;
+        }
+
+        private List<string> FindSymPAPlan(string planFile)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> ReadFFPlan(int iPID, string ffOutputPath, out bool bUnsolvable)
         {
             string sOutput;
@@ -569,7 +585,6 @@ namespace Planning
                             }
                             else // if (p == pSymPA)
                             {
-                                Console.WriteLine("Was Here***********************************************************************************");
                                 //need to check this exitCode;
                                 int exitCode = p.ExitCode;
                                 if (exitCode == 22 && a.Count > 1 && nextP != -1) //if it is not the only process (we are running FF too), than try to wait for FF
