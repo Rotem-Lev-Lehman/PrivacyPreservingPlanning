@@ -33,6 +33,7 @@ namespace Planning
 
         private CancellationToken token;
         private string SymPATempPDDLFolder = null;
+        public static List<Process> processesCreated = new List<Process>();
 
         public static TimeSpan PlannerTimeout = new TimeSpan(0, 5, 0);
         public ExternalPlanners()
@@ -202,15 +203,18 @@ namespace Planning
                 {
                     pFF = RunFF(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
                 }
+                processesCreated.Add(pFF);
             }
             if (bUseFD)
             {
                 //pFD = RunFD(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
                 pFD = RunFDPlannerWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState));
+                processesCreated.Add(pFD);
             }
             if (bUseSymPA)
             {
                 pSymPA = RunSymPAPlannerWithFiles(d.WriteSimpleDomain(), p.WriteSimpleProblem(curentState), SymPAFilename);
+                processesCreated.Add(pSymPA);
             }
 
                 

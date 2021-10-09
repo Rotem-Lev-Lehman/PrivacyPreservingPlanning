@@ -1695,6 +1695,8 @@ namespace Planning
                 if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(currentFFProcessName) || (currentFFProcessName2 != null && p.ProcessName.ToLower().Contains(currentFFProcessName2)))
                     l.Add(p);
             }
+            l.AddRange(ExternalPlanners.processesCreated);
+            ExternalPlanners.processesCreated = new List<Process>();
             return l;
         }
 
