@@ -3261,7 +3261,7 @@ namespace Planning
 
             int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
             int[] domains = new int[problemsSepIndex - domainsSepIndex - 1];
-            int[] problems = new int[args.Length - problemsSepIndex - 1];
+            int[] problems = new int[sympaSepIndex - problemsSepIndex - 1];
 
 
             Console.WriteLine("Selectors are:");
