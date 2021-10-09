@@ -3297,7 +3297,7 @@ namespace Planning
             
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
-            dict.Add("selectors", new int[] { 0 });
+            dict.Add("selectors", new int[] { 3 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] {4});
             dict.Add("problems", new int[] {0});
