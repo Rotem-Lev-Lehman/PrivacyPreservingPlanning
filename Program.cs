@@ -1980,15 +1980,21 @@ namespace Planning
                     string[] split = dir.Split(splitChar);
                     string percentage = split[split.Length - 1].Split('_')[1];
 
-                    string line;
-                    System.IO.StreamReader file = new System.IO.StreamReader(dir + "/Results.txt");
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        line = percentage + "," + line;
-                        outFile.WriteLine(line);
-                    }
+                    string[] files = Directory.GetFiles(dir);
 
-                    file.Close();
+                    // if we have multiple output files (if we used the approach of running multiple problems of the same domain simuntanusly), we need to go over all of the files:
+                    foreach(string filePath in files)
+                    {
+                        string line;
+                        System.IO.StreamReader file = new System.IO.StreamReader(filePath);
+                        while ((line = file.ReadLine()) != null)
+                        {
+                            line = percentage + "," + line;
+                            outFile.WriteLine(line);
+                        }
+
+                        file.Close();
+                    }
                 }
             } 
 
@@ -2540,6 +2546,64 @@ namespace Planning
             }
         }
 
+        private static void RunSpecificSummarizationOfExperimentResults(string[] selectors, string[] domains, string mainPath, string collaborativeString, string dependencyString, bool v3)
+        {
+            string domainsPath = baseFolderName + "/factored/";
+            if (runWithDummyInitAction)
+            {
+                domainsPath += "domains_with_init_action/";
+            }
+            string resultName = "/experiment_results";
+            string outputFileDirectory = "/Experiment_Output_File";
+            string outputFileName = "/output.csv";
+            string recordingsDirectoryName = "/Recordings";
+
+            string oldPathAndName = "ff.exe";
+
+            string plannerName = "";
+            if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                plannerName = "proj";
+            else if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                plannerName = "mafs";
+            else if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+                plannerName = "opt";
+
+            foreach (string domainName in domains)
+            {
+                foreach (string selectorType in selectors)
+                {
+                    // start:
+
+                    Console.WriteLine("*************************************************************");
+                    Console.WriteLine("Summarizing results:");
+                    Console.WriteLine("Now using " + dependencyString + " selection");
+                    Console.WriteLine("Now using " + collaborativeString + " approaches");
+                    Console.WriteLine("Now using selector: " + selectorType);
+                    Console.WriteLine("Now running domain: " + domainName);
+                    Console.WriteLine("*************************************************************");
+
+                    typeOfSelector = selectorType;
+
+                    string currPath = mainPath + selectorType + "/" + domainName;
+                    System.IO.Directory.CreateDirectory(currPath); //create the directory if it does not exist
+
+                    string problemsPath = domainsPath + domainName;
+
+                    string resultsPath = currPath + resultName;
+                    System.IO.Directory.CreateDirectory(resultsPath); //create the directory if it does not exist
+
+                    string outputFolder = currPath + outputFileDirectory;
+                    System.IO.Directory.CreateDirectory(outputFolder); //create the directory if it does not exist
+                    string outputFilePath = outputFolder + outputFileName;
+
+                    string recordingFolder = currPath + recordingsDirectoryName;
+                    System.IO.Directory.CreateDirectory(recordingFolder); //create the directory if it does not exist
+
+                    fixExperimentsResults(resultsPath, outputFilePath);
+                }
+            }
+        }
+
         static void RunSpecificExperimentOnSpecificPercentages(string[] selectors, string[] domains, double[] percentages, string mainPath, string collaborativeString, string dependencyString)
         {
             string domainsPath = baseFolderName + "/factored/";
@@ -2609,6 +2673,60 @@ namespace Planning
                     }
                 }
             }
+        }
+
+        private static void RunSummarizationOfPlannerResults(Dictionary<string, int[]> selectorsAndDomains, string plannerType, bool optimalSelectors)
+        {
+            int[] selectorIndexesToUse = selectorsAndDomains["selectors"];
+            int[] domainIndexesToUse = selectorsAndDomains["domains"];
+
+            string[] allPossibleDependenciesSelectors;
+            if (optimalSelectors)
+            {
+                allPossibleDependenciesSelectors = new string[] { "FF_and_SymPA", "FF_and_FD", "FD", "FF" };
+            }
+            else
+            {
+                allPossibleDependenciesSelectors = new string[] { "Actions_Achiever", "Public_Predicates_Achiever", "New_Actions_Achiever", "New_Public_Predicates_Achiever", "Random"/*, "Actions_Achiever_Without_Negation", "Public_Predicates_Achiever_Without_Negation"*/ };
+            }
+
+            string[] allPossibleDependenciesDomains = { "blocksworld", "depot", "driverlog", "elevators08", "logistics00", "rovers", "satellites", "sokoban", "taxi", "wireless", "woodworking08", "zenotravel" };
+            //string[] allPossibleDependenciesDomains = { /*"DebuggingExample"*//*"TestingExample"*//*"blocksworld_3_problems"*//*"logistics00"*//*"logistics_3_problems"*//*"Logistics_Test_example"*//*"Logistics_Test_example_simple"*//*"elevators08"*//*"elevators_debugging"*//*"blocksdebug"*//*"blocks_first_problem"*//*"uav"*//*"zenotravel_test_example"*//*"zenotravel_hard_test_example"*//*"rovers_test_example"*//*"rovers_hard_test_example"*//*"MA_Blocks_test"*//*"MA_Blocksworld"*//*"MA_Blocks_easy_test"*//*"MA_Logistics_100"*//*"logistics_with_init_test"*//*"Logistics_first_prob_debug"*//*"logistics_easy"*//*"logistics_problems"*//*"elevators_last_prob"*//*"logistics_only_13_0"*//*"zenotravel_easy_probs"*//*"logistics_with_action_appliabale"*//*"logistics_only_14_0"*/"zenotravel_only_23" };
+
+            string[] dependenciesSelectors = new string[selectorIndexesToUse.Length];
+            Console.WriteLine("Selectors that we will run:");
+            for (int i = 0; i < selectorIndexesToUse.Length; i++)
+            {
+                dependenciesSelectors[i] = allPossibleDependenciesSelectors[selectorIndexesToUse[i]];
+                Console.WriteLine(dependenciesSelectors[i]);
+            }
+
+            string[] dependenciesDomains = new string[domainIndexesToUse.Length];
+            Console.WriteLine("Domains that we will run the selectors on:");
+            for (int i = 0; i < domainIndexesToUse.Length; i++)
+            {
+                dependenciesDomains[i] = allPossibleDependenciesDomains[domainIndexesToUse[i]];
+                Console.WriteLine(dependenciesDomains[i]);
+            }
+
+            Console.WriteLine("Lets start running them :)");
+
+            string experimentPath = baseFolderName + "/Experiment/" + plannerType + "/";
+
+            goldenStandardRootDirectory = baseFolderName + "/goldenStandard";
+            System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
+
+            string dependenciesPath = experimentPath + "Dependecies/";
+
+            //first run the collaborations:
+            //collaborationUsed = true;
+            //RunSpecificExperiment(collaborationSelectors, collaborationDomains, collaborationPath, "Collaborative");
+
+            //now run the non collaborations:
+            collaborationUsed = false;
+            dependencyUsed = true;
+
+            RunSpecificSummarizationOfExperimentResults(dependenciesSelectors, dependenciesDomains, dependenciesPath, "Non_Collaborative", "Dependencies", true);
         }
 
         static void SummarizeHighLevelPlanWithTheirPublishedEffects(string directoryPath)
@@ -2721,6 +2839,22 @@ namespace Planning
             RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal", true);
         }
 
+        //Summarize results after solving:
+        private static void RunSummariziationOnProjectionOnlyPlannerResults(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunSummarizationOfPlannerResults(selectorsAndDomains, "Projection_Only_journal", false);
+        }
+
+        private static void RunSummariziationOnMAFSPlannerResults(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunSummarizationOfPlannerResults(selectorsAndDomains, "MAFS_Projection_journal", false);
+        }
+
+        private static void RunSummariziationOnOptimalDependenciesPlannerResults(Dictionary<string, int[]> selectorsAndDomains)
+        {
+            RunSummarizationOfPlannerResults(selectorsAndDomains, "Optimal_Dependencies_journal", true);
+        }
+
         static StreamWriter swResults;
 
         static void Main(string[] args)
@@ -2736,12 +2870,13 @@ namespace Planning
              }*/
             
             bool runningMyExperiment = false;
-            bool runningExpOnClusterServer = true;
+            bool runningExpOnClusterServer = false;
+            bool summarizeResults = true;
 
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
 
-            runWithDummyInitAction = runningMyExperiment || runningExpOnClusterServer; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
+            runWithDummyInitAction = runningMyExperiment || runningExpOnClusterServer || summarizeResults; //if I am running Rotem's experiment, it should be using the problem with a dummy init action and not the regular one.
 
             if (runningMyExperiment)
             {
@@ -2824,6 +2959,26 @@ namespace Planning
                     {
                         RunProjectionOnlyExperimentOnSpecificPercentage(selectorsDomainsAndPercentages);
                     }
+                }
+            }
+            else if (summarizeResults)
+            {
+                int plannerChoice = int.Parse(args[0]);
+                //int plannerChoice = 2;
+                ChoosePlanner(plannerChoice);
+                Console.WriteLine("Summarizing configuration " + highLevelPlanerType);
+                Dictionary<string, int[]> selectorsAndDomains = GetDomainAndSelectorIndexes(args);
+                if(highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
+                {
+                    RunSummariziationOnOptimalDependenciesPlannerResults(selectorsAndDomains);
+                }
+                else if (highLevelPlanerType == HighLevelPlanerType.ProjectionMafs)
+                {
+                    RunSummariziationOnMAFSPlannerResults(selectorsAndDomains);
+                }
+                else //if (highLevelPlanerType == HighLevelPlanerType.Projection)
+                {
+                    RunSummariziationOnProjectionOnlyPlannerResults(selectorsAndDomains);
                 }
             }
             else if (creatingNewBenchmarks)
@@ -3147,6 +3302,65 @@ namespace Planning
             dict.Add("selectors", new int[] { 0 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] {0});
+            return dict;
+            */
+        }
+
+        private static Dictionary<string, int[]> GetDomainAndSelectorIndexes(string[] args)
+        {
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
+            }
+            int selectorsSepIndex = -1;
+            int domainsSepIndex = -1;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Equals("s"))
+                {
+                    selectorsSepIndex = i;
+                }
+                else if (args[i].Equals("d"))
+                {
+                    domainsSepIndex = i;
+                }
+            }
+
+            int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
+            int[] domains = new int[args.Length - domainsSepIndex - 1];
+
+            Console.WriteLine("Selectors are:");
+            for (int i = 0; i < selectors.Length; i++)
+            {
+                selectors[i] = int.Parse(args[i + selectorsSepIndex + 1]);
+                Console.WriteLine(selectors[i]);
+                if (selectors[i] < 0 || selectors[i] > 4)
+                    throw new Exception("The selectors indexes must be between [0, 4]");
+            }
+
+            Console.WriteLine("Domains are:");
+            for (int i = 0; i < domains.Length; i++)
+            {
+                domains[i] = int.Parse(args[i + domainsSepIndex + 1]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
+            }
+
+            Dictionary<string, int[]> selectorsAndDomains = new Dictionary<string, int[]>();
+            selectorsAndDomains.Add("selectors", selectors);
+            selectorsAndDomains.Add("domains", domains);
+            Console.WriteLine("Now Running those selectors on the domains indexes by order");
+
+            return selectorsAndDomains;
+
+            /*
+            Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
+            //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            dict.Add("selectors", new int[] { 0 });
+            //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
+            dict.Add("domains", new int[] {5});
             return dict;
             */
         }
