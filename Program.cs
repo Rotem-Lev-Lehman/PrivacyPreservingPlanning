@@ -2717,12 +2717,14 @@ namespace Planning
             System.IO.Directory.CreateDirectory(goldenStandardRootDirectory);
 
             string dependenciesPath = experimentPath + "Dependecies/";
+            if (!optimalSelectors)
+                dependenciesPath += "No_Collaboration/";
 
             //first run the collaborations:
             //collaborationUsed = true;
             //RunSpecificExperiment(collaborationSelectors, collaborationDomains, collaborationPath, "Collaborative");
 
-            //now run the non collaborations:
+                //now run the non collaborations:
             collaborationUsed = false;
             dependencyUsed = true;
 
