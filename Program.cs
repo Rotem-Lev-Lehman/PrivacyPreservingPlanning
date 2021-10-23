@@ -2838,7 +2838,7 @@ namespace Planning
         //Run on a specific set of problems:
         private static void RunOptimalDependenciesSolverExperimentOnSpecificProblems(Dictionary<string, int[]> selectorsDomainsAndProblems)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal", true);
+            RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal_2", true);
         }
 
         //Summarize results after solving:
@@ -2872,8 +2872,8 @@ namespace Planning
              }*/
             
             bool runningMyExperiment = false;
-            bool runningExpOnClusterServer = false;
-            bool summarizeResults = true;
+            bool runningExpOnClusterServer = true;
+            bool summarizeResults = false;
 
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
@@ -2945,7 +2945,8 @@ namespace Planning
 
                 if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
                 {
-                    Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsToRun(args);
+                    //Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsToRun(args);
+                    Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsNoSymPAToRun(args);
                     RunOptimalDependenciesSolverExperimentOnSpecificProblems(selectorsDomainsAndProblems);
                 }
                 else
@@ -3440,6 +3441,87 @@ namespace Planning
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
             dict.Add("domains", new int[] {5});
             dict.Add("percentages", new int[] {100});
+            return dict;
+            */
+        }
+
+        private static Dictionary<string, int[]> GetOptimalArgumentsNoSymPAToRun(string[] args)
+        {
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
+            }
+            int selectorsSepIndex = -1;
+            int domainsSepIndex = -1;
+            int problemsSepIndex = -1;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Equals("s"))
+                {
+                    selectorsSepIndex = i;
+                }
+                else if (args[i].Equals("d"))
+                {
+                    domainsSepIndex = i;
+                }
+                else if (args[i].Equals("p"))
+                {
+                    problemsSepIndex = i;
+                }
+            }
+
+            int[] selectors = new int[domainsSepIndex - selectorsSepIndex - 1];
+            int[] domains = new int[problemsSepIndex - domainsSepIndex - 1];
+            int[] problems = new int[args.Length - problemsSepIndex - 1];
+
+
+            Console.WriteLine("Selectors are:");
+            for (int i = 0; i < selectors.Length; i++)
+            {
+                selectors[i] = int.Parse(args[i + selectorsSepIndex + 1]);
+                Console.WriteLine(selectors[i]);
+                if (selectors[i] < 0 || selectors[i] > 4)
+                    throw new Exception("The selectors indexes must be between [0, 4]");
+            }
+
+            Console.WriteLine("Domains are:");
+            for (int i = 0; i < domains.Length; i++)
+            {
+                domains[i] = int.Parse(args[i + domainsSepIndex + 1]);
+                Console.WriteLine(domains[i]);
+                if (domains[i] < 0 || domains[i] > 11)
+                    throw new Exception("The domains indexes must be between [0, 11]");
+            }
+
+            Console.WriteLine("Problems are:");
+            for (int i = 0; i < problems.Length; i++)
+            {
+                problems[i] = int.Parse(args[i + problemsSepIndex + 1]);
+                Console.WriteLine(problems[i]);
+                if (problems[i] < 0 || problems[i] > 21)
+                    throw new Exception("The problems must in the integer range of [0, 21]");
+            }
+
+            Console.WriteLine();
+
+            Dictionary<string, int[]> selectorsDomainsAndProblems = new Dictionary<string, int[]>();
+            selectorsDomainsAndProblems.Add("selectors", selectors);
+            selectorsDomainsAndProblems.Add("domains", domains);
+            selectorsDomainsAndProblems.Add("problems", problems);
+            Console.WriteLine("Now Running those selectors on the domains indexes for the given problems by order");
+
+            return selectorsDomainsAndProblems;
+
+            /*
+            Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
+            //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
+            dict.Add("selectors", new int[] { 0 });
+            //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
+            dict.Add("domains", new int[] {4});
+            dict.Add("problems", new int[] {1});
+            SymPAFilename1 = GetSymPAFilename(1);
+            SymPAFilename2 = GetSymPAFilename(2);
             return dict;
             */
         }

@@ -99,10 +99,12 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             {
                 plan = RunVersion2Or3PddlBuilder(m_agents, agentsDependencies);
             }
+            /*
             else if(!usingSymPA)
             {
                 plan = RunVersion4Or5PddlBuilder(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
             }
+            */
             else
             {
                 plan = RunVersion4Or5PddlBuilderUsingThreads(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);

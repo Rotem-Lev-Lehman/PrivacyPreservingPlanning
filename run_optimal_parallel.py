@@ -50,6 +50,23 @@ def run_optimal_planner(free_sympa_files, domain, problem):
     release_sympa_planners(free_sympa_files, sympa1, sympa2)
 
 
+def run_optimal_planner_without_sympa(domain, problem):
+    optimal_planner_num = '2'
+    ff_selector_num = '3'
+    args_row = f'run {domain} p {problem}'
+    args_list = ['dotnet', 'run', '--no-build', optimal_planner_num, 's', ff_selector_num, 'd', str(domain), 'p', str(problem)]
+    print(f'running process {args_row}, without SymPA files')
+    try:
+        output_filename = args_row.replace(' ', '_')
+        with open(f'{results_dir}/{output_filename}.txt', 'w') as results_file:
+            with open(f'{errors_dir}/{output_filename}.txt', 'w') as errors_file:
+                subprocess.run(args_list, stdout=results_file, stderr=errors_file, universal_newlines=True)
+
+        print(f'done {output_filename}')
+    except Exception as e:
+        print(e)
+
+
 def get_parameters_from_filename(filename):
     s = filename.split('.txt')[0].split('_')
     domain = int(s[1])
@@ -99,6 +116,16 @@ def get_all_possible_arguments(domains_to_run, free_sympa_files):
     return all_args_to_run
 
 
+def get_all_possible_arguments_without_sympa(domains_to_run):
+    domains = get_all_domains(domains_to_run)
+    problems = get_all_problems()
+    all_args = get_all_parameters_without_sympa(domains, problems)
+
+    done_probs = get_already_done_problems()
+    all_args_to_run = [t for t in all_args if t not in done_probs]
+    return all_args_to_run
+
+
 def get_all_parameters(free_sympa_files, domains, problems):
     all_params = []
     for d in domains:
@@ -109,8 +136,23 @@ def get_all_parameters(free_sympa_files, domains, problems):
     return all_params
 
 
+def get_all_parameters_without_sympa(domains, problems):
+    all_params = []
+    for d in domains:
+        d_list = [d]
+        p_list = problems[d]
+        all_params += get_all_permutations_without_sympa(d_list, p_list)
+
+    return all_params
+
+
 def get_all_permutations(sympa, domains, problems):
     all_lists = [sympa, domains, problems]
+    return list(itertools.product(*all_lists))
+
+
+def get_all_permutations_without_sympa(domains, problems):
+    all_lists = [domains, problems]
     return list(itertools.product(*all_lists))
 
 
@@ -174,23 +216,66 @@ def run_all_cppp_processes(free_sympa_files, num_of_sympa_parallel, domains_to_r
     print('All done :)')
 
 
+def run_all_cppp_processes_without_sympa(domains_to_run):
+    # num_of_cpus = mp.cpu_count()
+    num_of_cpus = 128
+    # mem = virtual_memory()
+    # mem = 494
+    # ram_size_in_gb = mem.total / math.pow(2, 30)  # total physical memory available
+    ram_size_in_gb = 400
+    print(f'Running the CPPP project on {num_of_cpus} CPUs on parallel, with {ram_size_in_gb} GB of RAM available')
+
+    print('Applying domains:')
+    print(get_all_domains(domains_to_run))
+
+    all_arguments = get_all_possible_arguments_without_sympa(domains_to_run)
+    n = len(all_arguments)
+    print(f'Total amount of permutations is {n}')  # 588
+
+    ram_for_each_process = 8
+    cpus_for_each_process = 8
+    ram_limit = int(ram_size_in_gb // ram_for_each_process)
+    cpu_limit = int(num_of_cpus // cpus_for_each_process)
+    num_of_parallel_jobs = min(ram_limit, cpu_limit)
+    print(f'RAM limit = {ram_limit}, CPUs limit = {cpu_limit}')
+    print(f'So the number of jobs that can be executed in parallel is {num_of_parallel_jobs}')
+    print(f'We will have a maximal amount of repetitions of {n / num_of_parallel_jobs}')
+
+    # Results dir:
+    Path(results_dir).mkdir(parents=True, exist_ok=True)
+    Path(errors_dir).mkdir(parents=True, exist_ok=True)
+    pool = mp.Pool(processes=num_of_parallel_jobs)
+    print('Running all CPPP processes now...')
+    for args_perm in all_arguments:
+       pool.apply_async(run_optimal_planner_without_sympa, args=args_perm)
+
+    print('Applied all of the jobs into the thread-pool')
+    pool.close()
+    print('Waiting for all processes to finish...')
+    pool.join()
+    print('All done :)')
+
+
 if __name__ == '__main__':
-    output_main_dir = 'optimal_out'
+    using_sympa = False
+
+    output_main_dir = 'optimal_out_2'
     results_dir = f'{output_main_dir}/results'
     errors_dir = f'{output_main_dir}/errors'
 
-    start_sympa = int(sys.argv[1])
-    end_sympa = int(sys.argv[2])
-    domains_to_run = sys.argv[3:]
-    # start_sympa = 0
-    # end_sympa = 31
-    # domains_to_run = ['1', '2']
+    if using_sympa:
+        start_sympa = int(sys.argv[1])
+        end_sympa = int(sys.argv[2])
+        domains_to_run = sys.argv[3:]
+        # start_sympa = 0
+        # end_sympa = 31
+        # domains_to_run = ['1', '2']
+        free_sympa_files, num_of_sympa_parallel = create_free_sympa_files(start_sympa, end_sympa)
+        print(f'SymPA files used = {start_sympa} <= f <= {end_sympa}')
+        print(f'domains we will run = {domains_to_run}')
 
-    free_sympa_files, num_of_sympa_parallel = create_free_sympa_files(start_sympa, end_sympa)
-
-    print(f'SymPA files used = {start_sympa} <= f <= {end_sympa}')
-    print(f'domains we will run = {domains_to_run}')
-
-    run_all_cppp_processes(free_sympa_files, num_of_sympa_parallel, domains_to_run)
-
-    # run_all_cppp_processes(0, [0, 1])
+        run_all_cppp_processes(free_sympa_files, num_of_sympa_parallel, domains_to_run)
+    else:
+        domains_to_run = sys.argv[1:]
+        print(f'domains we will run = {domains_to_run}')
+        run_all_cppp_processes_without_sympa(domains_to_run)
