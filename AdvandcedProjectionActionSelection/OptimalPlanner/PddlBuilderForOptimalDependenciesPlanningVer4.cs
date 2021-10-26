@@ -69,6 +69,11 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             return joinedStartState;
         }
 
+        public Dictionary<Dependency, Constant> GetMapDependencyToConstant()
+        {
+            return mapDependencyToConstant;
+        }
+
         public void BuildPddlFiles(List<Agent> m_agents, Dictionary<Agent, List<Dependency>> agentsDependencies, Dictionary<Agent, Dictionary<Predicate, List<Dependency>>> agentsPreconditionDictionary, Dictionary<Agent, Dictionary<Action, List<Dependency>>> agentsActions2DependenciesInEffect)
         {
             UpdateDomainAndProblemWithAgentsDependencies(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);

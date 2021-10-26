@@ -616,7 +616,8 @@ namespace Planning
                             bDone = true;
                         }
                         bool bMemSizeLimitReached = false;
-                        foreach (Process pPlanning in GetPlanningProcesses())
+                        //foreach (Process pPlanning in GetPlanningProcesses())
+                        foreach (Process pPlanning in a)
                         {
                             if (pPlanning.WorkingSet64 > 2 * Math.Pow(2, 30))
                             {

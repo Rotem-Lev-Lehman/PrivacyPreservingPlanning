@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
 {
@@ -390,7 +391,7 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
                     pddlBuilder.BuildPddlFiles(m_agents, agentsDependencies, agentsPreconditionDictionary, agentsActions2DependenciesInEffect);
 
                     Console.WriteLine("UP2DOWN - " + "Sending the pddl files to the external planners");
-                    List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename1, token);
+                    List<string> tmpPlan = SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), Program.SymPAFilename1, token);//, false, true, pddlBuilder.GetMapDependencyToConstant());
                     if (tmpPlan != null)
                     {
                         if (!VerifyPlan(Program.currentJointDomain, Program.currentJointProblem, tmpPlan))
@@ -754,17 +755,38 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             return SendToExternalPlanners(pddlBuilder.GetJoinedDomain(), pddlBuilder.GetJoinedProblem(), pddlBuilder.GetJoinedStartState(), null, default(CancellationToken));
         }
 
-        private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token, bool useSecondFFPath = false)
+        private List<string> SendToExternalPlanners(Domain domain, Problem problem, State startState, string SymPAFilename, CancellationToken token, bool useSecondFFPath = false, bool checkManualy=false, Dictionary<Dependency, Constant> mapDependencyToConstant=null)
         {
             bool ans;
+            List<string> plan;
             ExternalPlanners externalPlanners;
             if(useSecondFFPath)
                 externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder2);
             else
                 externalPlanners = new ExternalPlanners(token, tempSymPAPDDLFolder);
-            //List<string> plan = externalPlanners.ManualSolve(problem, domain);
-            List<string> plan = externalPlanners.Plan(usingFF, usingFD, usingSymPA, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, SymPAFilename, useSecondFFPath);
+
+            if (checkManualy)
+            {
+                string dependenciesFilePath = tempSymPAPDDLFolder + "/dep2constant.csv";
+                WriteDependenciesMapToFile(mapDependencyToConstant, dependenciesFilePath);
+                plan = externalPlanners.ManualSolve(problem, domain);
+            }
+            else
+            {
+                plan = externalPlanners.Plan(usingFF, usingFD, usingSymPA, domain, problem, startState, null, null, Program.maxTimeInMinutes * 60 * 1000, out ans, SymPAFilename, useSecondFFPath);
+            }
             return plan;
+        }
+
+        private void WriteDependenciesMapToFile(Dictionary<Dependency, Constant> mapDependencyToConstant, string filepath)
+        {
+            List<string> lines = new List<string>();
+            lines.Add("Dependency action,Dependency predicate,Constant");
+            foreach(KeyValuePair<Dependency, Constant> pair in mapDependencyToConstant)
+            {
+                lines.Add(pair.Key.ToString() + "," + pair.Value.ToString());
+            }
+            File.WriteAllLines(filepath, lines);
         }
 
         private Tuple<List<Dependency>, Dictionary<Predicate, List<Dependency>>, Dictionary<Action, List<Dependency>>> GetAgentDependencies(Agent agent, List<Action> possibleActions)

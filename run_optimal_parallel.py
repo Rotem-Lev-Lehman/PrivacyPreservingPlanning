@@ -257,9 +257,9 @@ def run_all_cppp_processes_without_sympa(domains_to_run):
 
 
 if __name__ == '__main__':
-    using_sympa = False
+    using_sympa = True
 
-    output_main_dir = 'optimal_out_2'
+    output_main_dir = 'optimal_out_3'
     results_dir = f'{output_main_dir}/results'
     errors_dir = f'{output_main_dir}/errors'
 

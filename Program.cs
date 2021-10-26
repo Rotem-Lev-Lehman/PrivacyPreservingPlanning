@@ -33,8 +33,8 @@ namespace Planning
         public enum HighLevelPlanerType { PDB, Landmark, Projection, ForwardHsp, BackwardHsp, LandmarkAndHsp, WeightedLandmarkAndHsp, SophisticatedProjection, MafsLandmark, Mafsff, MafsWithProjectionLandmarks, PDBMafs, ProjectionMafs, DistrebutedProjectionMafs, OptimalDependenciesPlanner, SingleAgentPlanner, DependenciesGraphGenerator, ManualDebugPlanner, TestsForRotem};
         
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ProjectionMafs; //Use the projection as a Heuristic for MAFS.
-        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
-        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
+        //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.Projection; //Use the projection as a solver by it's own. Try to solve a high level plan and then extend it to private plans.
+        static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.OptimalDependenciesPlanner; //Find the optimal set of dependencies to solve a problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.SingleAgentPlanner; //Plan using the single agent pddl file only (go over all agents until a single agent plan is found).
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.DependenciesGraphGenerator; //Do not plan, but create a dependency graph for the given problem.
         //static public HighLevelPlanerType highLevelPlanerType = HighLevelPlanerType.ManualDebugPlanner; //Do not plan, but create a dependency graph for the given problem.
@@ -141,7 +141,7 @@ namespace Planning
         //Cancelation token:
         public static CancellationTokenSource cancellationTokenSource;
 
-        public static bool runningOnLinux = true;
+        public static bool runningOnLinux = false;
         public static string baseFolderNameMyComputer = @"C:\Users\User\Desktop\second_degree\code\GPPP(last_v)"; //My computer path. Change this to your computer path
         public static string baseFolderNameLinuxServer = "/home/levlerot/CPPP/GPPP"; //path on cluster server (linux path)
         public static string SymPAbaseFolderName = "/home/levlerot/CPPP/optimal/unsolvability/improved_sympa"; //path of the SymPA files (on the cluster server)
@@ -1686,17 +1686,24 @@ namespace Planning
             timeForSelectingDependencies = dependenciesSelectionEndTime.Subtract(dependenciesSelectionStartTime).TotalSeconds;
         }
 
+        private static object planningProcessLock = new object();
+
         public static List<Process> GetPlanningProcesses()
         {
             List<Process> l = new List<Process>();
+            /*
             Process[] processes = Process.GetProcesses();
             foreach (Process p in processes)
             {
                 if (p.ProcessName.ToLower().Contains("downward") || p.ProcessName.ToLower().Contains(currentFFProcessName) || (currentFFProcessName2 != null && p.ProcessName.ToLower().Contains(currentFFProcessName2)))
                     l.Add(p);
             }
-            l.AddRange(ExternalPlanners.processesCreated);
-            ExternalPlanners.processesCreated = new List<Process>();
+            */
+            lock (planningProcessLock)
+            {
+                l.AddRange(ExternalPlanners.processesCreated);
+                ExternalPlanners.processesCreated = new List<Process>();
+            }
             return l;
         }
 
@@ -2838,7 +2845,7 @@ namespace Planning
         //Run on a specific set of problems:
         private static void RunOptimalDependenciesSolverExperimentOnSpecificProblems(Dictionary<string, int[]> selectorsDomainsAndProblems)
         {
-            RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal_2", true);
+            RunRegularExperimentOnAlotOfDomains(selectorsDomainsAndProblems, "Optimal_Dependencies_journal_3", true);
         }
 
         //Summarize results after solving:
@@ -2945,8 +2952,8 @@ namespace Planning
 
                 if (highLevelPlanerType == HighLevelPlanerType.OptimalDependenciesPlanner)
                 {
-                    //Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsToRun(args);
-                    Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsNoSymPAToRun(args);
+                    Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsToRun(args);
+                    //Dictionary<string, int[]> selectorsDomainsAndProblems = GetOptimalArgumentsNoSymPAToRun(args);
                     RunOptimalDependenciesSolverExperimentOnSpecificProblems(selectorsDomainsAndProblems);
                 }
                 else
@@ -3447,7 +3454,7 @@ namespace Planning
 
         private static Dictionary<string, int[]> GetOptimalArgumentsNoSymPAToRun(string[] args)
         {
-
+            /*
             for (int i = 0; i < args.Length; i++)
             {
                 Console.WriteLine("Args[" + i + "] = '" + args[i] + "'");
@@ -3512,18 +3519,18 @@ namespace Planning
             Console.WriteLine("Now Running those selectors on the domains indexes for the given problems by order");
 
             return selectorsDomainsAndProblems;
-
-            /*
+            */
+            
             Dictionary<string, int[]> dict = new Dictionary<string, int[]>();
             //dict.Add("selectors", new int[] { 0, 1, 2, 3 });
-            dict.Add("selectors", new int[] { 0 });
+            dict.Add("selectors", new int[] { 3 });
             //dict.Add("domains", new int[] { 0,1,2,3,4,5,6,7,8,9,10,11 });
-            dict.Add("domains", new int[] {4});
-            dict.Add("problems", new int[] {1});
-            SymPAFilename1 = GetSymPAFilename(1);
-            SymPAFilename2 = GetSymPAFilename(2);
+            dict.Add("domains", new int[] {11});
+            dict.Add("problems", new int[] {2});
+            //SymPAFilename1 = GetSymPAFilename(1);
+            //SymPAFilename2 = GetSymPAFilename(2);
             return dict;
-            */
+            
         }
 
         private static Dictionary<string, int[]> GetOptimalArgumentsToRun(string[] args)

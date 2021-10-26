@@ -37,5 +37,10 @@ namespace Planning.AdvandcedProjectionActionSelection.OptimalPlanner
             hashCode = hashCode * -1521134295 + EqualityComparer<Predicate>.Default.GetHashCode(predicate);
             return hashCode;
         }
+
+        public override string ToString()
+        {
+            return action.Name + "," + predicate.ToString();
+        }
     }
 }
