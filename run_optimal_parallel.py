@@ -185,7 +185,7 @@ def run_all_cppp_processes(free_sympa_files, num_of_sympa_parallel, domains_to_r
     # Results dir:
     Path(results_dir).mkdir(parents=True, exist_ok=True)
     Path(errors_dir).mkdir(parents=True, exist_ok=True)
-    pool = mp.Pool(processes=num_of_sympa_parallel)
+    pool = mp.Pool(processes=num_of_parallel_jobs)
     print('Running all CPPP processes now...')
     for args_perm in all_arguments:
        pool.apply_async(run_optimal_planner, args=args_perm)
