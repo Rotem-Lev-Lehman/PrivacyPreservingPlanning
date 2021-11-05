@@ -115,7 +115,7 @@ def get_all_possible_arguments(domains_to_run, free_sympa_files):
     all_args = get_all_parameters(results_dir, errors_dir, free_sympa_files, domains, problems)
 
     done_probs = get_already_done_problems()
-    all_args_to_run = [t for t in all_args if t not in done_probs]
+    all_args_to_run = [t for t in all_args if t[-2:] not in done_probs]
     return all_args_to_run
 
 
@@ -125,7 +125,7 @@ def get_all_possible_arguments_without_sympa(domains_to_run):
     all_args = get_all_parameters_without_sympa(results_dir, errors_dir, domains, problems)
 
     done_probs = get_already_done_problems()
-    all_args_to_run = [t for t in all_args if t not in done_probs]
+    all_args_to_run = [t for t in all_args if t[-2:] not in done_probs]
     return all_args_to_run
 
 
