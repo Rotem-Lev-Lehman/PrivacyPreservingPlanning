@@ -2861,7 +2861,7 @@ namespace Planning
 
         private static void RunSummariziationOnOptimalDependenciesPlannerResults(Dictionary<string, int[]> selectorsAndDomains)
         {
-            RunSummarizationOfPlannerResults(selectorsAndDomains, "Optimal_Dependencies_journal", true);
+            RunSummarizationOfPlannerResults(selectorsAndDomains, "Optimal_Dependencies_journal_3", true);
         }
 
         static StreamWriter swResults;
@@ -2879,8 +2879,8 @@ namespace Planning
              }*/
             
             bool runningMyExperiment = false;
-            bool runningExpOnClusterServer = true;
-            bool summarizeResults = false;
+            bool runningExpOnClusterServer = false;
+            bool summarizeResults = true;
 
             bool creatingNewBenchmarks = false;
             bool addDummyInitAction = false;
